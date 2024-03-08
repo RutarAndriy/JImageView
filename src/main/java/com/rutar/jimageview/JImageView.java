@@ -1,10 +1,12 @@
 package com.rutar.jimageview;
 
+import java.net.*;
 import java.awt.*;
 import java.util.*;
 import java.beans.*;
 import javax.swing.*;
 import java.awt.event.*;
+import javax.swing.event.*;
 
 // ............................................................................
 
@@ -15,6 +17,8 @@ import java.awt.event.*;
  */
 
 public class JImageView extends JScrollPane {
+
+private static Cursor CURSOR_DEFAULT = null;
 
 private static final Cursor CURSOR_HAND = new Cursor(Cursor.HAND_CURSOR);
 private static final Cursor CURSOR_MOVE = new Cursor(Cursor.MOVE_CURSOR);
@@ -45,10 +49,10 @@ private void initComponents() {
 panelRoot = new RootPane();
 labelImage = new JLabel();
 
-labelImage.setIcon(new ImageIcon(getClass().getResource("/com/rutar/jimageview/images/Uiconstock-E-Commerce-E-Commerce-Icon-Set.48.png")));
-labelImage.setIcon(new ImageIcon(getClass().getResource("/com/rutar/jimageview/images/Untitled.png")));
+labelImage.setIcon(getRandomImage());
 labelImage.addMouseListener(imageMouseListener);
 labelImage.addMouseMotionListener(imageMouseMotionListener);
+labelImage.setCursor(CURSOR_DEFAULT);
 
 GroupLayout panel_rootLayout = new GroupLayout(panelRoot);
 panelRoot.setLayout(panel_rootLayout);
@@ -67,10 +71,24 @@ panel_rootLayout.setVerticalGroup(panel_rootLayout
         .addGap(0, 0, Short.MAX_VALUE))
 );
 
-getViewport().addChangeListener(e -> {});
+getViewport().addChangeListener(changeListener);
 setViewportView(panelRoot);
 
-}                    
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private Icon getRandomImage() {
+
+    String path = "/com/rutar/jimageview/images/%s.png";
+    String[] names = { "tree", "fire", "wave" };
+
+    int index = (int)(Math.random() * 3);
+    URL resource = getClass().getResource(String.format(path, names[index]));
+
+    return new ImageIcon(resource);
+
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -221,6 +239,10 @@ for (JImageViewListener listener : getListeners()) {
 ///////////////////////////////////////////////////////////////////////////////
 
 private Point origin;
+private JViewport imageViewport;
+
+private boolean cursorOnImage;
+private boolean scrollBarVisible;
 
 // ............................................................................
 
@@ -238,22 +260,17 @@ public void mouseExited (MouseEvent me) { cursorOnImage = false; }
 @Override
 public void mousePressed (MouseEvent me) {
     origin = new Point(me.getPoint());
-    labelImage.setCursor(CURSOR_HAND);
+    labelImage.setCursor(isScrollBarVisible() ? CURSOR_HAND : null);
 }
 
 @Override
 public void mouseReleased (MouseEvent me) {
-    labelImage.setCursor(isScrollBarVisible() ? CURSOR_MOVE : null);
+    labelImage.setCursor(isScrollBarVisible() ? CURSOR_DEFAULT : null);
 }
 
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-
-private boolean cursorOnImage;
-private JViewport imageViewport;
-
-// ............................................................................
 
 public final MouseMotionListener imageMouseMotionListener
        = new MouseMotionAdapter() {
@@ -282,6 +299,22 @@ public void mouseDragged (MouseEvent me) {
         }
     }
 }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+private final ChangeListener changeListener = new ChangeListener() {
+
+    @Override
+    public void stateChanged (ChangeEvent e) {
+        
+        if (scrollBarVisible == isScrollBarVisible()) { return; }
+
+        scrollBarVisible = isScrollBarVisible();
+        CURSOR_DEFAULT = scrollBarVisible ? CURSOR_MOVE : null;
+        labelImage.setCursor(CURSOR_DEFAULT);
+        
+    }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
