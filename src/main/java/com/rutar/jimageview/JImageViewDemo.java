@@ -6,6 +6,7 @@ import java.beans.*;
 import javax.swing.*;
 import java.awt.event.*;
 import javax.swing.event.*;
+import javax.swing.plaf.metal.MetalIconFactory;
 
 // ............................................................................
 
@@ -27,10 +28,9 @@ public class JImageViewDemo extends JFrame {
 ///////////////////////////////////////////////////////////////////////////////
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents() {//GEN-BEGIN:initComponents
 
-        jImageView1 = new JImageView();
+        imageView = new JImageView();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -39,19 +39,19 @@ public class JImageViewDemo extends JFrame {
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jImageView1, GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+                .addComponent(imageView, GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jImageView1, GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                .addComponent(imageView, GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
         setLocationRelativeTo(null);
-    }// </editor-fold>//GEN-END:initComponents
+    }//GEN-END:initComponents
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -65,6 +65,6 @@ public class JImageViewDemo extends JFrame {
 ///////////////////////////////////////////////////////////////////////////////
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private JImageView jImageView1;
+    private JImageView imageView;
     // End of variables declaration//GEN-END:variables
 }

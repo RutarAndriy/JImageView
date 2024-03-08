@@ -37,9 +37,21 @@ private Color gridLightColor = Color.LIGHT_GRAY;       // I колір фоно�
 private Color gridDarkColor  = Color.DARK_GRAY;       // II колір фонової сітки
 private int gridSize = 25;                                      // Розмір сітки
 
+private int imageScale = 100;
+
+private ImageIcon image = null;
+private ImageIcon errorImage = null;
+
+private int imageScaleMax;
+private int imageScaleMin;
+private int imageScaleInternalFit;
+private int imageScaleExternalFit;
+
 ///////////////////////////////////////////////////////////////////////////////
 
-public JImageView() { initComponents(); }
+public JImageView() { initComponents();
+
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -49,7 +61,10 @@ private void initComponents() {
 panelRoot = new RootPane();
 labelImage = new JLabel();
 
-labelImage.setIcon(getRandomImage());
+setErrorImage(null);
+setImage(new ImageIcon(getClass().getResource("/com/rutar/jimageview/images/test_1.jpg")));
+
+labelImage.setIcon(getScaledImage());
 labelImage.addMouseListener(imageMouseListener);
 labelImage.addMouseMotionListener(imageMouseMotionListener);
 labelImage.setCursor(CURSOR_DEFAULT);
@@ -71,22 +86,46 @@ panel_rootLayout.setVerticalGroup(panel_rootLayout
         .addGap(0, 0, Short.MAX_VALUE))
 );
 
+addMouseListener(imageViewMouseListener);
+addMouseWheelListener((MouseWheelListener) imageViewMouseListener);
+
 getViewport().addChangeListener(changeListener);
+setWheelScrollingEnabled(false);
 setViewportView(panelRoot);
 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-private Icon getRandomImage() {
+public void zoomIn() {
+    
+    if (imageScale == 900 ||
+        imageScale >= imageScaleMax) { return; }
+    
+    if      (imageScale >= 10  && imageScale < 50)  { imageScale +=   5; }
+    else if (imageScale >= 50  && imageScale < 100) { imageScale +=  10; }
+    else if (imageScale >= 100 && imageScale < 300) { imageScale +=  25; }
+    else if (imageScale >= 300 && imageScale < 500) { imageScale +=  50; }
+    else if (imageScale >= 500 && imageScale < 900) { imageScale += 100; }
 
-    String path = "/com/rutar/jimageview/images/%s.png";
-    String[] names = { "tree", "fire", "wave" };
+    labelImage.setIcon(getScaledImage());
 
-    int index = (int)(Math.random() * 3);
-    URL resource = getClass().getResource(String.format(path, names[index]));
+}
 
-    return new ImageIcon(resource);
+// ............................................................................
+
+public void zoomOut() {
+    
+    if (imageScale == 10 ||
+        imageScale <= imageScaleMin) { return; }
+    
+    if      (imageScale > 10  && imageScale <= 50)  { imageScale -=   5; }
+    else if (imageScale > 50  && imageScale <= 100) { imageScale -=  10; }
+    else if (imageScale > 100 && imageScale <= 300) { imageScale -=  25; }
+    else if (imageScale > 300 && imageScale <= 500) { imageScale -=  50; }
+    else if (imageScale > 500 && imageScale <= 900) { imageScale -= 100; }
+
+    labelImage.setIcon(getScaledImage());
 
 }
 
@@ -117,6 +156,99 @@ public void paintComponent (Graphics g) {
     }
 
 }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+public ImageIcon getImage() { return image; }
+
+public void setImage (ImageIcon image)
+    { if (image == null) { image = getErrorImage(); }
+      setImageScaleMinMax(image);
+      ImageIcon oldValue = this.image;
+      this.image = image;
+      fireEvent("image", oldValue, image);
+      getPropertyChangeSupport().firePropertyChange("image",
+                                                    oldValue, image);
+      repaint(); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+public ImageIcon getErrorImage() { return errorImage; }
+
+public void setErrorImage (ImageIcon errorImage)
+    { if (errorImage == null) { errorImage = getRandomImage(); }
+      ImageIcon oldValue = this.errorImage;
+      this.errorImage = errorImage;
+      fireEvent("errorImage", oldValue, errorImage);
+      getPropertyChangeSupport().firePropertyChange("errorImage",
+                                                    oldValue, errorImage);
+      repaint(); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+private ImageIcon getScaledImage() {
+    
+    if (imageScale == 100) { return image; }
+    
+    Image original = image.getImage();
+    
+    int w = (int)(original.getWidth(null)  * imageScale/100f);
+    int h = (int)(original.getHeight(null) * imageScale/100f);
+
+    Image scaled = original.getScaledInstance(w, h, Image.SCALE_SMOOTH);
+    
+    return new ImageIcon(scaled);
+    
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private ImageIcon getRandomImage() {
+    
+    String path = "/com/rutar/jimageview/images/%s.png";
+    String[] names = { "tree", "fire", "wave" };
+
+    int index = (int)(Math.random() * 3);
+    URL resource = getClass().getResource(String.format(path, names[index]));
+
+    return new ImageIcon(resource);
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private void setImageScaleMinMax (ImageIcon image) {
+
+    int w = image.getIconWidth();
+    int h = image.getIconHeight();
+    
+    int z = (w > h) ? w : h;
+    
+    imageScaleMin = (int)(48d   / z * 100);
+    imageScaleMax = (int)(3000d / z * 100);
+    
+    if (imageScaleMin > 100) { imageScaleMin = 100; }
+    if (imageScaleMax < 100) { imageScaleMax = 100; }
+    
+}
+
+// ............................................................................
+
+private void setImageScaleFit() {
+
+    int vW = getViewport().getWidth();
+    int iW = image.getIconWidth();
+    
+    int vH = getViewport().getHeight();
+    int iH = image.getIconHeight();
+    
+    int fitW = (int)(100d * vW / iW);
+    int fitH = (int)(100d * vH / iH);
+    
+    imageScaleInternalFit = (fitW < fitH) ? fitW : fitH;
+    imageScaleExternalFit = (fitW > fitH) ? fitW : fitH;
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -301,6 +433,36 @@ public void mouseDragged (MouseEvent me) {
 }
 };
 
+
+///////////////////////////////////////////////////////////////////////////////
+
+private final MouseListener imageViewMouseListener
+        = new MouseAdapter() {
+    
+@Override
+public void mouseClicked (MouseEvent e) {
+
+}
+ 
+@Override
+public void mousePressed (MouseEvent me) {
+
+}
+
+@Override
+public void mouseReleased (MouseEvent me) {
+
+}
+
+// ............................................................................
+
+@Override
+public void mouseWheelMoved (MouseWheelEvent mwe)
+    { if (mwe.getWheelRotation() > 0) { zoomIn(); }
+      else                            { zoomOut(); } }
+
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 
 private final ChangeListener changeListener = new ChangeListener() {
@@ -308,6 +470,7 @@ private final ChangeListener changeListener = new ChangeListener() {
     @Override
     public void stateChanged (ChangeEvent e) {
         
+        setImageScaleFit();
         if (scrollBarVisible == isScrollBarVisible()) { return; }
 
         scrollBarVisible = isScrollBarVisible();
