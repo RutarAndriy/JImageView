@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.*;
 import java.beans.*;
 import javax.swing.*;
+import java.awt.event.*;
 
 // ............................................................................
 
@@ -13,121 +14,154 @@ import javax.swing.*;
  * 07.03.2024
  */
 
-public class JImageView extends JPanel {
+public class JImageView extends JScrollPane {
+
+private static final Cursor CURSOR_HAND = new Cursor(Cursor.HAND_CURSOR);
+private static final Cursor CURSOR_MOVE = new Cursor(Cursor.MOVE_CURSOR);
+
+// ............................................................................
 
 private static ArrayList <JImageViewListener> listeners = null;
 private static transient PropertyChangeSupport propertyChangeSupport = null;
 
-private int lineWidth = 1;                                     // Товщина ліній
-private int mouthWidth = 120;                     // Ширина усмішки, в градусах
-private boolean smile = true;                                // Усмішка/гримаса
+// ............................................................................
+
+private boolean drugImageOut = true;         // Переміщення за межею компонента
+
+private boolean backgroundGrid = true;                          // Фонова сітка
+private Color gridLightColor = Color.LIGHT_GRAY;       // I колір фонової сітки
+private Color gridDarkColor  = Color.DARK_GRAY;       // II колір фонової сітки
+private int gridSize = 25;                                      // Розмір сітки
 
 ///////////////////////////////////////////////////////////////////////////////
-    
+
+public JImageView() { initComponents(); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+@SuppressWarnings("unchecked")                       
+private void initComponents() {
+
+panelRoot = new RootPane();
+labelImage = new JLabel();
+
+labelImage.setIcon(new ImageIcon(getClass().getResource("/com/rutar/jimageview/images/Uiconstock-E-Commerce-E-Commerce-Icon-Set.48.png")));
+labelImage.setIcon(new ImageIcon(getClass().getResource("/com/rutar/jimageview/images/Untitled.png")));
+labelImage.addMouseListener(imageMouseListener);
+labelImage.addMouseMotionListener(imageMouseMotionListener);
+
+GroupLayout panel_rootLayout = new GroupLayout(panelRoot);
+panelRoot.setLayout(panel_rootLayout);
+panel_rootLayout.setHorizontalGroup(panel_rootLayout
+                .createParallelGroup(GroupLayout.Alignment.LEADING)
+    .addGroup(panel_rootLayout.createSequentialGroup()
+        .addGap(0, 0, Short.MAX_VALUE)
+        .addComponent(labelImage)
+        .addGap(0, 0, Short.MAX_VALUE))
+);
+panel_rootLayout.setVerticalGroup(panel_rootLayout
+                .createParallelGroup(GroupLayout.Alignment.LEADING)
+    .addGroup(panel_rootLayout.createSequentialGroup()
+        .addGap(0, 0, Short.MAX_VALUE)
+        .addComponent(labelImage)
+        .addGap(0, 0, Short.MAX_VALUE))
+);
+
+getViewport().addChangeListener(e -> {});
+setViewportView(panelRoot);
+
+}                    
+
+///////////////////////////////////////////////////////////////////////////////
+
+private final class RootPane extends JPanel {
+
 @Override
 public void paintComponent (Graphics g) {
 
-super.paintComponent(g);
-Graphics2D g2 = (Graphics2D)g;
-g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON);
+    super.paintComponent(g);
 
-int w = getWidth();
-int h = getHeight();
+    if (!backgroundGrid) { return; }
 
-int er = 4;
-int pad = 12;
+    Graphics2D g2 = (Graphics2D)g;
+    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON);
 
-int cw = w - pad * 2;
-int ch = h - pad * 2;
-int lw = (lineWidth - 1) / 2;
+    g2.setColor(gridLightColor);
+    g2.fillRect(0, 0, getWidth(), getHeight());
+    g2.setColor(gridDarkColor);
 
-g2.setColor(getForeground());
-g2.setStroke(new BasicStroke(lineWidth));
-g2.drawArc(pad, pad, cw, ch, 0, 360);
+    for (int a = 0; a < getWidth();  a += gridSize) {
+    for (int b = 0; b < getHeight(); b += gridSize*2) {
+        g.fillRect(a, b + (a/gridSize%2 == 0 ? gridSize : 0),
+                   gridSize, gridSize);
+    }
+    }
 
-// Mouth
-int sw = cw / 2;
-int sh = ch / 2;
-
-if (smile) { g2.drawArc(w / 2 - sw / 2,
-                        h / 2 - sh / 2,
-                        sw, sh, 270 - mouthWidth / 2, mouthWidth); }
-
-else       { g2.drawArc(w / 2 - sw / 2,
-                        h / 2 + sh / 3,
-                        sw, sh, 90 - mouthWidth / 2, mouthWidth); }
-    
-// Left eye
-g2.fillArc(w / 2 - cw * 1 / 8 - er / 2 - lw,
-           h / 2 - ch / 4 - er - lw,
-           er+lw*2, er+lw*2, 0, 360);
-
-// Right eye
-g2.fillArc(w / 2 + cw * 1 / 8 - er / 2 - lw,
-           h / 2 - ch / 4 - er - lw,
-           er+lw*2, er+lw*2, 0, 360);
-
+}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-public boolean isSmile() { return smile; }
+public boolean isDrugImageOut() { return drugImageOut; }
 
-public void setSmile (boolean smile)
-    { boolean oldValue = this.smile;
-      this.smile = smile;
-      fireEvent("smile", oldValue, smile);
-      getPropertyChangeSupport().firePropertyChange("smile", oldValue, smile);
+public void setDrugImageOut (boolean drugImageOut)
+    { boolean oldValue = this.drugImageOut;
+      this.drugImageOut = drugImageOut;
+      fireEvent("drugImageOut", oldValue, drugImageOut);
+      getPropertyChangeSupport().firePropertyChange("drugImageOut",
+                                                    oldValue, drugImageOut);
       repaint(); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-public int getLineWidth() { return lineWidth; }
+public boolean isBackgroundGrid() { return backgroundGrid; }
 
-public void setLineWidth (int lineWidth)
-    { if (lineWidth > 18) { lineWidth = 18; }
-      if (lineWidth <  1) { lineWidth = 1;  }
-      int oldValue = this.lineWidth;
-      this.lineWidth = lineWidth;
-      fireEvent("lineWidth", oldValue, lineWidth);
-      getPropertyChangeSupport().firePropertyChange("lineWidth",
-                                                    oldValue, lineWidth);
+public void setBackgroundGrid (boolean backgroundGrid)
+    { boolean oldValue = this.backgroundGrid;
+      this.backgroundGrid = backgroundGrid;
+      fireEvent("backgroundGrid", oldValue, backgroundGrid);
+      getPropertyChangeSupport().firePropertyChange("backgroundGrid",
+                                                    oldValue, backgroundGrid);
       repaint(); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-public int getMouthWidth() { return mouthWidth; }
+public Color getGridLightColor() { return gridLightColor; }
 
-public void setMouthWidth (int mouthWidth)
-    { if (mouthWidth > 175) { mouthWidth = 175; }
-      if (mouthWidth <   0) { mouthWidth = 0;   }
-      int oldValue = this.mouthWidth;
-      this.mouthWidth = mouthWidth;
-      fireEvent("mouthWidth", oldValue, mouthWidth);
-      getPropertyChangeSupport().firePropertyChange("mouthWidth",
-                                                    oldValue, mouthWidth);
+public void setGridLightColor (Color gridLightColor)
+    { Color oldValue = this.gridLightColor;
+      this.gridLightColor = gridLightColor;
+      fireEvent("gridLightColor", oldValue, gridLightColor);
+      getPropertyChangeSupport().firePropertyChange("gridLightColor",
+                                                    oldValue, gridLightColor);
       repaint(); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-@Override
-public void setBackground (Color bg)
-    { Color oldValue = getBackground();
-      fireEvent("background", oldValue, bg);
-      getPropertyChangeSupport().firePropertyChange("background",
-                                                    oldValue, bg);
-      super.setBackground(bg); }
+public Color getGridDarkColor() { return gridDarkColor; }
+
+public void setGridDarkColor (Color gridDarkColor)
+    { Color oldValue = this.gridDarkColor;
+      this.gridDarkColor = gridDarkColor;
+      fireEvent("gridDarkColor", oldValue, gridDarkColor);
+      getPropertyChangeSupport().firePropertyChange("gridDarkColor",
+                                                    oldValue, gridDarkColor);
+      repaint(); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-@Override
-public void setForeground (Color fg)
-    { Color oldValue = getForeground();
-      fireEvent("foreground", oldValue, fg);
-      getPropertyChangeSupport().firePropertyChange("foreground",
-                                                    oldValue, fg);
-      super.setForeground(fg); }
+public int getGridSize() { return gridSize; }
+
+public void setGridSize (int gridSize)
+    { if (gridSize > 99) { gridSize = 99; }
+      if (gridSize <  3) { gridSize = 3;  }
+      int oldValue = this.gridSize;
+      this.gridSize = gridSize;
+      fireEvent("gridSize", oldValue, gridSize);
+      getPropertyChangeSupport().firePropertyChange("gridSize",
+                                                    oldValue, gridSize);
+      repaint(); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -183,6 +217,83 @@ for (JImageViewListener listener : getListeners()) {
     }
 }
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+private Point origin;
+
+// ............................................................................
+
+private final MouseListener imageMouseListener
+        = new MouseAdapter() {
+
+@Override
+public void mouseEntered (MouseEvent me) { cursorOnImage = true; }
+
+@Override
+public void mouseExited (MouseEvent me) { cursorOnImage = false; }
+
+// ............................................................................
+
+@Override
+public void mousePressed (MouseEvent me) {
+    origin = new Point(me.getPoint());
+    labelImage.setCursor(CURSOR_HAND);
+}
+
+@Override
+public void mouseReleased (MouseEvent me) {
+    labelImage.setCursor(isScrollBarVisible() ? CURSOR_MOVE : null);
+}
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+private boolean cursorOnImage;
+private JViewport imageViewport;
+
+// ............................................................................
+
+public final MouseMotionListener imageMouseMotionListener
+       = new MouseMotionAdapter() {
+
+@Override
+public void mouseDragged (MouseEvent me) {
+
+    if (origin != null) {
+                      
+        if (!drugImageOut && !cursorOnImage) { return; }
+        
+        imageViewport = (JViewport) SwingUtilities
+                   .getAncestorOfClass(JViewport.class, labelImage);
+        
+        if (imageViewport != null) {
+            
+            int deltaX = origin.x - me.getX();
+            int deltaY = origin.y - me.getY();
+
+            Rectangle view = imageViewport.getViewRect();
+            view.x += deltaX;
+            view.y += deltaY;
+
+            labelImage.scrollRectToVisible(view);
+            
+        }
+    }
+}
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+private boolean isScrollBarVisible()
+    { return getVerticalScrollBar().isVisible() ||
+             getHorizontalScrollBar().isVisible(); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+private JLabel labelImage;
+private JPanel panelRoot;
 
 // Кінець класу JImageView ////////////////////////////////////////////////////
 
