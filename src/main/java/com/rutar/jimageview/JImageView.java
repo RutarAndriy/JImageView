@@ -62,7 +62,7 @@ panelRoot = new RootPane();
 labelImage = new JLabel();
 
 setErrorImage(null);
-setImage(new ImageIcon(getClass().getResource("/com/rutar/jimageview/images/test_1.jpg")));
+setImage(null);
 
 labelImage.setIcon(getScaledImage());
 labelImage.addMouseListener(imageMouseListener);
