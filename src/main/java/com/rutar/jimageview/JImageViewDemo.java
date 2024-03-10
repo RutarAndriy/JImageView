@@ -1,10 +1,12 @@
 package com.rutar.jimageview;
 
+import java.io.*;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
 import static javax.swing.GroupLayout.*;
+import static javax.swing.ScrollPaneConstants.*;
 
 // ............................................................................
 
@@ -266,19 +268,67 @@ setLocationRelativeTo(null);
 ///////////////////////////////////////////////////////////////////////////////
 
 private void buttonPressed (ActionEvent ae) {
-    System.out.println(ae.getActionCommand());
+    
+    switch (ae.getActionCommand()) {
+        
+        case "btn_zoom_in"      -> imageView.zoomIn();
+        case "btn_zoom_out"     -> imageView.zoomOut();
+        case "btn_original"     -> imageView.zoomOriginal();
+        case "btn_internal_fit" -> imageView.fitInternal();
+        case "btn_external_fit" -> imageView.fitExternal();
+        
+        // ....................................................................
+        
+        case "btn_set_scale" -> {
+            String input = field_scale.getText();
+            imageView.setImageScale(Integer.parseInt(input.split("%")[0]));
+        }
+        
+        // ....................................................................
+        
+        case "btn_open" -> {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setSelectedFile(new File("/home/rutar/test_1.jpg"));
+            chooser.showOpenDialog(this);
+            File file = chooser.getSelectedFile();
+            imageView.setImage(new ImageIcon(file.getAbsolutePath()));
+        }
+        
+    }
+    
+    field_scale.setText(imageView.getImageScale() + "%");
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 private void checkBoxPressed (ActionEvent ae) {
-    System.out.println(ae.getActionCommand());
+
+    switch (ae.getActionCommand()) {
+        
+        case "cb_show_scrollbar" -> {
+            
+            imageView.setVerticalScrollBarPolicy(cb_show_scrollbar.isSelected()
+                ? VERTICAL_SCROLLBAR_ALWAYS : VERTICAL_SCROLLBAR_AS_NEEDED);
+            imageView.setHorizontalScrollBarPolicy(cb_show_scrollbar.isSelected()
+                ? HORIZONTAL_SCROLLBAR_ALWAYS : HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            
+        }
+        
+    }
+    
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 private void radioButtonPressed (ActionEvent ae) {
-    System.out.println(ae.getActionCommand());
+
+    switch (ae.getActionCommand()) {
+        
+        case "rb_fast"   -> { }
+        case "rb_smooth" -> { }
+        
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -289,6 +339,15 @@ private void fieldInputFocusLosted (FocusEvent  fe) { fixInput(); }
 ///////////////////////////////////////////////////////////////////////////////
 
 private void fixInput() {
+    
+    String input = field_scale.getText();
+    input = input.replaceAll("%", "");
+    
+    try { int num = Integer.parseInt(input);
+          input = num + "%"; }
+    catch (NumberFormatException e) { input = "100%"; }
+    
+    field_scale.setText(input);
     
 }
 

@@ -47,11 +47,12 @@ private int imageScaleMin;
 private int imageScaleInternalFit;
 private int imageScaleExternalFit;
 
+private int scaleMin = 10;
+private int scaleMax = 900;
+
 ///////////////////////////////////////////////////////////////////////////////
 
-public JImageView() { initComponents();
-
-}
+public JImageView() { initComponents(); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -99,7 +100,7 @@ setViewportView(panelRoot);
 
 public void zoomIn() {
     
-    if (imageScale == 900 ||
+    if (imageScale == scaleMax ||
         imageScale >= imageScaleMax) { return; }
     
     if      (imageScale >= 10  && imageScale < 50)  { imageScale +=   5; }
@@ -108,7 +109,7 @@ public void zoomIn() {
     else if (imageScale >= 300 && imageScale < 500) { imageScale +=  50; }
     else if (imageScale >= 500 && imageScale < 900) { imageScale += 100; }
 
-    labelImage.setIcon(getScaledImage());
+    setImageScale(imageScale);
 
 }
 
@@ -116,7 +117,7 @@ public void zoomIn() {
 
 public void zoomOut() {
     
-    if (imageScale == 10 ||
+    if (imageScale == scaleMin ||
         imageScale <= imageScaleMin) { return; }
     
     if      (imageScale > 10  && imageScale <= 50)  { imageScale -=   5; }
@@ -125,9 +126,18 @@ public void zoomOut() {
     else if (imageScale > 300 && imageScale <= 500) { imageScale -=  50; }
     else if (imageScale > 500 && imageScale <= 900) { imageScale -= 100; }
 
-    labelImage.setIcon(getScaledImage());
+    setImageScale(imageScale);
 
 }
+
+// ............................................................................
+
+public void zoomOriginal() { setImageScale(100); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+public void fitInternal() { setImageScale(imageScaleInternalFit); }
+public void fitExternal() { setImageScale(imageScaleExternalFit); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -160,11 +170,86 @@ public void paintComponent (Graphics g) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+private void calculateImageScaleMinMax (ImageIcon image) {
+
+    int w = image.getIconWidth();
+    int h = image.getIconHeight();
+    
+    int z = (w > h) ? w : h;
+    
+    imageScaleMin = (int)(48d   / z * 100);
+    imageScaleMax = (int)(3000d / z * 100);
+    
+    if (imageScaleMin > 100) { imageScaleMin = 100; }
+    if (imageScaleMax < 100) { imageScaleMax = 100; }
+    
+}
+
+// ............................................................................
+
+private int iW, vW, mW, sW;
+private int iH, vH, mH, sH;
+private int fitWi, fitHi, fitWe, fitHe;
+
+private JScrollBar hScrollBar, vScrollBar;
+
+// ............................................................................
+
+private void calculateImageScaleFit() {
+    
+    vScrollBar = getVerticalScrollBar();
+    hScrollBar = getHorizontalScrollBar();
+    
+    // Ширина зображення
+    iW = image.getIconWidth();
+    // Ширина області перегляду
+    vW = getViewport().getWidth();
+
+    // Ширина вертикального скролбару
+    mW = vScrollBar.getMaximumSize().width;
+    // Активна ширина вертикального скролбару
+    sW = vScrollBar.isVisible() ? mW : 0;
+    
+    // Висота зображення
+    iH = image.getIconHeight();
+    // Висота області перегляду
+    vH = getViewport().getHeight();
+
+    // Висота горизонтального скролбару
+    mH = hScrollBar.getMaximumSize().height;
+    // Активна висота горизонтального скролбару
+    sH = hScrollBar.isVisible() ? mH : 0;
+    
+    boolean hScrollBarVisible = (vW < panelRoot.getWidth());
+    boolean vScrollBarVisible = (vH < panelRoot.getHeight());
+    
+    System.out.println("H >> : " + hScrollBar.isVisible() + "");
+    System.out.println("V >> : " + vScrollBar.isVisible() + "");
+    
+    //if (getVerticalScrollBarPolicy()   ==
+    //    VERTICAL_SCROLLBAR_ALWAYS)   { sW = 0; }
+    //if (getHorizontalScrollBarPolicy() ==
+    //    HORIZONTAL_SCROLLBAR_ALWAYS) { sH = 0; }
+    
+    fitWi = (int)(100d * (vW + sW) / iW);
+    fitHi = (int)(100d * (vH + sH) / iH);
+    
+    fitWe = (int)(100d * (vW + sW - mW) / iW);
+    fitHe = (int)(100d * (vH + sH - mH) / iH);
+    
+    imageScaleInternalFit = (fitWi < fitHi) ? fitWi : fitHi;
+    imageScaleExternalFit = (fitWe > fitHe) ? fitWe : fitHe;
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 public ImageIcon getImage() { return image; }
 
 public void setImage (ImageIcon image)
     { if (image == null) { image = getErrorImage(); }
-      setImageScaleMinMax(image);
+      calculateImageScaleMinMax(image);
+      labelImage.setIcon(image);
       ImageIcon oldValue = this.image;
       this.image = image;
       fireEvent("image", oldValue, image);
@@ -196,7 +281,7 @@ private ImageIcon getScaledImage() {
     int w = (int)(original.getWidth(null)  * imageScale/100f);
     int h = (int)(original.getHeight(null) * imageScale/100f);
 
-    Image scaled = original.getScaledInstance(w, h, Image.SCALE_SMOOTH);
+    Image scaled = original.getScaledInstance(w, h, Image.SCALE_FAST);
     
     return new ImageIcon(scaled);
     
@@ -213,41 +298,6 @@ private ImageIcon getRandomImage() {
     URL resource = getClass().getResource(String.format(path, names[index]));
 
     return new ImageIcon(resource);
-
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-private void setImageScaleMinMax (ImageIcon image) {
-
-    int w = image.getIconWidth();
-    int h = image.getIconHeight();
-    
-    int z = (w > h) ? w : h;
-    
-    imageScaleMin = (int)(48d   / z * 100);
-    imageScaleMax = (int)(3000d / z * 100);
-    
-    if (imageScaleMin > 100) { imageScaleMin = 100; }
-    if (imageScaleMax < 100) { imageScaleMax = 100; }
-    
-}
-
-// ............................................................................
-
-private void setImageScaleFit() {
-
-    int vW = getViewport().getWidth();
-    int iW = image.getIconWidth();
-    
-    int vH = getViewport().getHeight();
-    int iH = image.getIconHeight();
-    
-    int fitW = (int)(100d * vW / iW);
-    int fitH = (int)(100d * vH / iH);
-    
-    imageScaleInternalFit = (fitW < fitH) ? fitW : fitH;
-    imageScaleExternalFit = (fitW > fitH) ? fitW : fitH;
 
 }
 
@@ -304,14 +354,30 @@ public void setGridDarkColor (Color gridDarkColor)
 public int getGridSize() { return gridSize; }
 
 public void setGridSize (int gridSize)
-    { if (gridSize > 99) { gridSize = 99; }
-      if (gridSize <  3) { gridSize = 3;  }
+    { if      (gridSize > 99) { gridSize = 99; }
+      else if (gridSize <  3) { gridSize = 3;  }
       int oldValue = this.gridSize;
       this.gridSize = gridSize;
       fireEvent("gridSize", oldValue, gridSize);
       getPropertyChangeSupport().firePropertyChange("gridSize",
                                                     oldValue, gridSize);
       repaint(); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+public int getImageScale() { return imageScale; }
+
+public void setImageScale (int imageScale)
+    { if      (imageScale > scaleMax)      { imageScale = scaleMax;      }
+      else if (imageScale < scaleMin)      { imageScale = scaleMin;      }
+      else if (imageScale > imageScaleMax) { imageScale = imageScaleMax; }
+      else if (imageScale < imageScaleMin) { imageScale = imageScaleMin; }
+      int oldValue = this.imageScale;
+      this.imageScale = imageScale;
+      fireEvent("imageScale", oldValue, imageScale);
+      getPropertyChangeSupport().firePropertyChange("imageScale",
+                                                    oldValue, imageScale);
+      labelImage.setIcon(getScaledImage()); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -415,7 +481,7 @@ public void mouseDragged (MouseEvent me) {
         if (!drugImageOut && !cursorOnImage) { return; }
         
         imageViewport = (JViewport) SwingUtilities
-                   .getAncestorOfClass(JViewport.class, labelImage);
+                        .getAncestorOfClass(JViewport.class, labelImage);
         
         if (imageViewport != null) {
             
@@ -470,7 +536,7 @@ private final ChangeListener changeListener = new ChangeListener() {
     @Override
     public void stateChanged (ChangeEvent e) {
         
-        setImageScaleFit();
+        calculateImageScaleFit();
         if (scrollBarVisible == isScrollBarVisible()) { return; }
 
         scrollBarVisible = isScrollBarVisible();
