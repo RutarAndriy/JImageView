@@ -6,6 +6,8 @@ import java.util.*;
 import java.beans.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.*;
 
 // ............................................................................
@@ -223,6 +225,7 @@ private void calculateImageScaleFit() {
     boolean hScrollBarVisible = (vW < panelRoot.getWidth());
     boolean vScrollBarVisible = (vH < panelRoot.getHeight());
     
+    System.out.println("------------------");
     System.out.println("H >> : " + hScrollBar.isVisible() + "");
     System.out.println("V >> : " + vScrollBar.isVisible() + "");
     
@@ -536,7 +539,18 @@ private final ChangeListener changeListener = new ChangeListener() {
     @Override
     public void stateChanged (ChangeEvent e) {
         
-        calculateImageScaleFit();
+        // Dump, but fix problem :(
+        Thread t = new Thread(() -> {
+            
+            try {
+                Thread.sleep(10);
+                calculateImageScaleFit();
+            } catch (InterruptedException ex) {}
+            
+        });
+        t.start();
+        
+        //calculateImageScaleFit();
         if (scrollBarVisible == isScrollBarVisible()) { return; }
 
         scrollBarVisible = isScrollBarVisible();
