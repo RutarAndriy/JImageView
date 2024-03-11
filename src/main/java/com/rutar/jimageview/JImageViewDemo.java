@@ -70,15 +70,15 @@ btn_open.addActionListener(this::buttonPressed);
 
 panel_1.setLayout(new GridLayout(1, 0, 5, 0));
 
-btn_zoom_in.setText("Збільшити");
-btn_zoom_in.setActionCommand("btn_zoom_in");
-btn_zoom_in.addActionListener(this::buttonPressed);
-panel_1.add(btn_zoom_in);
-
 btn_zoom_out.setText("Зменшити");
 btn_zoom_out.setActionCommand("btn_zoom_out");
 btn_zoom_out.addActionListener(this::buttonPressed);
 panel_1.add(btn_zoom_out);
+
+btn_zoom_in.setText("Збільшити");
+btn_zoom_in.setActionCommand("btn_zoom_in");
+btn_zoom_in.addActionListener(this::buttonPressed);
+panel_1.add(btn_zoom_in);
 
 btn_center.setText("Центрувати зображення");
 btn_center.setActionCommand("btn_center");

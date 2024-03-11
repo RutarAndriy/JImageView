@@ -6,8 +6,6 @@ import java.util.*;
 import java.beans.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.event.*;
 
 // ............................................................................
@@ -39,18 +37,32 @@ private Color gridLightColor = Color.LIGHT_GRAY;       // I колір фоно�
 private Color gridDarkColor  = Color.DARK_GRAY;       // II колір фонової сітки
 private int gridSize = 25;                                      // Розмір сітки
 
-private int imageScale = 100;
+private int imageScale = 100;                             // Масштаб зображення
 
-private ImageIcon image = null;
-private ImageIcon errorImage = null;
+private ImageIcon image = null;                        // Зображення для показу
+private ImageIcon errorImage = null;  // Зображення яке показується при помилці
 
-private int imageScaleMax;
-private int imageScaleMin;
-private int imageScaleInternalFit;
-private int imageScaleExternalFit;
+private int imageScaleMax;             // Мінімальний масштаб заного зображення
+private int imageScaleMin;            // Максимальний масштаб заного зображення
+private int imageScaleInternalFit;       // Масштаб для внутрішнього заповнення
+private int imageScaleExternalFit;        // Масштаб для зовнішнього заповнення
+
+// ............................................................................
 
 private int scaleMin = 10;
 private int scaleMax = 900;
+
+private JScrollBar hScrollBar, vScrollBar;
+
+// ............................................................................
+
+// Масив стандартних масштабів
+private final int[] scales =
+    { 10,  15,  20,  25,  30,  35,  40,  45,  50,
+                          60,  70,  80,  90, 100,
+          125, 150, 175, 200, 225, 250, 275, 300,
+                              350, 400, 450, 500,
+                              600, 700, 800, 900  };
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -189,56 +201,46 @@ private void calculateImageScaleMinMax (ImageIcon image) {
 
 // ............................................................................
 
-private int iW, vW, mW, sW;
-private int iH, vH, mH, sH;
+private int iW, vW, mW, sW, eW;
+private int iH, vH, mH, sH, eH;
 private int fitWi, fitHi, fitWe, fitHe;
-
-private JScrollBar hScrollBar, vScrollBar;
 
 // ............................................................................
 
 private void calculateImageScaleFit() {
     
-    vScrollBar = getVerticalScrollBar();
-    hScrollBar = getHorizontalScrollBar();
-    
     // Ширина зображення
     iW = image.getIconWidth();
     // Ширина області перегляду
     vW = getViewport().getWidth();
-
     // Ширина вертикального скролбару
     mW = vScrollBar.getMaximumSize().width;
     // Активна ширина вертикального скролбару
     sW = vScrollBar.isVisible() ? mW : 0;
+    // Комія змінної sW, використовується для розрахунку imageScaleExternalFit
+    eW = sW;
     
     // Висота зображення
     iH = image.getIconHeight();
     // Висота області перегляду
     vH = getViewport().getHeight();
-
     // Висота горизонтального скролбару
     mH = hScrollBar.getMaximumSize().height;
     // Активна висота горизонтального скролбару
     sH = hScrollBar.isVisible() ? mH : 0;
+    // Комія змінної sH, використовується для розрахунку imageScaleExternalFit
+    eH = sH;
     
-    boolean hScrollBarVisible = (vW < panelRoot.getWidth());
-    boolean vScrollBarVisible = (vH < panelRoot.getHeight());
-    
-    System.out.println("------------------");
-    System.out.println("H >> : " + hScrollBar.isVisible() + "");
-    System.out.println("V >> : " + vScrollBar.isVisible() + "");
-    
-    //if (getVerticalScrollBarPolicy()   ==
-    //    VERTICAL_SCROLLBAR_ALWAYS)   { sW = 0; }
-    //if (getHorizontalScrollBarPolicy() ==
-    //    HORIZONTAL_SCROLLBAR_ALWAYS) { sH = 0; }
+    if (getVerticalScrollBarPolicy()   ==
+        VERTICAL_SCROLLBAR_ALWAYS)   { sW = 0; }
+    if (getHorizontalScrollBarPolicy() ==
+        HORIZONTAL_SCROLLBAR_ALWAYS) { sH = 0; }
     
     fitWi = (int)(100d * (vW + sW) / iW);
     fitHi = (int)(100d * (vH + sH) / iH);
     
-    fitWe = (int)(100d * (vW + sW - mW) / iW);
-    fitHe = (int)(100d * (vH + sH - mH) / iH);
+    fitWe = (int)(100d * (vW + eW - mW) / iW);
+    fitHe = (int)(100d * (vH + eH - mH) / iH);
     
     imageScaleInternalFit = (fitWi < fitHi) ? fitWi : fitHi;
     imageScaleExternalFit = (fitWe > fitHe) ? fitWe : fitHe;
@@ -539,23 +541,20 @@ private final ChangeListener changeListener = new ChangeListener() {
     @Override
     public void stateChanged (ChangeEvent e) {
         
-        // Dump, but fix problem :(
-        Thread t = new Thread(() -> {
-            
-            try {
-                Thread.sleep(10);
-                calculateImageScaleFit();
-            } catch (InterruptedException ex) {}
-            
-        });
-        t.start();
+        // Дуже важлива строка коду !!!
+        // Якщо компонент не валідований, його необхідно обов'язково валідувати
+        // Якщо цього не зробити, компонент повертатиме некоректні властивості
+        if (!isValid()) { validate(); }
         
-        //calculateImageScaleFit();
-        if (scrollBarVisible == isScrollBarVisible()) { return; }
+        if (scrollBarVisible != isScrollBarVisible()) {
 
         scrollBarVisible = isScrollBarVisible();
         CURSOR_DEFAULT = scrollBarVisible ? CURSOR_MOVE : null;
         labelImage.setCursor(CURSOR_DEFAULT);
+        
+        }
+        
+        calculateImageScaleFit();
         
     }
 };
@@ -563,8 +562,10 @@ private final ChangeListener changeListener = new ChangeListener() {
 ///////////////////////////////////////////////////////////////////////////////
 
 private boolean isScrollBarVisible()
-    { return getVerticalScrollBar().isVisible() ||
-             getHorizontalScrollBar().isVisible(); }
+    { hScrollBar = getHorizontalScrollBar();
+      vScrollBar = getVerticalScrollBar();
+      
+      return hScrollBar.isVisible() || vScrollBar.isVisible(); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
