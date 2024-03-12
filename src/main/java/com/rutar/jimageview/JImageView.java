@@ -42,6 +42,8 @@ private int imageScale = 100;                             // Масштаб зо
 private ImageIcon image = null;                        // Зображення для показу
 private ImageIcon errorImage = null;  // Зображення яке показується при помилці
 
+private int scaleMin;
+private int scaleMax;
 private int imageScaleMax;             // Мінімальний масштаб заного зображення
 private int imageScaleMin;            // Максимальний масштаб заного зображення
 private int imageScaleInternalFit;       // Масштаб для внутрішнього заповнення
@@ -49,8 +51,7 @@ private int imageScaleExternalFit;        // Масштаб для зовніш�
 
 // ............................................................................
 
-private int scaleMin = 10;
-private int scaleMax = 900;
+
 
 private JScrollBar hScrollBar, vScrollBar;
 
@@ -114,34 +115,30 @@ setViewportView(panelRoot);
 
 public void zoomIn() {
     
-    if (imageScale == scaleMax ||
-        imageScale >= imageScaleMax) { return; }
+    if (imageScale >= imageScaleMax) { return; }
     
-    if      (imageScale >= 10  && imageScale < 50)  { imageScale +=   5; }
-    else if (imageScale >= 50  && imageScale < 100) { imageScale +=  10; }
-    else if (imageScale >= 100 && imageScale < 300) { imageScale +=  25; }
-    else if (imageScale >= 300 && imageScale < 500) { imageScale +=  50; }
-    else if (imageScale >= 500 && imageScale < 900) { imageScale += 100; }
-
-    setImageScale(imageScale);
-
+    for (int z = 0; z < scales.length; z++) {
+        if (imageScale < scales[z]) {
+            imageScale = scales[z];
+            setImageScale(imageScale);
+            break;
+        }
+    }
 }
 
 // ............................................................................
 
 public void zoomOut() {
     
-    if (imageScale == scaleMin ||
-        imageScale <= imageScaleMin) { return; }
+    if (imageScale <= imageScaleMin) { return; }
     
-    if      (imageScale > 10  && imageScale <= 50)  { imageScale -=   5; }
-    else if (imageScale > 50  && imageScale <= 100) { imageScale -=  10; }
-    else if (imageScale > 100 && imageScale <= 300) { imageScale -=  25; }
-    else if (imageScale > 300 && imageScale <= 500) { imageScale -=  50; }
-    else if (imageScale > 500 && imageScale <= 900) { imageScale -= 100; }
-
-    setImageScale(imageScale);
-
+    for (int z = scales.length - 1; z >= 0; z--) {
+        if (imageScale > scales[z]) {
+            imageScale = scales[z];
+            setImageScale(imageScale);
+            break;
+        }
+    }
 }
 
 // ............................................................................
@@ -184,12 +181,15 @@ public void paintComponent (Graphics g) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-private void calculateImageScaleMinMax (ImageIcon image) {
+private void calculateScaleMinMax (ImageIcon image) {
 
     int w = image.getIconWidth();
     int h = image.getIconHeight();
     
     int z = (w > h) ? w : h;
+    
+    scaleMin = scales[0];
+    scaleMax = scales[scales.length - 1];
     
     imageScaleMin = (int)(48d   / z * 100);
     imageScaleMax = (int)(3000d / z * 100);
@@ -257,8 +257,9 @@ public ImageIcon getImage() { return image; }
 
 public void setImage (ImageIcon image)
     { if (image == null) { image = getErrorImage(); }
-      calculateImageScaleMinMax(image);
+      calculateScaleMinMax(image);
       labelImage.setIcon(image);
+      imageScale = 100;
       ImageIcon oldValue = this.image;
       this.image = image;
       fireEvent("image", oldValue, image);
@@ -379,7 +380,7 @@ public int getImageScale() { return imageScale; }
 public void setImageScale (int imageScale)
     { if      (imageScale > scaleMax)      { imageScale = scaleMax;      }
       else if (imageScale < scaleMin)      { imageScale = scaleMin;      }
-      else if (imageScale > imageScaleMax) { imageScale = imageScaleMax; }
+      if      (imageScale > imageScaleMax) { imageScale = imageScaleMax; }
       else if (imageScale < imageScaleMin) { imageScale = imageScaleMin; }
       int oldValue = this.imageScale;
       this.imageScale = imageScale;
