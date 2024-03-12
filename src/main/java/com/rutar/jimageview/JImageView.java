@@ -231,10 +231,14 @@ private void calculateImageScaleFit() {
     // Комія змінної sH, використовується для розрахунку imageScaleExternalFit
     eH = sH;
     
-    if (getVerticalScrollBarPolicy()   ==
+    if      (getVerticalScrollBarPolicy() ==
         VERTICAL_SCROLLBAR_ALWAYS)   { sW = 0; }
-    if (getHorizontalScrollBarPolicy() ==
+    else if (getVerticalScrollBarPolicy() ==
+        VERTICAL_SCROLLBAR_NEVER)    { eW = mW; }
+    if      (getHorizontalScrollBarPolicy() ==
         HORIZONTAL_SCROLLBAR_ALWAYS) { sH = 0; }
+    else if (getHorizontalScrollBarPolicy() ==
+        HORIZONTAL_SCROLLBAR_NEVER)  { eH = mH; }
     
     fitWi = (int)(100d * (vW + sW) / iW);
     fitHi = (int)(100d * (vH + sH) / iH);

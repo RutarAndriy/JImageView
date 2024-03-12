@@ -30,7 +30,8 @@ panel_components = new JPanel();
 panel_1 = new JPanel();
 panel_2 = new JPanel();
 panel_3 = new JPanel();
-        
+panel_4 = new JPanel();
+
 btn_open = new JButton();
 btn_zoom_in = new JButton();
 btn_zoom_out = new JButton();
@@ -38,26 +39,34 @@ btn_center = new JButton();
 btn_internal_fit = new JButton();
 btn_external_fit = new JButton();
 btn_original = new JButton();
+btn_rnd_grid_color = new JButton();
+btn_rnd_grid_size = new JButton();
 
 field_scale = new JTextField();
 btn_set_scale = new JButton();
 
 cb_grid = new JCheckBox();
-cb_show_scrollbar = new JCheckBox();
 cb_lmb = new JCheckBox();
 cb_cmb = new JCheckBox();
 cb_rmb = new JCheckBox();
 cb_wheel = new JCheckBox();
 
-rb_fast = new JRadioButton();
-rb_smooth = new JRadioButton();
+rb_zoom_fast = new JRadioButton();
+rb_zoom_smooth = new JRadioButton();
+
+rb_sb_always = new JRadioButton();
+rb_sb_as_needed = new JRadioButton();
+rb_sb_never = new JRadioButton();
 
 sep_1 = new JSeparator();
 sep_2 = new JSeparator();
 sep_3 = new JSeparator();
 sep_4 = new JSeparator();
+sep_5 = new JSeparator();
+sep_6 = new JSeparator();
 
 bg_zoom = new ButtonGroup();
+bg_scrollbars = new ButtonGroup();
 
 // ............................................................................
 
@@ -125,11 +134,6 @@ cb_grid.setActionCommand("cb_grid");
 cb_grid.setMargin(new Insets(2, 0, 2, 5));
 cb_grid.addActionListener(this::checkBoxPressed);
 
-cb_show_scrollbar.setText("Постійно відображати смуги прокрутки");
-cb_show_scrollbar.setActionCommand("cb_show_scrollbar");
-cb_show_scrollbar.setMargin(new Insets(2, 0, 2, 5));
-cb_show_scrollbar.addActionListener(this::checkBoxPressed);
-
 cb_lmb.setSelected(true);
 cb_lmb.setText("Перетягувати зображення лівою клавішею миші");
 cb_lmb.setActionCommand("cb_lmb");
@@ -155,18 +159,49 @@ cb_wheel.setActionCommand("cb_wheel");
 cb_wheel.setMargin(new Insets(2, 0, 2, 5));
 cb_wheel.addActionListener(this::checkBoxPressed);
 
-bg_zoom.add(rb_fast);
-rb_fast.setSelected(true);
-rb_fast.setText("Швидке масштабування");
-rb_fast.setActionCommand("rb_fast");
-rb_fast.setMargin(new Insets(2, 0, 2, 5));
-rb_fast.addActionListener(this::radioButtonPressed);
+bg_zoom.add(rb_zoom_fast);
+rb_zoom_fast.setSelected(true);
+rb_zoom_fast.setText("Швидке масштабування");
+rb_zoom_fast.setActionCommand("rb_zoom_fast");
+rb_zoom_fast.setMargin(new Insets(2, 0, 2, 5));
+rb_zoom_fast.addActionListener(this::radioButtonPressed);
 
-bg_zoom.add(rb_smooth);
-rb_smooth.setText("Згладжене масштабування");
-rb_smooth.setActionCommand("rb_smooth");
-rb_smooth.setMargin(new Insets(2, 0, 2, 5));
-rb_smooth.addActionListener(this::radioButtonPressed);
+bg_zoom.add(rb_zoom_smooth);
+rb_zoom_smooth.setText("Згладжене масштабування");
+rb_zoom_smooth.setActionCommand("rb_zoom_smooth");
+rb_zoom_smooth.setMargin(new Insets(2, 0, 2, 5));
+rb_zoom_smooth.addActionListener(this::radioButtonPressed);
+
+bg_scrollbars.add(rb_sb_always);
+rb_sb_always.setText("Постійно відображати смуги прокрутки");
+rb_sb_always.setActionCommand("rb_sb_always");
+rb_sb_always.setMargin(new Insets(2, 0, 2, 5));
+rb_sb_always.addActionListener(this::radioButtonPressed);
+
+bg_scrollbars.add(rb_sb_as_needed);
+rb_sb_as_needed.setSelected(true);
+rb_sb_as_needed.setText("Відображати смуги прокрутки за потреби");
+rb_sb_as_needed.setActionCommand("rb_sb_as_needed");
+rb_sb_as_needed.setMargin(new Insets(2, 0, 2, 5));
+rb_sb_as_needed.addActionListener(this::radioButtonPressed);
+
+bg_scrollbars.add(rb_sb_never);
+rb_sb_never.setText("Ніколи не відображати смуги прокрутки");
+rb_sb_never.setActionCommand("rb_sb_never");
+rb_sb_never.setMargin(new Insets(2, 0, 2, 5));
+rb_sb_never.addActionListener(this::radioButtonPressed);
+
+panel_4.setLayout(new GridLayout(1, 0, 5, 0));
+
+btn_rnd_grid_color.setText("Змінити колір сітки");
+btn_rnd_grid_color.setActionCommand("btn_rnd_grid_color");
+btn_rnd_grid_color.addActionListener(this::buttonPressed);
+panel_4.add(btn_rnd_grid_color);
+
+btn_rnd_grid_size.setText("Змінити розмір сітки");
+btn_rnd_grid_size.setActionCommand("btn_rnd_grid_size");
+btn_rnd_grid_size.addActionListener(this::buttonPressed);
+panel_4.add(btn_rnd_grid_size);
 
 GroupLayout panel_componentsLayout = new GroupLayout(panel_components);
 panel_components.setLayout(panel_componentsLayout);
@@ -183,15 +218,19 @@ panel_componentsLayout.setHorizontalGroup(panel_componentsLayout
                                                DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(sep_3)
     .addComponent(cb_grid, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
-    .addComponent(cb_show_scrollbar, DEFAULT_SIZE,
-                                     DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(cb_cmb, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(cb_lmb, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(cb_rmb, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(cb_wheel, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(sep_4)
-    .addComponent(rb_fast, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
-    .addComponent(rb_smooth, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+    .addComponent(rb_zoom_fast, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+    .addComponent(rb_zoom_smooth, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+    .addComponent(sep_5)
+    .addComponent(rb_sb_always, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+    .addComponent(rb_sb_as_needed, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+    .addComponent(rb_sb_never, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+    .addComponent(sep_6)
+    .addComponent(panel_4, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
 );
 
 panel_componentsLayout.setVerticalGroup(panel_componentsLayout
@@ -218,8 +257,6 @@ panel_componentsLayout.setVerticalGroup(panel_componentsLayout
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(cb_grid)
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(cb_show_scrollbar)
-        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(cb_lmb)
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(cb_cmb)
@@ -230,10 +267,22 @@ panel_componentsLayout.setVerticalGroup(panel_componentsLayout
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(sep_4, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(rb_fast)
+        .addComponent(rb_zoom_fast)
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(rb_smooth)
-        .addGap(0, 0, 0))
+        .addComponent(rb_zoom_smooth)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(sep_5, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(rb_sb_always)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(rb_sb_as_needed)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(rb_sb_never)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(sep_6, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(panel_4, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
+        .addGap(2, 2, 2))
 );
 
 GroupLayout layout = new GroupLayout(getContentPane());
@@ -306,14 +355,14 @@ private void checkBoxPressed (ActionEvent ae) {
 
     switch (ae.getActionCommand()) {
         
-        case "cb_show_scrollbar" -> {
-            
-            imageView.setVerticalScrollBarPolicy(cb_show_scrollbar.isSelected()
-                ? VERTICAL_SCROLLBAR_ALWAYS : VERTICAL_SCROLLBAR_AS_NEEDED);
-            imageView.setHorizontalScrollBarPolicy(cb_show_scrollbar.isSelected()
-                ? HORIZONTAL_SCROLLBAR_ALWAYS : HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            
-        }
+//        case "cb_show_scrollbar" -> {
+//            
+//            imageView.setVerticalScrollBarPolicy(cb_show_scrollbar.isSelected()
+//                ? VERTICAL_SCROLLBAR_NEVER : VERTICAL_SCROLLBAR_AS_NEEDED);
+//            imageView.setHorizontalScrollBarPolicy(cb_show_scrollbar.isSelected()
+//                ? HORIZONTAL_SCROLLBAR_NEVER : HORIZONTAL_SCROLLBAR_AS_NEEDED);
+//            
+//        }
         
     }
     
@@ -368,6 +417,7 @@ private JPanel panel_components;
 private JPanel panel_1;
 private JPanel panel_2;
 private JPanel panel_3;
+private JPanel panel_4;
 
 private JButton btn_open;
 
@@ -377,26 +427,34 @@ private JButton btn_center;
 private JButton btn_internal_fit;
 private JButton btn_external_fit;
 private JButton btn_original;
+private JButton btn_rnd_grid_color;
+private JButton btn_rnd_grid_size;
 
 private JTextField field_scale;
 private JButton btn_set_scale;
 
 private JCheckBox cb_grid;
-private JCheckBox cb_show_scrollbar;
 private JCheckBox cb_lmb;
 private JCheckBox cb_cmb;
 private JCheckBox cb_rmb;
 private JCheckBox cb_wheel;
 
-private JRadioButton rb_fast;
-private JRadioButton rb_smooth;
+private JRadioButton rb_zoom_fast;
+private JRadioButton rb_zoom_smooth;
+
+private JRadioButton rb_sb_always;
+private JRadioButton rb_sb_as_needed;
+private JRadioButton rb_sb_never;
 
 private JSeparator sep_1;
 private JSeparator sep_2;
 private JSeparator sep_3;
 private JSeparator sep_4;
+private JSeparator sep_5;
+private JSeparator sep_6;
 
 private ButtonGroup bg_zoom;
+private ButtonGroup bg_scrollbars;
 
 // Кінець класу JImageViewDemo ////////////////////////////////////////////////
 
