@@ -4,9 +4,10 @@ import java.io.*;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import com.rutar.jimageview.JImageView.*;
 
+import static java.awt.Color.*;
 import static javax.swing.GroupLayout.*;
-import static javax.swing.ScrollPaneConstants.*;
 
 // ............................................................................
 
@@ -17,6 +18,18 @@ import static javax.swing.ScrollPaneConstants.*;
  */
 
 public class JImageViewDemo extends JFrame {
+
+private int grid_color_id;
+private final Color[][] grid_colors = {
+    { null, WHITE,       RED,    YELLOW,     GREEN,      BLUE },
+    { null, BLACK, DARK_GRAY, DARK_GRAY, DARK_GRAY, DARK_GRAY }
+};
+
+private int grid_size_id = 4;
+private final int[] grid_sizes =
+    { 7, 9, 15, 20, 25, 30, 50, 70, 99 };
+
+///////////////////////////////////////////////////////////////////////////////
 
 public JImageViewDemo() { initComponents(); }
 
@@ -160,13 +173,13 @@ cb_wheel.setMargin(new Insets(2, 0, 2, 5));
 cb_wheel.addActionListener(this::checkBoxPressed);
 
 bg_zoom.add(rb_zoom_fast);
-rb_zoom_fast.setSelected(true);
 rb_zoom_fast.setText("Швидке масштабування");
 rb_zoom_fast.setActionCommand("rb_zoom_fast");
 rb_zoom_fast.setMargin(new Insets(2, 0, 2, 5));
 rb_zoom_fast.addActionListener(this::radioButtonPressed);
 
 bg_zoom.add(rb_zoom_smooth);
+rb_zoom_smooth.setSelected(true);
 rb_zoom_smooth.setText("Згладжене масштабування");
 rb_zoom_smooth.setActionCommand("rb_zoom_smooth");
 rb_zoom_smooth.setMargin(new Insets(2, 0, 2, 5));
@@ -343,6 +356,31 @@ private void buttonPressed (ActionEvent ae) {
             imageView.setImage(new ImageIcon(file.getAbsolutePath()));
         }
         
+        // ....................................................................
+        
+        case "btn_rnd_grid_color" -> {
+            
+            grid_color_id += (grid_color_id < grid_colors[0].length)
+                           ? 1 : -grid_colors[0].length;
+
+            if (grid_color_id == grid_colors[0].length)
+                { imageView.setGridLightColor(getRandomColor());
+                  imageView.setGridDarkColor(getRandomColor()); }
+            else
+                { imageView.setGridLightColor(grid_colors[0][grid_color_id]);
+                  imageView.setGridDarkColor (grid_colors[1][grid_color_id]); }
+        }
+        
+        // ....................................................................
+        
+        case "btn_rnd_grid_size" -> {
+            
+            grid_size_id += (grid_size_id < grid_sizes.length - 1)
+                           ? 1 : -grid_sizes.length + 1;
+
+            imageView.setGridSize(grid_sizes[grid_size_id]);
+        }
+        
     }
     
     field_scale.setText(imageView.getImageScale() + "%");
@@ -355,14 +393,16 @@ private void checkBoxPressed (ActionEvent ae) {
 
     switch (ae.getActionCommand()) {
         
-//        case "cb_show_scrollbar" -> {
-//            
-//            imageView.setVerticalScrollBarPolicy(cb_show_scrollbar.isSelected()
-//                ? VERTICAL_SCROLLBAR_NEVER : VERTICAL_SCROLLBAR_AS_NEEDED);
-//            imageView.setHorizontalScrollBarPolicy(cb_show_scrollbar.isSelected()
-//                ? HORIZONTAL_SCROLLBAR_NEVER : HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//            
-//        }
+        case "cb_grid" ->
+            { imageView.setGridVisible(cb_grid.isSelected()); }
+        case "cb_lmb" ->
+            { imageView.setLMBEnable(cb_lmb.isSelected()); }
+        case "cb_cmb" ->
+            { imageView.setCMBEnable(cb_cmb.isSelected()); }
+        case "cb_rmb" ->
+            { imageView.setRMBEnable(cb_rmb.isSelected()); }
+        case "cb_wheel" ->
+            { imageView.setWheelEnable(cb_wheel.isSelected()); }
         
     }
     
@@ -371,19 +411,48 @@ private void checkBoxPressed (ActionEvent ae) {
 ///////////////////////////////////////////////////////////////////////////////
 
 private void radioButtonPressed (ActionEvent ae) {
-
+    
+    long to = System.currentTimeMillis();
+    
     switch (ae.getActionCommand()) {
         
-        case "rb_fast"   -> { }
-        case "rb_smooth" -> { }
+        case "rb_zoom_fast"    ->
+            { imageView.setScaleQuality(Scale_Quality.FAST); }
+        case "rb_zoom_smooth"  ->
+            { imageView.setScaleQuality(Scale_Quality.SMOOTH); }
+        
+        case "rb_sb_always"    ->
+            { imageView.setHorizontalScrollBarPolicy(32);
+              imageView  .setVerticalScrollBarPolicy(22); }
+        case "rb_sb_as_needed" ->
+            { imageView.setHorizontalScrollBarPolicy(30);
+              imageView  .setVerticalScrollBarPolicy(20); }
+        case "rb_sb_never"     ->
+            { imageView.setHorizontalScrollBarPolicy(31);
+              imageView  .setVerticalScrollBarPolicy(21); }
         
     }
+    
+    long tn = System.currentTimeMillis();
+    System.out.println("Processing time: " + (tn - to) + " ms.");
+    
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-private void fieldInputEntered     (ActionEvent ae) { fixInput(); }
-private void fieldInputFocusLosted (FocusEvent  fe) { fixInput(); }
+private void fieldInputEntered (ActionEvent ae) {
+    
+    fixInput();
+    ActionEvent event = new ActionEvent(btn_set_scale, -1, "btn_set_scale");
+
+    for (ActionListener listener : btn_set_scale.getActionListeners()) {
+        listener.actionPerformed(event);
+    }
+}
+
+// ............................................................................
+
+private void fieldInputFocusLosted (FocusEvent fe) { fixInput(); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -398,6 +467,16 @@ private void fixInput() {
     
     field_scale.setText(input);
     
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private Color getRandomColor() {
+
+return new Color((int)(Math.random() * 255),
+                 (int)(Math.random() * 255),
+                 (int)(Math.random() * 255));
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -32,7 +32,7 @@ private static transient PropertyChangeSupport propertyChangeSupport = null;
 
 private boolean drugImageOut = true;         // Переміщення за межею компонента
 
-private boolean backgroundGrid = true;                          // Фонова сітка
+private boolean gridVisible = true;                          // Фонова сітка
 private Color gridLightColor = Color.LIGHT_GRAY;       // I колір фонової сітки
 private Color gridDarkColor  = Color.DARK_GRAY;       // II колір фонової сітки
 private int gridSize = 25;                                      // Розмір сітки
@@ -51,7 +51,11 @@ private int imageScaleExternalFit;        // Масштаб для зовніш�
 
 // ............................................................................
 
+private Scale_Quality scaleQuality = Scale_Quality.SMOOTH;
 
+private boolean lmbEnable, cmbEnable, rmbEnable, wheelEnable;
+
+public enum Scale_Quality { FAST, SMOOTH }
 
 private JScrollBar hScrollBar, vScrollBar;
 
@@ -80,7 +84,7 @@ labelImage = new JLabel();
 setErrorImage(null);
 setImage(null);
 
-labelImage.setIcon(getScaledImage());
+updateImage();
 labelImage.addMouseListener(imageMouseListener);
 labelImage.addMouseMotionListener(imageMouseMotionListener);
 labelImage.setCursor(CURSOR_DEFAULT);
@@ -159,7 +163,7 @@ public void paintComponent (Graphics g) {
 
     super.paintComponent(g);
 
-    if (!backgroundGrid) { return; }
+    if (!gridVisible) { return; }
 
     Graphics2D g2 = (Graphics2D)g;
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -256,12 +260,12 @@ private void calculateImageScaleFit() {
 public ImageIcon getImage() { return image; }
 
 public void setImage (ImageIcon image)
-    { if (image == null) { image = getErrorImage(); }
-      calculateScaleMinMax(image);
-      labelImage.setIcon(image);
-      imageScale = 100;
+    { if (image == null) { image = getErrorImage(); }       
       ImageIcon oldValue = this.image;
       this.image = image;
+      calculateScaleMinMax(image); 
+      setImageScale(100);
+      updateImage();
       fireEvent("image", oldValue, image);
       getPropertyChangeSupport().firePropertyChange("image",
                                                     oldValue, image);
@@ -291,7 +295,11 @@ private ImageIcon getScaledImage() {
     int w = (int)(original.getWidth(null)  * imageScale/100f);
     int h = (int)(original.getHeight(null) * imageScale/100f);
 
-    Image scaled = original.getScaledInstance(w, h, Image.SCALE_FAST);
+    int   quality = Image.SCALE_FAST;
+    if (scaleQuality == Scale_Quality.SMOOTH)
+        { quality = Image.SCALE_SMOOTH; }
+    
+    Image scaled = original.getScaledInstance(w, h, quality);
     
     return new ImageIcon(scaled);
     
@@ -313,6 +321,66 @@ private ImageIcon getRandomImage() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+private void updateImage() { labelImage.setIcon(getScaledImage()); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+public Scale_Quality getScaleQuality() { return scaleQuality; }
+
+public void setScaleQuality (Scale_Quality scaleQuality)
+    { Scale_Quality oldValue = this.scaleQuality;
+      this.scaleQuality = scaleQuality;
+      updateImage();
+      fireEvent("scaleQuality", oldValue, scaleQuality);
+      getPropertyChangeSupport().firePropertyChange("scaleQuality",
+                                                    oldValue, scaleQuality); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+public boolean isLMBEnable() { return lmbEnable; }
+
+public void setLMBEnable (boolean lmbEnable)
+    { boolean oldValue = this.lmbEnable;
+      this.lmbEnable = lmbEnable;
+      fireEvent("lmbEnable", oldValue, lmbEnable);
+      getPropertyChangeSupport().firePropertyChange("lmbEnable",
+                                                    oldValue, lmbEnable); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+public boolean isCMBEnable() { return cmbEnable; }
+
+public void setCMBEnable (boolean cmbEnable)
+    { boolean oldValue = this.cmbEnable;
+      this.cmbEnable = cmbEnable;
+      fireEvent("cmbEnable", oldValue, cmbEnable);
+      getPropertyChangeSupport().firePropertyChange("cmbEnable",
+                                                    oldValue, cmbEnable); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+public boolean isRMBEnable() { return rmbEnable; }
+
+public void setRMBEnable (boolean rmbEnable)
+    { boolean oldValue = this.rmbEnable;
+      this.rmbEnable = rmbEnable;
+      fireEvent("rmbEnable", oldValue, rmbEnable);
+      getPropertyChangeSupport().firePropertyChange("rmbEnable",
+                                                    oldValue, rmbEnable); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+public boolean isWheelEnable() { return wheelEnable; }
+
+public void setWheelEnable (boolean wheelEnable)
+    { boolean oldValue = this.wheelEnable;
+      this.wheelEnable = wheelEnable;
+      fireEvent("wheelEnable", oldValue, wheelEnable);
+      getPropertyChangeSupport().firePropertyChange("wheelEnable",
+                                                    oldValue, wheelEnable); }
+
+///////////////////////////////////////////////////////////////////////////////
+
 public boolean isDrugImageOut() { return drugImageOut; }
 
 public void setDrugImageOut (boolean drugImageOut)
@@ -325,14 +393,14 @@ public void setDrugImageOut (boolean drugImageOut)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-public boolean isBackgroundGrid() { return backgroundGrid; }
+public boolean isGridVisible() { return gridVisible; }
 
-public void setBackgroundGrid (boolean backgroundGrid)
-    { boolean oldValue = this.backgroundGrid;
-      this.backgroundGrid = backgroundGrid;
-      fireEvent("backgroundGrid", oldValue, backgroundGrid);
-      getPropertyChangeSupport().firePropertyChange("backgroundGrid",
-                                                    oldValue, backgroundGrid);
+public void setGridVisible (boolean gridVisible)
+    { boolean oldValue = this.gridVisible;
+      this.gridVisible = gridVisible;
+      fireEvent("gridVisible", oldValue, gridVisible);
+      getPropertyChangeSupport().firePropertyChange("gridVisible",
+                                                    oldValue, gridVisible);
       repaint(); }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -340,7 +408,8 @@ public void setBackgroundGrid (boolean backgroundGrid)
 public Color getGridLightColor() { return gridLightColor; }
 
 public void setGridLightColor (Color gridLightColor)
-    { Color oldValue = this.gridLightColor;
+    { if (gridLightColor == null) { gridLightColor = Color.LIGHT_GRAY; }
+      Color oldValue = this.gridLightColor;
       this.gridLightColor = gridLightColor;
       fireEvent("gridLightColor", oldValue, gridLightColor);
       getPropertyChangeSupport().firePropertyChange("gridLightColor",
@@ -352,7 +421,8 @@ public void setGridLightColor (Color gridLightColor)
 public Color getGridDarkColor() { return gridDarkColor; }
 
 public void setGridDarkColor (Color gridDarkColor)
-    { Color oldValue = this.gridDarkColor;
+    { if (gridDarkColor == null) { gridDarkColor = Color.DARK_GRAY; }
+      Color oldValue = this.gridDarkColor;
       this.gridDarkColor = gridDarkColor;
       fireEvent("gridDarkColor", oldValue, gridDarkColor);
       getPropertyChangeSupport().firePropertyChange("gridDarkColor",
@@ -384,10 +454,10 @@ public void setImageScale (int imageScale)
       else if (imageScale < imageScaleMin) { imageScale = imageScaleMin; }
       int oldValue = this.imageScale;
       this.imageScale = imageScale;
+      updateImage();
       fireEvent("imageScale", oldValue, imageScale);
       getPropertyChangeSupport().firePropertyChange("imageScale",
-                                                    oldValue, imageScale);
-      labelImage.setIcon(getScaledImage()); }
+                                                    oldValue, imageScale); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
