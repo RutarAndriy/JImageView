@@ -156,6 +156,20 @@ public void fitExternal() { setImageScale(imageScaleExternalFit); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+public void center() {
+    
+    Dimension size = panelRoot.getSize();
+    Rectangle viewRect = getViewport().getViewRect();
+
+    viewRect.x = (size.width  - viewRect.width)  / 2;
+    viewRect.y = (size.height - viewRect.height) / 2;
+    
+    labelImage.scrollRectToVisible(viewRect);
+    
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 private final class RootPane extends JPanel {
 
 @Override

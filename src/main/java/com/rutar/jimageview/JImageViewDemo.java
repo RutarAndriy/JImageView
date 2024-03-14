@@ -138,12 +138,12 @@ field_scale.setHorizontalAlignment(JTextField.CENTER);
 field_scale.setText("100%");
 field_scale.addFocusListener(new FocusAdapter() {
     @Override
-    public void focusLost(FocusEvent evt) {
-        fieldInputFocusLosted(evt);
+    public void focusLost (FocusEvent evt) {
+        fieldInputFocusLosted();
     }
 });
 
-field_scale.addActionListener(this::fieldInputEntered);
+field_scale.addActionListener(ae -> this.fieldInputEntered());
 panel_4.add(field_scale);
 
 btn_set_scale.setText("Задати масштаб");
@@ -345,9 +345,10 @@ private void buttonPressed (ActionEvent ae) {
         
         case "btn_zoom_in"      -> imageView.zoomIn();
         case "btn_zoom_out"     -> imageView.zoomOut();
-        case "btn_original"     -> imageView.zoomOriginal();
+        case "btn_center"       -> imageView.center();
         case "btn_internal_fit" -> imageView.fitInternal();
         case "btn_external_fit" -> imageView.fitExternal();
+        case "btn_original"     -> imageView.zoomOriginal();
         
         // ....................................................................
         
@@ -450,7 +451,7 @@ private void radioButtonPressed (ActionEvent ae) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-private void fieldInputEntered (ActionEvent ae) {
+private void fieldInputEntered() {
     
     fixInput();
     ActionEvent event = new ActionEvent(btn_set_scale, -1, "btn_set_scale");
@@ -462,7 +463,7 @@ private void fieldInputEntered (ActionEvent ae) {
 
 // ............................................................................
 
-private void fieldInputFocusLosted (FocusEvent fe) { fixInput(); }
+private void fieldInputFocusLosted() { fixInput(); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
