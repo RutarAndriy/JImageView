@@ -111,8 +111,20 @@ addMouseWheelListener((MouseWheelListener) imageViewMouseListener);
 
 getViewport().addChangeListener(changeListener);
 setWheelScrollingEnabled(false);
+setViewport(new CustomViewport());
 setViewportView(panelRoot);
 
+}
+
+class CustomViewport extends JViewport {
+
+        @Override
+        public void paint(Graphics g) {
+            super.paint(g);
+            g.setColor(Color.YELLOW);
+            g.drawRect(35, 35, getWidth()-35-5, 50);
+            repaint();
+        }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -195,6 +207,19 @@ public void paintComponent (Graphics g) {
     }
 
 }
+
+// ............................................................................
+
+@Override
+public void paintChildren(Graphics g) {
+    
+    super.paintChildren(g);
+
+    g.setColor(Color.RED);
+    g.drawRect(30, 30, 70, 50);
+
+}
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
