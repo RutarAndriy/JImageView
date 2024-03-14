@@ -61,6 +61,7 @@ field_scale = new JTextField();
 btn_set_scale = new JButton();
 
 cb_grid = new JCheckBox();
+cb_drag_out = new JCheckBox();
 cb_lmb = new JCheckBox();
 cb_cmb = new JCheckBox();
 cb_rmb = new JCheckBox();
@@ -157,6 +158,12 @@ cb_grid.setActionCommand("cb_grid");
 cb_grid.setMargin(new Insets(2, 0, 2, 5));
 cb_grid.addActionListener(this::checkBoxPressed);
 
+cb_drag_out.setSelected(true);
+cb_drag_out.setText("Перетягування за межею видимості");
+cb_drag_out.setActionCommand("cb_drag_out");
+cb_drag_out.setMargin(new Insets(2, 0, 2, 5));
+cb_drag_out.addActionListener(this::checkBoxPressed);
+
 cb_lmb.setSelected(true);
 cb_lmb.setText("Перетягувати зображення лівою клавішею миші");
 cb_lmb.setActionCommand("cb_lmb");
@@ -241,6 +248,7 @@ panel_componentsLayout.setHorizontalGroup(panel_componentsLayout
                                                DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(sep_3)
     .addComponent(cb_grid, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+    .addComponent(cb_drag_out, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(cb_cmb, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(cb_lmb, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(cb_rmb, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
@@ -279,6 +287,8 @@ panel_componentsLayout.setVerticalGroup(panel_componentsLayout
         .addComponent(sep_3, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(cb_grid)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(cb_drag_out)
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(cb_lmb)
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -406,6 +416,8 @@ private void checkBoxPressed (ActionEvent ae) {
         
         case "cb_grid" ->
             { imageView.setGridVisible(cb_grid.isSelected()); }
+        case "cb_drag_out" ->
+            { imageView.setDrugImageOut(cb_drag_out.isSelected()); }
         case "cb_lmb" ->
             { imageView.setLMBEnable(cb_lmb.isSelected()); }
         case "cb_cmb" ->
@@ -526,6 +538,7 @@ private JTextField field_scale;
 private JButton btn_set_scale;
 
 private JCheckBox cb_grid;
+private JCheckBox cb_drag_out;
 private JCheckBox cb_lmb;
 private JCheckBox cb_cmb;
 private JCheckBox cb_rmb;

@@ -59,6 +59,10 @@ public enum Scale_Quality { FAST, SMOOTH }
 
 private JScrollBar hScrollBar, vScrollBar;
 
+private Rectangle   regionRect;
+private BasicStroke regionStroke;
+private BasicStroke regionStrokeAdditional;
+
 // ............................................................................
 
 // Масив стандартних масштабів
@@ -79,14 +83,13 @@ public JImageView() { initComponents(); }
 private void initComponents() {
 
 panelRoot = new RootPane();
-labelImage = new JLabel();
+labelImage = new ImageLabel();
 
+setRegionStroke(null);
 setErrorImage(null);
 setImage(null);
 
 updateImage();
-labelImage.addMouseListener(imageMouseListener);
-labelImage.addMouseMotionListener(imageMouseMotionListener);
 labelImage.setCursor(CURSOR_DEFAULT);
 
 GroupLayout panel_rootLayout = new GroupLayout(panelRoot);
@@ -106,25 +109,18 @@ panel_rootLayout.setVerticalGroup(panel_rootLayout
         .addGap(0, 0, Short.MAX_VALUE))
 );
 
-addMouseListener(imageViewMouseListener);
-addMouseWheelListener((MouseWheelListener) imageViewMouseListener);
-
-getViewport().addChangeListener(changeListener);
+//addMouseListener(imageViewMouseListener);
+//addMouseMotionListener(imageViewMouseMotionListener);
+//addMouseWheelListener((MouseWheelListener) imageViewMouseListener);
 setWheelScrollingEnabled(false);
-setViewport(new CustomViewport());
+
+getViewport().addMouseListener(mouseListener);
+getViewport().addChangeListener(changeListener);
+getViewport().addMouseMotionListener(mouseMotionListener);
+getViewport().addMouseWheelListener((MouseWheelListener) mouseListener);
+
 setViewportView(panelRoot);
 
-}
-
-class CustomViewport extends JViewport {
-
-        @Override
-        public void paint(Graphics g) {
-            super.paint(g);
-            g.setColor(Color.YELLOW);
-            g.drawRect(35, 35, getWidth()-35-5, 50);
-            repaint();
-        }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -188,38 +184,65 @@ private final class RootPane extends JPanel {
 public void paintComponent (Graphics g) {
 
     super.paintComponent(g);
-
-    if (!gridVisible) { return; }
-
     Graphics2D g2 = (Graphics2D)g;
-    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                        RenderingHints.VALUE_ANTIALIAS_ON);
+    
+    if (gridVisible) {
 
-    g2.setColor(gridLightColor);
-    g2.fillRect(0, 0, getWidth(), getHeight());
-    g2.setColor(gridDarkColor);
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                            RenderingHints.VALUE_ANTIALIAS_OFF);
 
-    for (int a = 0; a < getWidth();  a += gridSize) {
-    for (int b = 0; b < getHeight(); b += gridSize*2) {
-        g.fillRect(a, b + (a/gridSize%2 == 0 ? gridSize : 0),
-                   gridSize, gridSize);
-    }
+        g2.setColor(gridLightColor);
+        g2.fillRect(0, 0, getWidth(), getHeight());
+        g2.setColor(gridDarkColor);
+
+        for (int col = 0; col < getWidth();  col += gridSize) {
+        for (int row = 0; row < getHeight(); row += gridSize*2) {
+            g.fillRect(col, row + (col/gridSize%2 == 0 ? gridSize : 0),
+                       gridSize, gridSize);
+        }
+        }
+    
     }
 
 }
+}
 
-// ............................................................................
+///////////////////////////////////////////////////////////////////////////////
+
+private final class ImageLabel extends JLabel {
+
+private int rectX, rectY, rectW, rectH;
 
 @Override
-public void paintChildren(Graphics g) {
+public void paintComponent (Graphics g) {
+
+    super.paintComponent(g);
     
-    super.paintChildren(g);
+    if (regionRect == null) { return; }
+    
+    Graphics2D g2 = (Graphics2D) g;
+    
+    RenderingHints renderingHints = g2.getRenderingHints();
+    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_OFF);
+    
+    rectX = regionRect.x - getBounds().x;
+    rectY = regionRect.y - getBounds().y;
+    
+    rectW = regionRect.width;
+    rectH = regionRect.height;
+    
+    g2.setStroke(regionStrokeAdditional);
+    g2.setColor(Color.WHITE);
+    g2.drawRect(rectX, rectY, regionRect.width, regionRect.height);
 
-    g.setColor(Color.RED);
-    g.drawRect(30, 30, 70, 50);
-
+    g2.setStroke(regionStroke);
+    g2.setColor(Color.BLACK);
+    g2.drawRect(rectX, rectY, regionRect.width, regionRect.height);
+    
+    g2.setRenderingHints(renderingHints);
+    
 }
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -373,6 +396,28 @@ public void setScaleQuality (Scale_Quality scaleQuality)
       fireEvent("scaleQuality", oldValue, scaleQuality);
       getPropertyChangeSupport().firePropertyChange("scaleQuality",
                                                     oldValue, scaleQuality); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+public BasicStroke getRegionStroke() { return regionStroke; }
+
+public void setRegionStroke (BasicStroke regionStroke)
+    { if (regionStroke == null) {
+          regionStroke = new BasicStroke(2f, BasicStroke.CAP_BUTT, 
+                                             BasicStroke.JOIN_MITER, 10, 
+                                             new float[] { 3, 3 }, 0); }
+    
+      regionStrokeAdditional = new BasicStroke(regionStroke.getLineWidth(),
+                                               regionStroke.getEndCap(),
+                                               regionStroke.getLineJoin());
+      
+      // ......................................................................
+      
+      BasicStroke oldValue = this.regionStroke;
+      this.regionStroke = regionStroke;
+      fireEvent("regionStroke", oldValue, regionStroke);
+      getPropertyChangeSupport().firePropertyChange("regionStroke",
+                                                    oldValue, regionStroke); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -563,7 +608,7 @@ private boolean scrollBarVisible;
 
 // ............................................................................
 
-private final MouseListener imageMouseListener
+private final MouseListener mouseListener
         = new MouseAdapter() {
 
 @Override
@@ -577,26 +622,26 @@ public void mouseExited (MouseEvent me) { cursorOnImage = false; }
 @Override
 public void mousePressed (MouseEvent me) {
     origin = new Point(me.getPoint());
-    labelImage.setCursor(isScrollBarVisible() ? CURSOR_HAND : null);
+    labelImage.setCursor(isScrollBarVisible() ? CURSOR_HAND : CURSOR_DEFAULT);
 }
 
 @Override
 public void mouseReleased (MouseEvent me) {
-    labelImage.setCursor(isScrollBarVisible() ? CURSOR_DEFAULT : null);
+    labelImage.setCursor(CURSOR_DEFAULT);
 }
 
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 
-public final MouseMotionListener imageMouseMotionListener
+public final MouseMotionListener mouseMotionListener
        = new MouseMotionAdapter() {
 
 @Override
 public void mouseDragged (MouseEvent me) {
 
     if (origin != null) {
-                      
+        
         if (!drugImageOut && !cursorOnImage) { return; }
         
         imageViewport = (JViewport) SwingUtilities
@@ -607,6 +652,10 @@ public void mouseDragged (MouseEvent me) {
             int deltaX = origin.x - me.getX();
             int deltaY = origin.y - me.getY();
 
+            System.out.println("OriginX: " + origin.x + ", OriginY: " + origin.y);
+            System.out.println("GetX: " + me.getX() + ", GetY: " + me.getY());
+            System.out.println("dX: " + deltaX + ", dY: " + deltaY);
+            
             Rectangle view = imageViewport.getViewRect();
             view.x += deltaX;
             view.y += deltaY;
@@ -618,25 +667,25 @@ public void mouseDragged (MouseEvent me) {
 }
 };
 
-
 ///////////////////////////////////////////////////////////////////////////////
 
 private final MouseListener imageViewMouseListener
         = new MouseAdapter() {
-    
+
 @Override
 public void mouseClicked (MouseEvent e) {
-
+    System.out.println("Button: " + e.getButton());
 }
  
 @Override
 public void mousePressed (MouseEvent me) {
-
+    origin = new Point(me.getPoint());
+    regionRect = new Rectangle();
 }
 
 @Override
 public void mouseReleased (MouseEvent me) {
-
+    regionRect = null;
 }
 
 // ............................................................................
@@ -646,6 +695,48 @@ public void mouseWheelMoved (MouseWheelEvent mwe)
     { if (mwe.getWheelRotation() > 0) { zoomIn(); }
       else                            { zoomOut(); } }
 
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+public final MouseMotionListener imageViewMouseMotionListener
+       = new MouseMotionAdapter() {
+
+@Override
+public void mouseDragged (MouseEvent me) {
+
+    if (origin != null) {
+        
+        int deltaX = me.getX() - origin.x;
+        int deltaY = me.getY() - origin.y;
+        
+        regionRect.x = origin.x;
+        regionRect.y = origin.y;
+        regionRect.width  = deltaX;
+        regionRect.height = deltaY;
+        
+        labelImage.repaint();
+        System.out.println(regionRect);
+        
+//        if (!drugImageOut && !cursorOnImage) { return; }
+//        
+//        imageViewport = (JViewport) SwingUtilities
+//                        .getAncestorOfClass(JViewport.class, labelImage);
+//        
+//        if (imageViewport != null) {
+//            
+//            int deltaX = origin.x - me.getX();
+//            int deltaY = origin.y - me.getY();
+//
+//            Rectangle view = imageViewport.getViewRect();
+//            view.x += deltaX;
+//            view.y += deltaY;
+//
+//            labelImage.scrollRectToVisible(view);
+//            
+//        }
+    }
+}
 };
 
 ///////////////////////////////////////////////////////////////////////////////
