@@ -7,6 +7,7 @@ import java.awt.event.*;
 import com.rutar.jimageview.JImageView.*;
 
 import static java.awt.Color.*;
+import javax.imageio.ImageIO;
 import static javax.swing.GroupLayout.*;
 
 // ............................................................................
@@ -374,7 +375,8 @@ private void buttonPressed (ActionEvent ae) {
             chooser.setSelectedFile(new File("/home/rutar/test_1.jpg"));
             chooser.showOpenDialog(this);
             File file = chooser.getSelectedFile();
-            imageView.setImage(new ImageIcon(file.getAbsolutePath()));
+            try { imageView.setImage(ImageIO.read(file)); }
+            catch (IOException e) {}
         }
         
         // ....................................................................

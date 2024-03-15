@@ -1,10 +1,12 @@
 package com.rutar.jimageview;
 
+import java.io.*;
 import java.net.*;
 import java.awt.*;
 import java.util.*;
 import java.beans.*;
 import javax.swing.*;
+import javax.imageio.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 
@@ -18,17 +20,31 @@ import javax.swing.event.*;
 
 public class JImageView extends JScrollPane {
 
-private static Cursor CURSOR_DEFAULT = null;
+// ............................................................................
 
 private static final Cursor CURSOR_HAND = new Cursor(Cursor.HAND_CURSOR);
 private static final Cursor CURSOR_MOVE = new Cursor(Cursor.MOVE_CURSOR);
 
 // ............................................................................
 
-private static ArrayList <JImageViewListener> listeners = null;
-private static transient PropertyChangeSupport propertyChangeSupport = null;
+// Масив стандартних масштабів
+private final int[] scales =
+    { 10,  15,  20,  25,  30,  35,   40,   45,   50,
+                          60,  70,   80,   90,  100,
+          125, 150, 175, 200, 225,  250,  275,  300,
+                              350,  400,  450,  500,
+                              600,  700,  800,  900,
+                                   1000, 2000, 3000 };
 
 // ............................................................................
+
+private static ArrayList <JImageViewListener> listeners = null;
+private static transient PropertyChangeSupport propertyChangeSupport = null;
+private static Cursor CURSOR_DEFAULT = null;
+
+// ............................................................................
+
+private JPanel panelRoot;
 
 private boolean drugImageOut = true;         // Переміщення за межею компонента
 
@@ -39,11 +55,15 @@ private int gridSize = 25;                                      // Розмір 
 
 private int imageScale = 100;                             // Масштаб зображення
 
-private ImageIcon image = null;                        // Зображення для показу
-private ImageIcon errorImage = null;  // Зображення яке показується при помилці
+private Image image = null;                            // Зображення для показу
+private Image errorImage = null;      // Зображення яке показується при помилці
 
-private int scaleMin;
-private int scaleMax;
+private int imageScaleW;                    // Ширина масштабованого зображення
+private int imageScaleH;                    // Висота масштабованого зображення
+
+private int globalScaleMin = scales[0];
+private int globalScaleMax = scales[scales.length - 1];
+
 private int imageScaleMax;             // Мінімальний масштаб заного зображення
 private int imageScaleMin;            // Максимальний масштаб заного зображення
 private int imageScaleInternalFit;       // Масштаб для внутрішнього заповнення
@@ -63,16 +83,6 @@ private Rectangle   regionRect;
 private BasicStroke regionStroke;
 private BasicStroke regionStrokeAdditional;
 
-// ............................................................................
-
-// Масив стандартних масштабів
-private final int[] scales =
-    { 10,  15,  20,  25,  30,  35,  40,  45,  50,
-                          60,  70,  80,  90, 100,
-          125, 150, 175, 200, 225, 250, 275, 300,
-                              350, 400, 450, 500,
-                              600, 700, 800, 900  };
-
 ///////////////////////////////////////////////////////////////////////////////
 
 public JImageView() { initComponents(); }
@@ -83,35 +93,11 @@ public JImageView() { initComponents(); }
 private void initComponents() {
 
 panelRoot = new RootPane();
-labelImage = new ImageLabel();
 
 setRegionStroke(null);
 setErrorImage(null);
 setImage(null);
 
-updateImage();
-labelImage.setCursor(CURSOR_DEFAULT);
-
-GroupLayout panel_rootLayout = new GroupLayout(panelRoot);
-panelRoot.setLayout(panel_rootLayout);
-panel_rootLayout.setHorizontalGroup(panel_rootLayout
-                .createParallelGroup(GroupLayout.Alignment.LEADING)
-    .addGroup(panel_rootLayout.createSequentialGroup()
-        .addGap(0, 0, Short.MAX_VALUE)
-        .addComponent(labelImage)
-        .addGap(0, 0, Short.MAX_VALUE))
-);
-panel_rootLayout.setVerticalGroup(panel_rootLayout
-                .createParallelGroup(GroupLayout.Alignment.LEADING)
-    .addGroup(panel_rootLayout.createSequentialGroup()
-        .addGap(0, 0, Short.MAX_VALUE)
-        .addComponent(labelImage)
-        .addGap(0, 0, Short.MAX_VALUE))
-);
-
-//addMouseListener(imageViewMouseListener);
-//addMouseMotionListener(imageViewMouseMotionListener);
-//addMouseWheelListener((MouseWheelListener) imageViewMouseListener);
 setWheelScrollingEnabled(false);
 
 getViewport().addMouseListener(mouseListener);
@@ -125,8 +111,125 @@ setViewportView(panelRoot);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-public void zoomIn() {
+private final class RootPane extends JPanel {
+
+@Override
+public void paintComponent (Graphics g) {
+
+    super.paintComponent(g);
+    Graphics2D g2 = (Graphics2D)g;
     
+    if (gridVisible) {
+
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                            RenderingHints.VALUE_ANTIALIAS_OFF);
+
+        g2.setColor(gridLightColor);
+        g2.fillRect(0, 0, getWidth(), getHeight());
+        g2.setColor(gridDarkColor);
+
+        for (int col = 0; col < getWidth();  col += gridSize) {
+        for (int row = 0; row < getHeight(); row += gridSize*2) {
+            g.fillRect(col, row + (col/gridSize%2 == 0 ? gridSize : 0),
+                       gridSize, gridSize);
+        }
+        }
+    
+    }
+    
+    iX = getWidth()/2  - imageScaleW/2;
+    iY = getHeight()/2 - imageScaleH/2;
+    
+    g2.drawImage(image, iX, iY, imageScaleW, imageScaleH, null);
+    
+//    g2.setColor(Color.WHITE);
+//    g2.setStroke(regionStrokeAdditional);
+//    g2.drawRect(iX, iY, imageScaleW, imageScaleH);
+
+//    g2.setColor(Color.BLACK);
+//    g2.setStroke(regionStroke);
+//    g2.drawRect(iX, iY, imageScaleW, imageScaleH);
+
+}
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private void calculateImageLimitScale() {
+    
+    int w = image.getWidth(null);
+    int h = image.getHeight(null);
+
+    int q = (w > h) ? h : w;
+    int z = (w > h) ? w : h;
+    
+    imageScaleMin = (int)(48d   / q * 100);
+    imageScaleMax = (int)(7000d / z * 100);
+    
+    if (imageScaleMin > 100) { imageScaleMin = 100; }
+    if (imageScaleMax < 100) { imageScaleMax = 100; }
+    
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private void calculateImageFitScale() {
+    
+    // Ширина зображення
+    iW = image.getWidth(null);
+    // Ширина області перегляду
+    vW = getViewport().getWidth();
+    // Ширина вертикального скролбару
+    mW = vScrollBar.getMaximumSize().width;
+    // Активна ширина вертикального скролбару
+    sW = vScrollBar.isVisible() ? mW : 0;
+    // Комія змінної sW, використовується для розрахунку imageScaleExternalFit
+    eW = sW;
+    
+    // Висота зображення
+    iH = image.getHeight(null);
+    // Висота області перегляду
+    vH = getViewport().getHeight();
+    // Висота горизонтального скролбару
+    mH = hScrollBar.getMaximumSize().height;
+    // Активна висота горизонтального скролбару
+    sH = hScrollBar.isVisible() ? mH : 0;
+    // Комія змінної sH, використовується для розрахунку imageScaleExternalFit
+    eH = sH;
+    
+    if      (getVerticalScrollBarPolicy() ==
+        VERTICAL_SCROLLBAR_ALWAYS)   { sW = 0; }
+    else if (getVerticalScrollBarPolicy() ==
+        VERTICAL_SCROLLBAR_NEVER)    { eW = mW; }
+    if      (getHorizontalScrollBarPolicy() ==
+        HORIZONTAL_SCROLLBAR_ALWAYS) { sH = 0; }
+    else if (getHorizontalScrollBarPolicy() ==
+        HORIZONTAL_SCROLLBAR_NEVER)  { eH = mH; }
+    
+    fitWi = (int)(100d * (vW + sW) / iW);
+    fitHi = (int)(100d * (vH + sH) / iH);
+    
+    fitWe = (int)(100d * (vW + eW - mW) / iW);
+    fitHe = (int)(100d * (vH + eH - mH) / iH);
+    
+    imageScaleInternalFit = (fitWi < fitHi) ? fitWi : fitHi;
+    imageScaleExternalFit = (fitWe > fitHe) ? fitWe : fitHe;
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private void calculateScaledImageSize() {
+    
+    imageScaleW = (int)(image.getWidth(null)  * imageScale / 100d);
+    imageScaleH = (int)(image.getHeight(null) * imageScale / 100d);
+    
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+public void zoomIn() {
+
     if (imageScale >= imageScaleMax) { return; }
     
     for (int z = 0; z < scales.length; z++) {
@@ -172,204 +275,38 @@ public void center() {
     viewRect.x = (size.width  - viewRect.width)  / 2;
     viewRect.y = (size.height - viewRect.height) / 2;
     
-    labelImage.scrollRectToVisible(viewRect);
+    panelRoot.scrollRectToVisible(viewRect);
     
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-private final class RootPane extends JPanel {
+public Image getImage() { return image; }
 
-@Override
-public void paintComponent (Graphics g) {
-
-    super.paintComponent(g);
-    Graphics2D g2 = (Graphics2D)g;
-    
-    if (gridVisible) {
-
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                            RenderingHints.VALUE_ANTIALIAS_OFF);
-
-        g2.setColor(gridLightColor);
-        g2.fillRect(0, 0, getWidth(), getHeight());
-        g2.setColor(gridDarkColor);
-
-        for (int col = 0; col < getWidth();  col += gridSize) {
-        for (int row = 0; row < getHeight(); row += gridSize*2) {
-            g.fillRect(col, row + (col/gridSize%2 == 0 ? gridSize : 0),
-                       gridSize, gridSize);
-        }
-        }
-    
-    }
-
-}
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-private final class ImageLabel extends JLabel {
-
-private int rectX, rectY, rectW, rectH;
-
-@Override
-public void paintComponent (Graphics g) {
-
-    super.paintComponent(g);
-    
-    if (regionRect == null) { return; }
-    
-    Graphics2D g2 = (Graphics2D) g;
-    
-    RenderingHints renderingHints = g2.getRenderingHints();
-    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                        RenderingHints.VALUE_ANTIALIAS_OFF);
-    
-    rectX = regionRect.x - getBounds().x;
-    rectY = regionRect.y - getBounds().y;
-    
-    rectW = regionRect.width;
-    rectH = regionRect.height;
-    
-    g2.setStroke(regionStrokeAdditional);
-    g2.setColor(Color.WHITE);
-    g2.drawRect(rectX, rectY, regionRect.width, regionRect.height);
-
-    g2.setStroke(regionStroke);
-    g2.setColor(Color.BLACK);
-    g2.drawRect(rectX, rectY, regionRect.width, regionRect.height);
-    
-    g2.setRenderingHints(renderingHints);
-    
-}
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-private void calculateScaleMinMax (ImageIcon image) {
-
-    int w = image.getIconWidth();
-    int h = image.getIconHeight();
-    
-    int z = (w > h) ? w : h;
-    
-    scaleMin = scales[0];
-    scaleMax = scales[scales.length - 1];
-    
-    imageScaleMin = (int)(48d   / z * 100);
-    imageScaleMax = (int)(3000d / z * 100);
-    
-    if (imageScaleMin > 100) { imageScaleMin = 100; }
-    if (imageScaleMax < 100) { imageScaleMax = 100; }
-    
-}
-
-// ............................................................................
-
-private int iW, vW, mW, sW, eW;
-private int iH, vH, mH, sH, eH;
-private int fitWi, fitHi, fitWe, fitHe;
-
-// ............................................................................
-
-private void calculateImageScaleFit() {
-    
-    // Ширина зображення
-    iW = image.getIconWidth();
-    // Ширина області перегляду
-    vW = getViewport().getWidth();
-    // Ширина вертикального скролбару
-    mW = vScrollBar.getMaximumSize().width;
-    // Активна ширина вертикального скролбару
-    sW = vScrollBar.isVisible() ? mW : 0;
-    // Комія змінної sW, використовується для розрахунку imageScaleExternalFit
-    eW = sW;
-    
-    // Висота зображення
-    iH = image.getIconHeight();
-    // Висота області перегляду
-    vH = getViewport().getHeight();
-    // Висота горизонтального скролбару
-    mH = hScrollBar.getMaximumSize().height;
-    // Активна висота горизонтального скролбару
-    sH = hScrollBar.isVisible() ? mH : 0;
-    // Комія змінної sH, використовується для розрахунку imageScaleExternalFit
-    eH = sH;
-    
-    if      (getVerticalScrollBarPolicy() ==
-        VERTICAL_SCROLLBAR_ALWAYS)   { sW = 0; }
-    else if (getVerticalScrollBarPolicy() ==
-        VERTICAL_SCROLLBAR_NEVER)    { eW = mW; }
-    if      (getHorizontalScrollBarPolicy() ==
-        HORIZONTAL_SCROLLBAR_ALWAYS) { sH = 0; }
-    else if (getHorizontalScrollBarPolicy() ==
-        HORIZONTAL_SCROLLBAR_NEVER)  { eH = mH; }
-    
-    fitWi = (int)(100d * (vW + sW) / iW);
-    fitHi = (int)(100d * (vH + sH) / iH);
-    
-    fitWe = (int)(100d * (vW + eW - mW) / iW);
-    fitHe = (int)(100d * (vH + eH - mH) / iH);
-    
-    imageScaleInternalFit = (fitWi < fitHi) ? fitWi : fitHi;
-    imageScaleExternalFit = (fitWe > fitHe) ? fitWe : fitHe;
-
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-public ImageIcon getImage() { return image; }
-
-public void setImage (ImageIcon image)
+public void setImage (Image image)
     { if (image == null) { image = getErrorImage(); }       
-      ImageIcon oldValue = this.image;
+      Image oldValue = this.image;
       this.image = image;
-      calculateScaleMinMax(image); 
       setImageScale(100);
-      updateImage();
       fireEvent("image", oldValue, image);
       getPropertyChangeSupport().firePropertyChange("image",
-                                                    oldValue, image);
-      repaint(); }
+                                                    oldValue, image); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-public ImageIcon getErrorImage() { return errorImage; }
+public Image getErrorImage() { return errorImage; }
 
-public void setErrorImage (ImageIcon errorImage)
+public void setErrorImage (Image errorImage)
     { if (errorImage == null) { errorImage = getRandomImage(); }
-      ImageIcon oldValue = this.errorImage;
+      Image oldValue = this.errorImage;
       this.errorImage = errorImage;
       fireEvent("errorImage", oldValue, errorImage);
       getPropertyChangeSupport().firePropertyChange("errorImage",
-                                                    oldValue, errorImage);
-      repaint(); }
+                                                    oldValue, errorImage); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-private ImageIcon getScaledImage() {
-    
-    if (imageScale == 100) { return image; }
-    
-    Image original = image.getImage();
-    
-    int w = (int)(original.getWidth(null)  * imageScale/100f);
-    int h = (int)(original.getHeight(null) * imageScale/100f);
-
-    int   quality = Image.SCALE_FAST;
-    if (scaleQuality == Scale_Quality.SMOOTH)
-        { quality = Image.SCALE_SMOOTH; }
-    
-    Image scaled = original.getScaledInstance(w, h, quality);
-    
-    return new ImageIcon(scaled);
-    
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-private ImageIcon getRandomImage() {
+private Image getRandomImage() {
     
     String path = "/com/rutar/jimageview/images/%s.png";
     String[] names = { "tree", "fire", "wave" };
@@ -377,13 +314,10 @@ private ImageIcon getRandomImage() {
     int index = (int)(Math.random() * 3);
     URL resource = getClass().getResource(String.format(path, names[index]));
 
-    return new ImageIcon(resource);
+    try { return ImageIO.read(resource); }
+    catch (IOException e) { return null;}
 
 }
-
-///////////////////////////////////////////////////////////////////////////////
-
-private void updateImage() { labelImage.setIcon(getScaledImage()); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -392,7 +326,7 @@ public Scale_Quality getScaleQuality() { return scaleQuality; }
 public void setScaleQuality (Scale_Quality scaleQuality)
     { Scale_Quality oldValue = this.scaleQuality;
       this.scaleQuality = scaleQuality;
-      updateImage();
+      panelRoot.repaint();
       fireEvent("scaleQuality", oldValue, scaleQuality);
       getPropertyChangeSupport().firePropertyChange("scaleQuality",
                                                     oldValue, scaleQuality); }
@@ -472,8 +406,7 @@ public void setDrugImageOut (boolean drugImageOut)
       this.drugImageOut = drugImageOut;
       fireEvent("drugImageOut", oldValue, drugImageOut);
       getPropertyChangeSupport().firePropertyChange("drugImageOut",
-                                                    oldValue, drugImageOut);
-      repaint(); }
+                                                    oldValue, drugImageOut); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -485,7 +418,7 @@ public void setGridVisible (boolean gridVisible)
       fireEvent("gridVisible", oldValue, gridVisible);
       getPropertyChangeSupport().firePropertyChange("gridVisible",
                                                     oldValue, gridVisible);
-      repaint(); }
+      panelRoot.repaint(); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -498,7 +431,7 @@ public void setGridLightColor (Color gridLightColor)
       fireEvent("gridLightColor", oldValue, gridLightColor);
       getPropertyChangeSupport().firePropertyChange("gridLightColor",
                                                     oldValue, gridLightColor);
-      repaint(); }
+      panelRoot.repaint(); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -511,7 +444,7 @@ public void setGridDarkColor (Color gridDarkColor)
       fireEvent("gridDarkColor", oldValue, gridDarkColor);
       getPropertyChangeSupport().firePropertyChange("gridDarkColor",
                                                     oldValue, gridDarkColor);
-      repaint(); }
+      panelRoot.repaint(); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -525,20 +458,23 @@ public void setGridSize (int gridSize)
       fireEvent("gridSize", oldValue, gridSize);
       getPropertyChangeSupport().firePropertyChange("gridSize",
                                                     oldValue, gridSize);
-      repaint(); }
+      panelRoot.repaint(); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 public int getImageScale() { return imageScale; }
 
 public void setImageScale (int imageScale)
-    { if      (imageScale > scaleMax)      { imageScale = scaleMax;      }
-      else if (imageScale < scaleMin)      { imageScale = scaleMin;      }
-      if      (imageScale > imageScaleMax) { imageScale = imageScaleMax; }
-      else if (imageScale < imageScaleMin) { imageScale = imageScaleMin; }
+    { calculateImageLimitScale();
+      if      (imageScale > globalScaleMax) { imageScale = globalScaleMax; }
+      else if (imageScale < globalScaleMin) { imageScale = globalScaleMin; }
+      if      (imageScale > imageScaleMax)  { imageScale = imageScaleMax;  }
+      else if (imageScale < imageScaleMin)  { imageScale = imageScaleMin;  }
       int oldValue = this.imageScale;
       this.imageScale = imageScale;
-      updateImage();
+      calculateScaledImageSize();
+      panelRoot.setPreferredSize(new Dimension(imageScaleW, imageScaleH));
+      panelRoot.updateUI();
       fireEvent("imageScale", oldValue, imageScale);
       getPropertyChangeSupport().firePropertyChange("imageScale",
                                                     oldValue, imageScale); }
@@ -621,14 +557,22 @@ public void mouseExited (MouseEvent me) { cursorOnImage = false; }
 
 @Override
 public void mousePressed (MouseEvent me) {
-    origin = new Point(me.getPoint());
-    labelImage.setCursor(isScrollBarVisible() ? CURSOR_HAND : CURSOR_DEFAULT);
+    
+    origin = getPointOnImage(me);
+    panelRoot.setCursor(isScrollBarVisible() ? CURSOR_HAND : CURSOR_DEFAULT);
 }
 
 @Override
 public void mouseReleased (MouseEvent me) {
-    labelImage.setCursor(CURSOR_DEFAULT);
+    
+    origin = null;
+    panelRoot.setCursor(CURSOR_DEFAULT);
 }
+
+@Override
+public void mouseWheelMoved (MouseWheelEvent mwe)
+    { if (mwe.getWheelRotation() > 0) { zoomIn(); }
+      else                            { zoomOut(); } }
 
 };
 
@@ -643,98 +587,24 @@ public void mouseDragged (MouseEvent me) {
     if (origin != null) {
         
         if (!drugImageOut && !cursorOnImage) { return; }
-        
+
         imageViewport = (JViewport) SwingUtilities
-                        .getAncestorOfClass(JViewport.class, labelImage);
+                        .getAncestorOfClass(JViewport.class, panelRoot);
         
         if (imageViewport != null) {
             
-            int deltaX = origin.x - me.getX();
-            int deltaY = origin.y - me.getY();
-
-            System.out.println("OriginX: " + origin.x + ", OriginY: " + origin.y);
-            System.out.println("GetX: " + me.getX() + ", GetY: " + me.getY());
-            System.out.println("dX: " + deltaX + ", dY: " + deltaY);
+            Point point = getPointOnImage(me);
+            
+            int deltaX = origin.x - point.x;
+            int deltaY = origin.y - point.y;
             
             Rectangle view = imageViewport.getViewRect();
             view.x += deltaX;
             view.y += deltaY;
 
-            labelImage.scrollRectToVisible(view);
+            panelRoot.scrollRectToVisible(view);
             
         }
-    }
-}
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
-private final MouseListener imageViewMouseListener
-        = new MouseAdapter() {
-
-@Override
-public void mouseClicked (MouseEvent e) {
-    System.out.println("Button: " + e.getButton());
-}
- 
-@Override
-public void mousePressed (MouseEvent me) {
-    origin = new Point(me.getPoint());
-    regionRect = new Rectangle();
-}
-
-@Override
-public void mouseReleased (MouseEvent me) {
-    regionRect = null;
-}
-
-// ............................................................................
-
-@Override
-public void mouseWheelMoved (MouseWheelEvent mwe)
-    { if (mwe.getWheelRotation() > 0) { zoomIn(); }
-      else                            { zoomOut(); } }
-
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
-public final MouseMotionListener imageViewMouseMotionListener
-       = new MouseMotionAdapter() {
-
-@Override
-public void mouseDragged (MouseEvent me) {
-
-    if (origin != null) {
-        
-        int deltaX = me.getX() - origin.x;
-        int deltaY = me.getY() - origin.y;
-        
-        regionRect.x = origin.x;
-        regionRect.y = origin.y;
-        regionRect.width  = deltaX;
-        regionRect.height = deltaY;
-        
-        labelImage.repaint();
-        System.out.println(regionRect);
-        
-//        if (!drugImageOut && !cursorOnImage) { return; }
-//        
-//        imageViewport = (JViewport) SwingUtilities
-//                        .getAncestorOfClass(JViewport.class, labelImage);
-//        
-//        if (imageViewport != null) {
-//            
-//            int deltaX = origin.x - me.getX();
-//            int deltaY = origin.y - me.getY();
-//
-//            Rectangle view = imageViewport.getViewRect();
-//            view.x += deltaX;
-//            view.y += deltaY;
-//
-//            labelImage.scrollRectToVisible(view);
-//            
-//        }
     }
 }
 };
@@ -753,16 +623,23 @@ private final ChangeListener changeListener = new ChangeListener() {
         
         if (scrollBarVisible != isScrollBarVisible()) {
 
-        scrollBarVisible = isScrollBarVisible();
-        CURSOR_DEFAULT = scrollBarVisible ? CURSOR_MOVE : null;
-        labelImage.setCursor(CURSOR_DEFAULT);
+            scrollBarVisible = isScrollBarVisible();
+            CURSOR_DEFAULT = scrollBarVisible ? CURSOR_MOVE : null;
+            panelRoot.setCursor(CURSOR_DEFAULT);
         
         }
         
-        calculateImageScaleFit();
+        calculateImageFitScale();
         
     }
 };
+
+///////////////////////////////////////////////////////////////////////////////
+
+private Point getPointOnImage (MouseEvent me) {
+    return SwingUtilities.convertMouseEvent(getViewport(), me, panelRoot)
+                         .getPoint();
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -772,10 +649,12 @@ private boolean isScrollBarVisible()
       
       return hScrollBar.isVisible() || vScrollBar.isVisible(); }
 
-///////////////////////////////////////////////////////////////////////////////
+// Допоміжні перемінні ////////////////////////////////////////////////////////
 
-private JLabel labelImage;
-private JPanel panelRoot;
+private int iX, iY;
+private int iW, vW, mW, sW, eW;
+private int iH, vH, mH, sH, eH;
+private int fitWi, fitHi, fitWe, fitHe;
 
 // Кінець класу JImageView ////////////////////////////////////////////////////
 
