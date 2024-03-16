@@ -2,12 +2,14 @@ package com.rutar.jimageview;
 
 import java.io.*;
 import java.awt.*;
+import java.util.*;
+import java.beans.*;
 import javax.swing.*;
+import javax.imageio.*;
 import java.awt.event.*;
 import com.rutar.jimageview.JImageView.*;
 
 import static java.awt.Color.*;
-import javax.imageio.ImageIO;
 import static javax.swing.GroupLayout.*;
 
 // ............................................................................
@@ -32,7 +34,8 @@ private final int[] grid_sizes =
 
 ///////////////////////////////////////////////////////////////////////////////
 
-public JImageViewDemo() { initComponents(); }
+public JImageViewDemo() { initComponents();
+                          initAppIcons(); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -345,6 +348,20 @@ setMinimumSize(getSize());
 
 setSize(new Dimension(1000, 600));
 setLocationRelativeTo(null);
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private void initAppIcons() {
+
+ArrayList<Image> icons = new ArrayList<>();
+JImageViewBeanInfo bean = new JImageViewBeanInfo();
+
+icons.add(bean.getIcon(BeanInfo.ICON_COLOR_16x16));
+icons.add(bean.getIcon(BeanInfo.ICON_COLOR_32x32));
+
+setIconImages(icons);
 
 }
 
