@@ -234,8 +234,14 @@ public void zoomIn (Point origin) {
     if (imageScale >= imageScaleMax) { return; }
     int scaleValue = imageScale;
     
-    oldPosition = new Point2D.Float(origin.x * 100f / imageScaleW,
-                                    origin.y * 100f / imageScaleH);
+    if (origin == null) { origin = SwingUtilities.convertPoint(getViewport(),
+                               new Point(getViewport().getWidth()/2,
+                                         getViewport().getHeight()/2),
+                                         panelRoot); }
+    
+    if (!isValid()) { validate(); }
+    oldPosition = new Point2D.Float(origin.x * 100f / panelRoot.getWidth(),
+                                    origin.y * 100f / panelRoot.getHeight());
     
     for (int z = 0; z < scales.length; z++) {
         if (scaleValue < scales[z]) {
@@ -245,24 +251,24 @@ public void zoomIn (Point origin) {
         }
     }
     
-    newPosition = new Point2D.Float(origin.x * 100f / imageScaleW,
-                                    origin.y * 100f / imageScaleH);
+    if (!isValid()) { validate(); }
+    newPosition = new Point2D.Float(origin.x * 100f / panelRoot.getWidth(),
+                                    origin.y * 100f / panelRoot.getHeight());
+    
+    int Dx = (int)((oldPosition.x - newPosition.x)
+                  * panelRoot.getWidth()  / 100);
+    int Dy = (int)((oldPosition.y - newPosition.y)
+                  * panelRoot.getHeight() / 100); 
+    
+    imageViewport = (JViewport) SwingUtilities
+                    .getAncestorOfClass(JViewport.class, panelRoot);
+    
+    Rectangle viewRect = imageViewport.getViewRect();
 
-    float dX = newPosition.x - oldPosition.x;
-    float dY = newPosition.y - oldPosition.y;
+    viewRect.x += Dx;
+    viewRect.y += Dy;
     
-    int Dx = (int)(dX  * imageScaleW / 100);
-    int Dy = (int)(dY  * imageScaleH / 100);
-    
-    Rectangle viewRect = getViewport().getViewRect();
-
-    viewRect.x -= Dx;
-    viewRect.y -= Dy;
-    
-    //panelRoot.scrollRectToVisible(viewRect);
-    
-    System.out.println("Dx: " + Dx + "/" + dX + "%, "
-                     + "Dy: " + Dy + "/" + dY + "%");
+    panelRoot.scrollRectToVisible(viewRect);
     
 }
 
@@ -272,9 +278,15 @@ public void zoomOut (Point origin) {
     
     if (imageScale <= imageScaleMin) { return; }
     int scaleValue = imageScale;
+    
+    if (origin == null) { origin = SwingUtilities.convertPoint(getViewport(),
+                               new Point(getViewport().getWidth()/2,
+                                         getViewport().getHeight()/2),
+                                         panelRoot); }
         
-    oldPosition = new Point2D.Float(origin.x * 100f / imageScaleW,
-                                    origin.y * 100f / imageScaleH);
+    if (!isValid()) { validate(); }
+    oldPosition = new Point2D.Float(origin.x * 100f / panelRoot.getWidth(),
+                                    origin.y * 100f / panelRoot.getHeight());
     
     for (int z = scales.length - 1; z >= 0; z--) {
         if (scaleValue > scales[z]) {
@@ -284,24 +296,24 @@ public void zoomOut (Point origin) {
         }
     }
     
-    newPosition = new Point2D.Float(origin.x * 100f / imageScaleW,
-                                    origin.y * 100f / imageScaleH);
+    if (!isValid()) { validate(); }
+    newPosition = new Point2D.Float(origin.x * 100f / panelRoot.getWidth(),
+                                    origin.y * 100f / panelRoot.getHeight());
     
-    float dX = newPosition.x - oldPosition.x;
-    float dY = newPosition.y - oldPosition.y;
+    int Dx = (int)((oldPosition.x - newPosition.x)
+                  * panelRoot.getWidth()  / 100);
+    int Dy = (int)((oldPosition.y - newPosition.y)
+                  * panelRoot.getHeight() / 100); 
     
-    int Dx = (int)(dX  * imageScaleW / 100);
-    int Dy = (int)(dY  * imageScaleH / 100);
-    
-    Rectangle viewRect = getViewport().getViewRect();
+    imageViewport = (JViewport) SwingUtilities
+                    .getAncestorOfClass(JViewport.class, panelRoot);
 
-    viewRect.x -= Dx;
-    viewRect.y -= Dy;
+    Rectangle viewRect = imageViewport.getViewRect();
+
+    viewRect.x += Dx;
+    viewRect.y += Dy;
     
-    //panelRoot.scrollRectToVisible(viewRect);
-    
-    System.out.println("Dx: " + Dx + "/" + dX + "%, "
-                     + "Dy: " + Dy + "/" + dY + "%");
+    panelRoot.scrollRectToVisible(viewRect);
     
 }
 
@@ -311,12 +323,21 @@ public void zoomOriginal() { setImageScale(100); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+public void minimize() { setImageScale(imageScaleMin);
+                         center(); }
+public void maximize() { setImageScale(imageScaleMax);
+                         center(); }
+
+///////////////////////////////////////////////////////////////////////////////
+
 public void fitInternal() { setImageScale(imageScaleInternalFit); }
 public void fitExternal() { setImageScale(imageScaleExternalFit); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 public void center() {
+    
+    if (!isValid()) { validate(); }
     
     Dimension size = panelRoot.getSize();
     Rectangle viewRect = getViewport().getViewRect();
@@ -360,7 +381,8 @@ private Image getRandomImage() {
     String path = "/com/rutar/jimageview/images/%s.png";
     String[] names = { "tree", "fire", "wave" };
 
-    int index = (int)(Math.random() * 3);
+    //int index = (int)(Math.random() * 3);
+    int index = 0;
     URL resource = getClass().getResource(String.format(path, names[index]));
 
     try { return ImageIO.read(resource); }
@@ -620,7 +642,8 @@ public void mouseReleased (MouseEvent me) {
 
 @Override
 public void mouseWheelMoved (MouseWheelEvent mwe)
-    { if (mwe.getWheelRotation() > 0) { zoomIn(getPointOnImage(mwe));  }
+    { if (mwe.getWheelRotation() > 0) { //zoomIn(getPointOnImage(mwe));  
+    }
       else                            { zoomOut(getPointOnImage(mwe)); } }
 
 };

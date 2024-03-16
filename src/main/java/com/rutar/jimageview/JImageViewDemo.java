@@ -49,15 +49,18 @@ panel_2 = new JPanel();
 panel_3 = new JPanel();
 panel_4 = new JPanel();
 panel_5 = new JPanel();
+panel_6 = new JPanel();
 
 btn_open = new JButton();
 btn_zoom_in = new JButton();
 btn_zoom_out = new JButton();
-btn_original = new JButton();
-btn_region_fit = new JToggleButton();
+btn_minimize = new JButton();
+btn_maximize = new JButton();
 btn_internal_fit = new JButton();
 btn_external_fit = new JButton();
 btn_center = new JButton();
+btn_region_fit = new JToggleButton();
+btn_original = new JButton();
 btn_rnd_grid_color = new JButton();
 btn_rnd_grid_size = new JButton();
 
@@ -111,33 +114,45 @@ panel_1.add(btn_zoom_in);
 
 panel_2.setLayout(new GridLayout(1, 0, 5, 0));
 
+btn_minimize.setText("Мінімізувати");
+btn_minimize.setActionCommand("btn_minimize");
+btn_minimize.addActionListener(this::buttonPressed);
+panel_2.add(btn_minimize);
+
+btn_maximize.setText("Максимізувати");
+btn_maximize.setActionCommand("btn_maximize");
+btn_maximize.addActionListener(this::buttonPressed);
+panel_2.add(btn_maximize);
+
+panel_3.setLayout(new GridLayout(1, 0, 5, 0));
+
 btn_internal_fit.setText("Вписати");
 btn_internal_fit.setActionCommand("btn_internal_fit");
 btn_internal_fit.addActionListener(this::buttonPressed);
-panel_2.add(btn_internal_fit);
+panel_3.add(btn_internal_fit);
 
 btn_external_fit.setText("За розміром вікна");
 btn_external_fit.setActionCommand("btn_external_fit");
 btn_external_fit.addActionListener(this::buttonPressed);
-panel_2.add(btn_external_fit);
+panel_3.add(btn_external_fit);
 
-panel_3.setLayout(new GridLayout(1, 0, 5, 0));
+panel_4.setLayout(new GridLayout(1, 0, 5, 0));
 
 btn_center.setText("Центрувати");
 btn_center.setActionCommand("btn_center");
 btn_center.addActionListener(this::buttonPressed);
-panel_3.add(btn_center);
+panel_4.add(btn_center);
 
 btn_region_fit.setText("Масштабувати регіон");
 btn_region_fit.setActionCommand("btn_region_fit");
 btn_region_fit.addActionListener(this::buttonPressed);
-panel_3.add(btn_region_fit);
+panel_4.add(btn_region_fit);
 
 btn_original.setText("Оригінальний розмір зображення");
 btn_original.setActionCommand("btn_original");
 btn_original.addActionListener(this::buttonPressed);
 
-panel_4.setLayout(new GridLayout(1, 0, 5, 0));
+panel_5.setLayout(new GridLayout(1, 0, 5, 0));
 
 field_scale.setHorizontalAlignment(JTextField.CENTER);
 field_scale.setText("100%");
@@ -149,12 +164,12 @@ field_scale.addFocusListener(new FocusAdapter() {
 });
 
 field_scale.addActionListener(ae -> this.fieldInputEntered());
-panel_4.add(field_scale);
+panel_5.add(field_scale);
 
 btn_set_scale.setText("Задати масштаб");
 btn_set_scale.setActionCommand("btn_set_scale");
 btn_set_scale.addActionListener(this::buttonPressed);
-panel_4.add(btn_set_scale);
+panel_5.add(btn_set_scale);
 
 cb_grid.setSelected(true);
 cb_grid.setText("Відображати сітку");
@@ -225,17 +240,17 @@ rb_sb_never.setActionCommand("rb_sb_never");
 rb_sb_never.setMargin(new Insets(2, 0, 2, 5));
 rb_sb_never.addActionListener(this::radioButtonPressed);
 
-panel_5.setLayout(new GridLayout(1, 0, 5, 0));
+panel_6.setLayout(new GridLayout(1, 0, 5, 0));
 
 btn_rnd_grid_color.setText("Змінити колір сітки");
 btn_rnd_grid_color.setActionCommand("btn_rnd_grid_color");
 btn_rnd_grid_color.addActionListener(this::buttonPressed);
-panel_5.add(btn_rnd_grid_color);
+panel_6.add(btn_rnd_grid_color);
 
 btn_rnd_grid_size.setText("Змінити розмір сітки");
 btn_rnd_grid_size.setActionCommand("btn_rnd_grid_size");
 btn_rnd_grid_size.addActionListener(this::buttonPressed);
-panel_5.add(btn_rnd_grid_size);
+panel_6.add(btn_rnd_grid_size);
 
 GroupLayout panel_componentsLayout = new GroupLayout(panel_components);
 panel_components.setLayout(panel_componentsLayout);
@@ -246,9 +261,10 @@ panel_componentsLayout.setHorizontalGroup(panel_componentsLayout
     .addComponent(panel_1, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(panel_2, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(panel_3, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+    .addComponent(panel_4, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(btn_original, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(sep_2)
-    .addComponent(panel_4, Alignment.TRAILING, DEFAULT_SIZE,
+    .addComponent(panel_5, Alignment.TRAILING, DEFAULT_SIZE,
                                                DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(sep_3)
     .addComponent(cb_grid, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
@@ -265,7 +281,7 @@ panel_componentsLayout.setHorizontalGroup(panel_componentsLayout
     .addComponent(rb_sb_as_needed, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(rb_sb_never, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(sep_6)
-    .addComponent(panel_5, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+    .addComponent(panel_6, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
 );
 
 panel_componentsLayout.setVerticalGroup(panel_componentsLayout
@@ -282,11 +298,13 @@ panel_componentsLayout.setVerticalGroup(panel_componentsLayout
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(panel_3, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(panel_4, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(btn_original)
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(sep_2, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(panel_4, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
+        .addComponent(panel_5, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(sep_3, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -318,7 +336,7 @@ panel_componentsLayout.setVerticalGroup(panel_componentsLayout
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(sep_6, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(panel_5, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
+        .addComponent(panel_6, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
         .addGap(2, 2, 2))
 );
 
@@ -382,10 +400,12 @@ private void buttonPressed (ActionEvent ae) {
         
         case "btn_zoom_in"      -> imageView.zoomIn(null);
         case "btn_zoom_out"     -> imageView.zoomOut(null);
-        case "btn_center"       -> imageView.center();
+        case "btn_minimize"     -> imageView.minimize();
+        case "btn_maximize"     -> imageView.maximize();
         case "btn_internal_fit" -> imageView.fitInternal();
         case "btn_external_fit" -> imageView.fitExternal();
         case "btn_original"     -> imageView.zoomOriginal();
+        case "btn_center"       -> imageView.center();
         
         // ....................................................................
         
@@ -545,16 +565,19 @@ private JPanel panel_2;
 private JPanel panel_3;
 private JPanel panel_4;
 private JPanel panel_5;
+private JPanel panel_6;
 
 private JButton btn_open;
 
 private JButton btn_zoom_in;
 private JButton btn_zoom_out;
-private JButton btn_original;
-private JToggleButton btn_region_fit;
+private JButton btn_minimize;
+private JButton btn_maximize;
 private JButton btn_internal_fit;
 private JButton btn_external_fit;
 private JButton btn_center;
+private JToggleButton btn_region_fit;
+private JButton btn_original;
 private JButton btn_rnd_grid_color;
 private JButton btn_rnd_grid_size;
 
