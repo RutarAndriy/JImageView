@@ -380,8 +380,8 @@ private void buttonPressed (ActionEvent ae) {
     
     switch (ae.getActionCommand()) {
         
-        case "btn_zoom_in"      -> imageView.zoomIn();
-        case "btn_zoom_out"     -> imageView.zoomOut();
+        case "btn_zoom_in"      -> imageView.zoomIn(null);
+        case "btn_zoom_out"     -> imageView.zoomOut(null);
         case "btn_center"       -> imageView.center();
         case "btn_internal_fit" -> imageView.fitInternal();
         case "btn_external_fit" -> imageView.fitExternal();

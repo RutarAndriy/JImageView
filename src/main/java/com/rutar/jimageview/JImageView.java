@@ -8,6 +8,7 @@ import java.beans.*;
 import javax.swing.*;
 import javax.imageio.*;
 import java.awt.event.*;
+import java.awt.geom.Point2D;
 import javax.swing.event.*;
 
 // ............................................................................
@@ -228,10 +229,13 @@ private void calculateScaledImageSize() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-public void zoomIn() {
+public void zoomIn (Point origin) {
 
     if (imageScale >= imageScaleMax) { return; }
     int scaleValue = imageScale;
+    
+    oldPosition = new Point2D.Float(origin.x * 100f / imageScaleW,
+                                    origin.y * 100f / imageScaleH);
     
     for (int z = 0; z < scales.length; z++) {
         if (scaleValue < scales[z]) {
@@ -240,15 +244,38 @@ public void zoomIn() {
             break;
         }
     }
+    
+    newPosition = new Point2D.Float(origin.x * 100f / imageScaleW,
+                                    origin.y * 100f / imageScaleH);
+
+    float dX = newPosition.x - oldPosition.x;
+    float dY = newPosition.y - oldPosition.y;
+    
+    int Dx = (int)(dX  * imageScaleW / 100);
+    int Dy = (int)(dY  * imageScaleH / 100);
+    
+    Rectangle viewRect = getViewport().getViewRect();
+
+    viewRect.x -= Dx;
+    viewRect.y -= Dy;
+    
+    //panelRoot.scrollRectToVisible(viewRect);
+    
+    System.out.println("Dx: " + Dx + "/" + dX + "%, "
+                     + "Dy: " + Dy + "/" + dY + "%");
+    
 }
 
 // ............................................................................
 
-public void zoomOut() {
+public void zoomOut (Point origin) {
     
     if (imageScale <= imageScaleMin) { return; }
     int scaleValue = imageScale;
         
+    oldPosition = new Point2D.Float(origin.x * 100f / imageScaleW,
+                                    origin.y * 100f / imageScaleH);
+    
     for (int z = scales.length - 1; z >= 0; z--) {
         if (scaleValue > scales[z]) {
             scaleValue = scales[z];
@@ -256,6 +283,26 @@ public void zoomOut() {
             break;
         }
     }
+    
+    newPosition = new Point2D.Float(origin.x * 100f / imageScaleW,
+                                    origin.y * 100f / imageScaleH);
+    
+    float dX = newPosition.x - oldPosition.x;
+    float dY = newPosition.y - oldPosition.y;
+    
+    int Dx = (int)(dX  * imageScaleW / 100);
+    int Dy = (int)(dY  * imageScaleH / 100);
+    
+    Rectangle viewRect = getViewport().getViewRect();
+
+    viewRect.x -= Dx;
+    viewRect.y -= Dy;
+    
+    //panelRoot.scrollRectToVisible(viewRect);
+    
+    System.out.println("Dx: " + Dx + "/" + dX + "%, "
+                     + "Dy: " + Dy + "/" + dY + "%");
+    
 }
 
 // ............................................................................
@@ -573,8 +620,8 @@ public void mouseReleased (MouseEvent me) {
 
 @Override
 public void mouseWheelMoved (MouseWheelEvent mwe)
-    { if (mwe.getWheelRotation() > 0) { zoomIn(); }
-      else                            { zoomOut(); } }
+    { if (mwe.getWheelRotation() > 0) { zoomIn(getPointOnImage(mwe));  }
+      else                            { zoomOut(getPointOnImage(mwe)); } }
 
 };
 
@@ -657,6 +704,8 @@ private int iX, iY;
 private int iW, vW, mW, sW, eW;
 private int iH, vH, mH, sH, eH;
 private int fitWi, fitHi, fitWe, fitHe;
+
+private Point2D.Float oldPosition, newPosition;
 
 // Кінець класу JImageView ////////////////////////////////////////////////////
 
