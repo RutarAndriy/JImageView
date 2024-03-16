@@ -29,12 +29,12 @@ private static final Cursor CURSOR_MOVE = new Cursor(Cursor.MOVE_CURSOR);
 
 // Масив стандартних масштабів
 private final int[] scales =
-    { 10,  15,  20,  25,  30,  35,   40,   45,   50,
-                          60,  70,   80,   90,  100,
-          125, 150, 175, 200, 225,  250,  275,  300,
-                              350,  400,  450,  500,
-                              600,  700,  800,  900,
-                                   1000, 2000, 3000 };
+    { 10,  15,  20,  25,   30,   35,   40,   45,   50,
+                           60,   70,   80,   90,  100,
+          125, 150, 175,  200,  225,  250,  275,  300,
+                                350,  400,  450,  500,
+                                600,  700,  800,  900,
+                         1000, 1500, 2000, 2500, 3000 };
 
 // ............................................................................
 
@@ -231,11 +231,12 @@ private void calculateScaledImageSize() {
 public void zoomIn() {
 
     if (imageScale >= imageScaleMax) { return; }
+    int scaleValue = imageScale;
     
     for (int z = 0; z < scales.length; z++) {
-        if (imageScale < scales[z]) {
-            imageScale = scales[z];
-            setImageScale(imageScale);
+        if (scaleValue < scales[z]) {
+            scaleValue = scales[z];
+            setImageScale(scaleValue);
             break;
         }
     }
@@ -246,11 +247,12 @@ public void zoomIn() {
 public void zoomOut() {
     
     if (imageScale <= imageScaleMin) { return; }
-    
+    int scaleValue = imageScale;
+        
     for (int z = scales.length - 1; z >= 0; z--) {
-        if (imageScale > scales[z]) {
-            imageScale = scales[z];
-            setImageScale(imageScale);
+        if (scaleValue > scales[z]) {
+            scaleValue = scales[z];
+            setImageScale(scaleValue);
             break;
         }
     }
@@ -287,7 +289,7 @@ public void setImage (Image image)
     { if (image == null) { image = getErrorImage(); }       
       Image oldValue = this.image;
       this.image = image;
-      setImageScale(100);
+      zoomOriginal();
       fireEvent("image", oldValue, image);
       getPropertyChangeSupport().firePropertyChange("image",
                                                     oldValue, image); }
@@ -476,8 +478,8 @@ public void setImageScale (int imageScale)
       panelRoot.setPreferredSize(new Dimension(imageScaleW, imageScaleH));
       panelRoot.updateUI();
       fireEvent("imageScale", oldValue, imageScale);
-      getPropertyChangeSupport().firePropertyChange("imageScale",
-                                                    oldValue, imageScale); }
+      getPropertyChangeSupport()
+     .firePropertyChange("imageScale", oldValue, imageScale); }
 
 ///////////////////////////////////////////////////////////////////////////////
 

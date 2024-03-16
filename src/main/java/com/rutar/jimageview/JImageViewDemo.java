@@ -343,6 +343,15 @@ layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
         .addGap(5, 5, 5))
 );
 
+imageView.addPropertyChangeListener((PropertyChangeEvent evt) -> {
+    
+    switch (evt.getPropertyName()) {
+
+        case "imageScale" -> field_scale.setText(evt.getNewValue() + "%");
+
+    }
+});
+
 pack();
 setMinimumSize(getSize());
 
@@ -419,12 +428,8 @@ private void buttonPressed (ActionEvent ae) {
                            ? 1 : -grid_sizes.length + 1;
 
             imageView.setGridSize(grid_sizes[grid_size_id]);
-        }
-        
+        }   
     }
-    
-    field_scale.setText(imageView.getImageScale() + "%");
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
