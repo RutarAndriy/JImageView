@@ -73,6 +73,7 @@ cb_lmb = new JCheckBox();
 cb_cmb = new JCheckBox();
 cb_rmb = new JCheckBox();
 cb_wheel = new JCheckBox();
+cb_invert = new JCheckBox();
 
 rb_zoom_fast = new JRadioButton();
 rb_zoom_smooth = new JRadioButton();
@@ -208,6 +209,11 @@ cb_wheel.setActionCommand("cb_wheel");
 cb_wheel.setMargin(new Insets(2, 0, 2, 5));
 cb_wheel.addActionListener(this::checkBoxPressed);
 
+cb_invert.setText("Інвертувати колесико миші");
+cb_invert.setActionCommand("cb_invert");
+cb_invert.setMargin(new Insets(2, 0, 2, 5));
+cb_invert.addActionListener(this::checkBoxPressed);
+
 bg_zoom.add(rb_zoom_fast);
 rb_zoom_fast.setText("Швидке масштабування");
 rb_zoom_fast.setActionCommand("rb_zoom_fast");
@@ -273,6 +279,7 @@ panel_componentsLayout.setHorizontalGroup(panel_componentsLayout
     .addComponent(cb_lmb, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(cb_rmb, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(cb_wheel, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+    .addComponent(cb_invert, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(sep_4)
     .addComponent(rb_zoom_fast, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
     .addComponent(rb_zoom_smooth, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
@@ -320,6 +327,8 @@ panel_componentsLayout.setVerticalGroup(panel_componentsLayout
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(cb_wheel)
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(cb_invert)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(sep_4, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(rb_zoom_fast)
@@ -345,7 +354,7 @@ getContentPane().setLayout(layout);
 layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
     .addGroup(layout.createSequentialGroup()
         .addGap(5, 5, 5)
-        .addComponent(imageView, DEFAULT_SIZE, 396, Short.MAX_VALUE)
+        .addComponent(imageView, DEFAULT_SIZE, 500, Short.MAX_VALUE)
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(panel_components, PREFERRED_SIZE,
                                         DEFAULT_SIZE, PREFERRED_SIZE)
@@ -373,7 +382,7 @@ imageView.addPropertyChangeListener((PropertyChangeEvent evt) -> {
 pack();
 setMinimumSize(getSize());
 
-setSize(new Dimension(1000, 600));
+setSize(new Dimension(1080, 600));
 setLocationRelativeTo(null);
 
 }
@@ -470,6 +479,8 @@ private void checkBoxPressed (ActionEvent ae) {
             { imageView.setRMBEnable(cb_rmb.isSelected()); }
         case "cb_wheel" ->
             { imageView.setWheelEnable(cb_wheel.isSelected()); }
+        case "cb_invert" ->
+            { imageView.setWheelInvert(cb_invert.isSelected()); }
         
     }
     
@@ -478,8 +489,6 @@ private void checkBoxPressed (ActionEvent ae) {
 ///////////////////////////////////////////////////////////////////////////////
 
 private void radioButtonPressed (ActionEvent ae) {
-    
-    long to = System.currentTimeMillis();
     
     switch (ae.getActionCommand()) {
         
@@ -499,10 +508,6 @@ private void radioButtonPressed (ActionEvent ae) {
               imageView  .setVerticalScrollBarPolicy(21); }
         
     }
-    
-    long tn = System.currentTimeMillis();
-    System.out.println("Processing time: " + (tn - to) + " ms.");
-    
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -590,6 +595,7 @@ private JCheckBox cb_lmb;
 private JCheckBox cb_cmb;
 private JCheckBox cb_rmb;
 private JCheckBox cb_wheel;
+private JCheckBox cb_invert;
 
 private JRadioButton rb_zoom_fast;
 private JRadioButton rb_zoom_smooth;

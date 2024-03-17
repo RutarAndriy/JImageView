@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.imageio.*;
 import java.awt.event.*;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import javax.swing.event.*;
 
 // ............................................................................
@@ -74,7 +75,11 @@ private int imageScaleExternalFit;        // Масштаб для зовніш�
 
 private Scale_Quality scaleQuality = Scale_Quality.SMOOTH;
 
-private boolean lmbEnable, cmbEnable, rmbEnable, wheelEnable;
+private boolean lmbEnable   = true;
+private boolean cmbEnable   = true;
+private boolean rmbEnable   = true;
+private boolean wheelEnable = true;
+private boolean wheelInvert = false;
 
 public enum Scale_Quality { FAST, SMOOTH }
 
@@ -142,22 +147,28 @@ public void paintComponent (Graphics g) {
     
     }
     
+    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+    g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+    
     int iX = getWidth()/2  - imageScaleW/2;
     int iY = getHeight()/2 - imageScaleH/2;
     
-    g2.drawImage(image, iX, iY, imageScaleW, imageScaleH, null);
-    
+    if (imageScale >= 100 || scaleQuality == Scale_Quality.FAST)
+        { g2.drawImage(image, iX, iY, imageScaleW, imageScaleH, null); }
+    else
+        { g2.drawImage(getSmoothThumbnail(), iX, iY, null); }
+
 //    g2.setColor(Color.WHITE);
 //    g2.setStroke(regionStrokeAdditional);
 //    g2.drawRect(iX, iY, imageScaleW, imageScaleH);
-
 //    g2.setColor(Color.BLACK);
 //    g2.setStroke(regionStroke);
 //    g2.drawRect(iX, iY, imageScaleW, imageScaleH);
 
 }
 }
-
+    
 ///////////////////////////////////////////////////////////////////////////////
 // Активні методи - для виконання певних маніпуляцій із зображенням ///////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -290,8 +301,8 @@ public void setImage (Image image)
       this.image = image;
       zoomToOriginal();
       fireEvent("image", oldValue, image);
-      getPropertyChangeSupport().firePropertyChange("image",
-                                                    oldValue, image); }
+      getPropertyChangeSupport()
+     .firePropertyChange("image", oldValue, image); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -302,10 +313,8 @@ public void setErrorImage (Image errorImage)
       Image oldValue = this.errorImage;
       this.errorImage = errorImage;
       fireEvent("errorImage", oldValue, errorImage);
-      getPropertyChangeSupport().firePropertyChange("errorImage",
-                                                    oldValue, errorImage); }
-
-
+      getPropertyChangeSupport()
+     .firePropertyChange("errorImage", oldValue, errorImage); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -316,8 +325,8 @@ public void setScaleQuality (Scale_Quality scaleQuality)
       this.scaleQuality = scaleQuality;
       panelRoot.repaint();
       fireEvent("scaleQuality", oldValue, scaleQuality);
-      getPropertyChangeSupport().firePropertyChange("scaleQuality",
-                                                    oldValue, scaleQuality); }
+      getPropertyChangeSupport()
+     .firePropertyChange("scaleQuality", oldValue, scaleQuality); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -338,8 +347,8 @@ public void setRegionStroke (BasicStroke regionStroke)
       BasicStroke oldValue = this.regionStroke;
       this.regionStroke = regionStroke;
       fireEvent("regionStroke", oldValue, regionStroke);
-      getPropertyChangeSupport().firePropertyChange("regionStroke",
-                                                    oldValue, regionStroke); }
+      getPropertyChangeSupport()
+     .firePropertyChange("regionStroke", oldValue, regionStroke); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -349,8 +358,8 @@ public void setLMBEnable (boolean lmbEnable)
     { boolean oldValue = this.lmbEnable;
       this.lmbEnable = lmbEnable;
       fireEvent("lmbEnable", oldValue, lmbEnable);
-      getPropertyChangeSupport().firePropertyChange("lmbEnable",
-                                                    oldValue, lmbEnable); }
+      getPropertyChangeSupport()
+     .firePropertyChange("lmbEnable", oldValue, lmbEnable); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -360,8 +369,8 @@ public void setCMBEnable (boolean cmbEnable)
     { boolean oldValue = this.cmbEnable;
       this.cmbEnable = cmbEnable;
       fireEvent("cmbEnable", oldValue, cmbEnable);
-      getPropertyChangeSupport().firePropertyChange("cmbEnable",
-                                                    oldValue, cmbEnable); }
+      getPropertyChangeSupport()
+     .firePropertyChange("cmbEnable", oldValue, cmbEnable); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -371,8 +380,8 @@ public void setRMBEnable (boolean rmbEnable)
     { boolean oldValue = this.rmbEnable;
       this.rmbEnable = rmbEnable;
       fireEvent("rmbEnable", oldValue, rmbEnable);
-      getPropertyChangeSupport().firePropertyChange("rmbEnable",
-                                                    oldValue, rmbEnable); }
+      getPropertyChangeSupport()
+     .firePropertyChange("rmbEnable", oldValue, rmbEnable); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -382,8 +391,19 @@ public void setWheelEnable (boolean wheelEnable)
     { boolean oldValue = this.wheelEnable;
       this.wheelEnable = wheelEnable;
       fireEvent("wheelEnable", oldValue, wheelEnable);
-      getPropertyChangeSupport().firePropertyChange("wheelEnable",
-                                                    oldValue, wheelEnable); }
+      getPropertyChangeSupport()
+     .firePropertyChange("wheelEnable", oldValue, wheelEnable); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+public boolean isWheelInvert() { return wheelInvert; }
+
+public void setWheelInvert (boolean wheelInvert)
+    { boolean oldValue = this.wheelInvert;
+      this.wheelInvert = wheelInvert;
+      fireEvent("wheelInvert", oldValue, wheelInvert);
+      getPropertyChangeSupport()
+     .firePropertyChange("wheelEnable", oldValue, wheelInvert); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -393,8 +413,8 @@ public void setDrugImageOut (boolean drugImageOut)
     { boolean oldValue = this.drugImageOut;
       this.drugImageOut = drugImageOut;
       fireEvent("drugImageOut", oldValue, drugImageOut);
-      getPropertyChangeSupport().firePropertyChange("drugImageOut",
-                                                    oldValue, drugImageOut); }
+      getPropertyChangeSupport()
+     .firePropertyChange("drugImageOut", oldValue, drugImageOut); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -403,10 +423,10 @@ public boolean isGridVisible() { return gridVisible; }
 public void setGridVisible (boolean gridVisible)
     { boolean oldValue = this.gridVisible;
       this.gridVisible = gridVisible;
+      panelRoot.repaint();
       fireEvent("gridVisible", oldValue, gridVisible);
-      getPropertyChangeSupport().firePropertyChange("gridVisible",
-                                                    oldValue, gridVisible);
-      panelRoot.repaint(); }
+      getPropertyChangeSupport()
+     .firePropertyChange("gridVisible", oldValue, gridVisible); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -416,10 +436,10 @@ public void setGridLightColor (Color gridLightColor)
     { if (gridLightColor == null) { gridLightColor = Color.LIGHT_GRAY; }
       Color oldValue = this.gridLightColor;
       this.gridLightColor = gridLightColor;
+      panelRoot.repaint();
       fireEvent("gridLightColor", oldValue, gridLightColor);
-      getPropertyChangeSupport().firePropertyChange("gridLightColor",
-                                                    oldValue, gridLightColor);
-      panelRoot.repaint(); }
+      getPropertyChangeSupport()
+     .firePropertyChange("gridLightColor", oldValue, gridLightColor); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -429,10 +449,10 @@ public void setGridDarkColor (Color gridDarkColor)
     { if (gridDarkColor == null) { gridDarkColor = Color.DARK_GRAY; }
       Color oldValue = this.gridDarkColor;
       this.gridDarkColor = gridDarkColor;
+      panelRoot.repaint();
       fireEvent("gridDarkColor", oldValue, gridDarkColor);
-      getPropertyChangeSupport().firePropertyChange("gridDarkColor",
-                                                    oldValue, gridDarkColor);
-      panelRoot.repaint(); }
+      getPropertyChangeSupport()
+     .firePropertyChange("gridDarkColor", oldValue, gridDarkColor); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -443,10 +463,10 @@ public void setGridSize (int gridSize)
       else if (gridSize <  3) { gridSize = 3;  }
       int oldValue = this.gridSize;
       this.gridSize = gridSize;
+      panelRoot.repaint();
       fireEvent("gridSize", oldValue, gridSize);
-      getPropertyChangeSupport().firePropertyChange("gridSize",
-                                                    oldValue, gridSize);
-      panelRoot.repaint(); }
+      getPropertyChangeSupport()
+     .firePropertyChange("gridSize", oldValue, gridSize); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -468,10 +488,6 @@ public void setImageScale (int imageScale)
      .firePropertyChange("imageScale", oldValue, imageScale); }
 
 ///////////////////////////////////////////////////////////////////////////////
-
-
-
-
 
 @Override
 public void addPropertyChangeListener (PropertyChangeListener listener)
@@ -648,6 +664,40 @@ private Image getRandomImage() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+private BufferedImage getSmoothThumbnail() {
+
+BufferedImage thumbnail = (BufferedImage) image;
+
+int w = thumbnail.getWidth();
+int h = thumbnail.getHeight();
+
+int type = (thumbnail.getTransparency() ==
+            Transparency.OPAQUE) ? BufferedImage.TYPE_INT_RGB :
+                                   BufferedImage.TYPE_INT_ARGB;
+
+do {
+    
+if (w > imageScaleW) { w /= 2; if (w < imageScaleW) { w = imageScaleW; } }
+if (h > imageScaleH) { h /= 2; if (h < imageScaleH) { h = imageScaleH; } }
+
+BufferedImage tmp = new BufferedImage(w, h, type);
+Graphics2D g2 = tmp.createGraphics();
+g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                    RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+
+g2.drawImage(thumbnail, 0, 0, w, h, null);
+g2.dispose();
+
+thumbnail = tmp;
+
+} while (w != imageScaleW || h != imageScaleH);
+
+return thumbnail;
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 private Point getPointOnImage (MouseEvent me) {
     return SwingUtilities.convertMouseEvent(getViewport(), me, panelRoot)
                          .getPoint();
@@ -687,24 +737,56 @@ public void mouseExited (MouseEvent me) { cursorOnImage = false; }
 @Override
 public void mousePressed (MouseEvent me) {
     
-    origin = getPointOnImage(me);
-    panelRoot.setCursor(isScrollBarVisible() ? CURSOR_HAND : CURSOR_DEFAULT);
-}
-
-@Override
-public void mouseReleased (MouseEvent me) {
-    
-    origin = null;
-    panelRoot.setCursor(CURSOR_DEFAULT);
+    switch (me.getButton()) {
+        
+        // Ліва клавіша миші
+        case MouseEvent.BUTTON1 -> {
+            origin = getPointOnImage(me);
+            panelRoot.setCursor(isScrollBarVisible() ? CURSOR_HAND :
+                                                       CURSOR_DEFAULT);
+        }
+        
+        // Середня клавіша миші
+        case MouseEvent.BUTTON2 -> {
+        
+            if (!cmbEnable) { return; }
+            
+            if (imageScale == 100)                        { fitInternal();    }
+            else if (imageScale == imageScaleInternalFit) { fitExternal();    }
+            else                                          { zoomToOriginal(); }
+        
+        }
+    }
 }
 
 // ............................................................................
 
 @Override
-public void mouseWheelMoved (MouseWheelEvent mwe)
-    { if (mwe.getWheelRotation() > 0) { zoomIn(mwe.getPoint());  }
-      else                            { zoomOut(mwe.getPoint()); } }
+public void mouseReleased (MouseEvent me) {
+    
+    switch (me.getButton()) {
+        
+        // Ліва клавіша миші
+        case MouseEvent.BUTTON1 -> {
+            origin = null;
+            panelRoot.setCursor(CURSOR_DEFAULT);
+        }     
+    }
+}
 
+// ............................................................................
+
+@Override
+public void mouseWheelMoved (MouseWheelEvent mwe) {
+    
+    if (mwe.getWheelRotation() > 0)
+        { if (wheelInvert) { zoomOut(mwe.getPoint()); }
+          else             { zoomIn(mwe.getPoint());  } }
+    else
+        { if (wheelInvert) { zoomIn(mwe.getPoint());  }
+          else             { zoomOut(mwe.getPoint()); } }
+
+}
 };
 
 ///////////////////////////////////////////////////////////////////////////////
