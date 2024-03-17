@@ -233,15 +233,11 @@ public void zoomIn (Point origin) {
 
     if (imageScale >= imageScaleMax) { return; }
     int scaleValue = imageScale;
+
+//    if (origin == null) { origin = new Point(getWidth()/2,
+//                                             getHeight()/2); }
     
-    if (origin == null) { origin = SwingUtilities.convertPoint(getViewport(),
-                               new Point(getViewport().getWidth()/2,
-                                         getViewport().getHeight()/2),
-                                         panelRoot); }
-    
-    if (!isValid()) { validate(); }
-    oldPosition = new Point2D.Float(origin.x * 100f / panelRoot.getWidth(),
-                                    origin.y * 100f / panelRoot.getHeight());
+    Point2D.Float oldPosition = getPercentagePoint(origin);
     
     for (int z = 0; z < scales.length; z++) {
         if (scaleValue < scales[z]) {
@@ -251,24 +247,10 @@ public void zoomIn (Point origin) {
         }
     }
     
-    if (!isValid()) { validate(); }
-    newPosition = new Point2D.Float(origin.x * 100f / panelRoot.getWidth(),
-                                    origin.y * 100f / panelRoot.getHeight());
-    
-    int Dx = (int)((oldPosition.x - newPosition.x)
-                  * panelRoot.getWidth()  / 100);
-    int Dy = (int)((oldPosition.y - newPosition.y)
-                  * panelRoot.getHeight() / 100); 
-    
-    imageViewport = (JViewport) SwingUtilities
-                    .getAncestorOfClass(JViewport.class, panelRoot);
-    
-    Rectangle viewRect = imageViewport.getViewRect();
+    Point2D.Float newPosition = getPercentagePoint(origin);
 
-    viewRect.x += Dx;
-    viewRect.y += Dy;
-    
-    panelRoot.scrollRectToVisible(viewRect);
+    panelRoot.scrollRectToVisible
+             (calculateScrollParams(oldPosition, newPosition));
     
 }
 
@@ -278,16 +260,12 @@ public void zoomOut (Point origin) {
     
     if (imageScale <= imageScaleMin) { return; }
     int scaleValue = imageScale;
-    
-    if (origin == null) { origin = SwingUtilities.convertPoint(getViewport(),
-                               new Point(getViewport().getWidth()/2,
-                                         getViewport().getHeight()/2),
-                                         panelRoot); }
-        
-    if (!isValid()) { validate(); }
-    oldPosition = new Point2D.Float(origin.x * 100f / panelRoot.getWidth(),
-                                    origin.y * 100f / panelRoot.getHeight());
-    
+
+    //    if (origin == null) { origin = new Point(getWidth()/2,
+    //                                             getHeight()/2); }
+
+    Point2D.Float oldPosition = getPercentagePoint(origin);
+
     for (int z = scales.length - 1; z >= 0; z--) {
         if (scaleValue > scales[z]) {
             scaleValue = scales[z];
@@ -295,26 +273,43 @@ public void zoomOut (Point origin) {
             break;
         }
     }
+
+    Point2D.Float newPosition = getPercentagePoint(origin);
+
+    panelRoot.scrollRectToVisible
+             (calculateScrollParams(oldPosition, newPosition));
     
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private Point2D.Float getPercentagePoint (Point origin) {
+
     if (!isValid()) { validate(); }
-    newPosition = new Point2D.Float(origin.x * 100f / panelRoot.getWidth(),
-                                    origin.y * 100f / panelRoot.getHeight());
+    var point = SwingUtilities.convertPoint(getViewport(), origin, panelRoot);
+    
+    return new Point2D.Float(point.x * 100f / panelRoot.getWidth(),
+                             point.y * 100f / panelRoot.getHeight());
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private Rectangle calculateScrollParams (Point2D.Float oldPosition,
+                                         Point2D.Float newPosition) {
     
     int Dx = (int)((oldPosition.x - newPosition.x)
-                  * panelRoot.getWidth()  / 100);
+              * panelRoot.getWidth()  / 100);
     int Dy = (int)((oldPosition.y - newPosition.y)
-                  * panelRoot.getHeight() / 100); 
-    
-    imageViewport = (JViewport) SwingUtilities
-                    .getAncestorOfClass(JViewport.class, panelRoot);
+              * panelRoot.getHeight() / 100); 
 
-    Rectangle viewRect = imageViewport.getViewRect();
+    Rectangle params = getViewport().getViewRect();
 
-    viewRect.x += Dx;
-    viewRect.y += Dy;
-    
-    panelRoot.scrollRectToVisible(viewRect);
-    
+    params.x += Dx;
+    params.y += Dy;
+
+    return params;
+
 }
 
 // ............................................................................
@@ -640,11 +635,12 @@ public void mouseReleased (MouseEvent me) {
     panelRoot.setCursor(CURSOR_DEFAULT);
 }
 
+// ............................................................................
+
 @Override
 public void mouseWheelMoved (MouseWheelEvent mwe)
-    { if (mwe.getWheelRotation() > 0) { //zoomIn(getPointOnImage(mwe));  
-    }
-      else                            { zoomOut(getPointOnImage(mwe)); } }
+    { if (mwe.getWheelRotation() > 0) { zoomIn(mwe.getPoint());  }
+      else                            { zoomOut(mwe.getPoint()); } }
 
 };
 
@@ -660,23 +656,17 @@ public void mouseDragged (MouseEvent me) {
         
         if (!drugImageOut && !cursorOnImage) { return; }
 
-        imageViewport = (JViewport) SwingUtilities
-                        .getAncestorOfClass(JViewport.class, panelRoot);
-        
-        if (imageViewport != null) {
-            
             Point point = getPointOnImage(me);
             
             int deltaX = origin.x - point.x;
             int deltaY = origin.y - point.y;
             
-            Rectangle view = imageViewport.getViewRect();
+            Rectangle view = getViewport().getViewRect();
             view.x += deltaX;
             view.y += deltaY;
 
             panelRoot.scrollRectToVisible(view);
             
-        }
     }
 }
 };
@@ -727,8 +717,6 @@ private int iX, iY;
 private int iW, vW, mW, sW, eW;
 private int iH, vH, mH, sH, eH;
 private int fitWi, fitHi, fitWe, fitHe;
-
-private Point2D.Float oldPosition, newPosition;
 
 // Кінець класу JImageView ////////////////////////////////////////////////////
 
