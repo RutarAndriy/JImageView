@@ -112,6 +112,10 @@ setViewportView(panelRoot);
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Клас RootPane
+ * Реалізує 
+ */
 private final class RootPane extends JPanel {
 
 @Override
@@ -138,8 +142,8 @@ public void paintComponent (Graphics g) {
     
     }
     
-    iX = getWidth()/2  - imageScaleW/2;
-    iY = getHeight()/2 - imageScaleH/2;
+    int iX = getWidth()/2  - imageScaleW/2;
+    int iY = getHeight()/2 - imageScaleH/2;
     
     g2.drawImage(image, iX, iY, imageScaleW, imageScaleH, null);
     
@@ -155,87 +159,21 @@ public void paintComponent (Graphics g) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-
-private void calculateImageLimitScale() {
-    
-    int w = image.getWidth(null);
-    int h = image.getHeight(null);
-
-    int q = (w > h) ? h : w;
-    int z = (w > h) ? w : h;
-    
-    imageScaleMin = (int)(48d   / q * 100);
-    imageScaleMax = (int)(7000d / z * 100);
-    
-    if (imageScaleMin > 100) { imageScaleMin = 100; }
-    if (imageScaleMax < 100) { imageScaleMax = 100; }
-    
-}
-
+// Активні методи - для виконання певних маніпуляцій із зображенням ///////////
 ///////////////////////////////////////////////////////////////////////////////
 
-private void calculateImageFitScale() {
-    
-    // Ширина зображення
-    iW = image.getWidth(null);
-    // Ширина області перегляду
-    vW = getViewport().getWidth();
-    // Ширина вертикального скролбару
-    mW = vScrollBar.getMaximumSize().width;
-    // Активна ширина вертикального скролбару
-    sW = vScrollBar.isVisible() ? mW : 0;
-    // Комія змінної sW, використовується для розрахунку imageScaleExternalFit
-    eW = sW;
-    
-    // Висота зображення
-    iH = image.getHeight(null);
-    // Висота області перегляду
-    vH = getViewport().getHeight();
-    // Висота горизонтального скролбару
-    mH = hScrollBar.getMaximumSize().height;
-    // Активна висота горизонтального скролбару
-    sH = hScrollBar.isVisible() ? mH : 0;
-    // Комія змінної sH, використовується для розрахунку imageScaleExternalFit
-    eH = sH;
-    
-    if      (getVerticalScrollBarPolicy() ==
-        VERTICAL_SCROLLBAR_ALWAYS)   { sW = 0; }
-    else if (getVerticalScrollBarPolicy() ==
-        VERTICAL_SCROLLBAR_NEVER)    { eW = mW; }
-    if      (getHorizontalScrollBarPolicy() ==
-        HORIZONTAL_SCROLLBAR_ALWAYS) { sH = 0; }
-    else if (getHorizontalScrollBarPolicy() ==
-        HORIZONTAL_SCROLLBAR_NEVER)  { eH = mH; }
-    
-    fitWi = (int)(100d * (vW + sW) / iW);
-    fitHi = (int)(100d * (vH + sH) / iH);
-    
-    fitWe = (int)(100d * (vW + eW - mW) / iW);
-    fitHe = (int)(100d * (vH + eH - mH) / iH);
-    
-    imageScaleInternalFit = (fitWi < fitHi) ? fitWi : fitHi;
-    imageScaleExternalFit = (fitWe > fitHe) ? fitWe : fitHe;
-
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-private void calculateScaledImageSize() {
-    
-    imageScaleW = (int)(image.getWidth(null)  * imageScale / 100d);
-    imageScaleH = (int)(image.getHeight(null) * imageScale / 100d);
-    
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
+/**
+ * Збільшення відображуваного зображення
+ * @param origin точка, відносно якої відбувається збільшення.
+ * Якщо не задана, то використовується центр компонента
+ */
 public void zoomIn (Point origin) {
 
     if (imageScale >= imageScaleMax) { return; }
     int scaleValue = imageScale;
 
-//    if (origin == null) { origin = new Point(getWidth()/2,
-//                                             getHeight()/2); }
+    if (origin == null) { origin = new Point(getWidth()/2,
+                                             getHeight()/2); }
     
     Point2D.Float oldPosition = getPercentagePoint(origin);
     
@@ -254,15 +192,20 @@ public void zoomIn (Point origin) {
     
 }
 
-// ............................................................................
+///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Зменшення відображуваного зображення
+ * @param origin точка, відносно якої відбувається зменшення.
+ * Якщо не задана, то використовується центр компонента
+ */
 public void zoomOut (Point origin) {
     
     if (imageScale <= imageScaleMin) { return; }
     int scaleValue = imageScale;
 
-    //    if (origin == null) { origin = new Point(getWidth()/2,
-    //                                             getHeight()/2); }
+        if (origin == null) { origin = new Point(getWidth()/2,
+                                                 getHeight()/2); }
 
     Point2D.Float oldPosition = getPercentagePoint(origin);
 
@@ -283,53 +226,39 @@ public void zoomOut (Point origin) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-private Point2D.Float getPercentagePoint (Point origin) {
-
-    if (!isValid()) { validate(); }
-    var point = SwingUtilities.convertPoint(getViewport(), origin, panelRoot);
-    
-    return new Point2D.Float(point.x * 100f / panelRoot.getWidth(),
-                             point.y * 100f / panelRoot.getHeight());
-
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-private Rectangle calculateScrollParams (Point2D.Float oldPosition,
-                                         Point2D.Float newPosition) {
-    
-    int Dx = (int)((oldPosition.x - newPosition.x)
-              * panelRoot.getWidth()  / 100);
-    int Dy = (int)((oldPosition.y - newPosition.y)
-              * panelRoot.getHeight() / 100); 
-
-    Rectangle params = getViewport().getViewRect();
-
-    params.x += Dx;
-    params.y += Dy;
-
-    return params;
-
-}
-
-// ............................................................................
-
-public void zoomOriginal() { setImageScale(100); }
-
-///////////////////////////////////////////////////////////////////////////////
-
+/** Задання мінімально можливого розміру зображення + центрування */
 public void minimize() { setImageScale(imageScaleMin);
                          center(); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/** Задання максимально можливого розміру зображення + центрування */
 public void maximize() { setImageScale(imageScaleMax);
                          center(); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Задання розміру зображення таким чином, щоб його 
+ * більша сторона максимально замістила доступний простір компонента
+ */
 public void fitInternal() { setImageScale(imageScaleInternalFit); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Задання розміру зображення таким чином, щоб його 
+ * менша сторона максимально замістила доступний простір компонента
+ */
 public void fitExternal() { setImageScale(imageScaleExternalFit); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/** 
+ * Переміщує зображння таким чином, щоб воно відображалося в центрі компонента.
+ * Метод доцільно використовувати лише тоді, коли зображення не поміщається 
+ * в межах компонента і є доступними смуги прокручування
+ */
 public void center() {
     
     if (!isValid()) { validate(); }
@@ -346,13 +275,20 @@ public void center() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/** Відновлення оригінального розміру відображуваного зображення */
+public void zoomToOriginal() { setImageScale(100); }
+
+///////////////////////////////////////////////////////////////////////////////
+// Getter'и та Setter'и - повертають та задають властивості компонента ////////
+///////////////////////////////////////////////////////////////////////////////
+
 public Image getImage() { return image; }
 
 public void setImage (Image image)
     { if (image == null) { image = getErrorImage(); }       
       Image oldValue = this.image;
       this.image = image;
-      zoomOriginal();
+      zoomToOriginal();
       fireEvent("image", oldValue, image);
       getPropertyChangeSupport().firePropertyChange("image",
                                                     oldValue, image); }
@@ -369,21 +305,7 @@ public void setErrorImage (Image errorImage)
       getPropertyChangeSupport().firePropertyChange("errorImage",
                                                     oldValue, errorImage); }
 
-///////////////////////////////////////////////////////////////////////////////
 
-private Image getRandomImage() {
-    
-    String path = "/com/rutar/jimageview/images/%s.png";
-    String[] names = { "tree", "fire", "wave" };
-
-    //int index = (int)(Math.random() * 3);
-    int index = 0;
-    URL resource = getClass().getResource(String.format(path, names[index]));
-
-    try { return ImageIO.read(resource); }
-    catch (IOException e) { return null;}
-
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -547,6 +469,10 @@ public void setImageScale (int imageScale)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+
+
+
+
 @Override
 public void addPropertyChangeListener (PropertyChangeListener listener)
     { getPropertyChangeSupport().addPropertyChangeListener(listener); }
@@ -599,6 +525,143 @@ for (JImageViewListener listener : getListeners()) {
     }
 }
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+private void calculateImageLimitScale() {
+    
+    int w = image.getWidth(null);
+    int h = image.getHeight(null);
+
+    int q = (w > h) ? h : w;
+    int z = (w > h) ? w : h;
+    
+    imageScaleMin = (int)(48d   / q * 100);
+    imageScaleMax = (int)(7000d / z * 100);
+    
+    if (imageScaleMin > 100) { imageScaleMin = 100; }
+    if (imageScaleMax < 100) { imageScaleMax = 100; }
+    
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private void calculateImageFitScale() {
+    
+    // Ширина зображення
+    int iW = image.getWidth(null);
+    // Ширина області перегляду
+    int vW = getViewport().getWidth();
+    // Ширина вертикального скролбару
+    int mW = vScrollBar.getMaximumSize().width;
+    // Активна ширина вертикального скролбару
+    int sW = vScrollBar.isVisible() ? mW : 0;
+    // Комія змінної sW, використовується для розрахунку imageScaleExternalFit
+    int eW = sW;
+    
+    // Висота зображення
+    int iH = image.getHeight(null);
+    // Висота області перегляду
+    int vH = getViewport().getHeight();
+    // Висота горизонтального скролбару
+    int mH = hScrollBar.getMaximumSize().height;
+    // Активна висота горизонтального скролбару
+    int sH = hScrollBar.isVisible() ? mH : 0;
+    // Комія змінної sH, використовується для розрахунку imageScaleExternalFit
+    int eH = sH;
+    
+    if      (getVerticalScrollBarPolicy() ==
+        VERTICAL_SCROLLBAR_ALWAYS)   { sW = 0; }
+    else if (getVerticalScrollBarPolicy() ==
+        VERTICAL_SCROLLBAR_NEVER)    { eW = mW; }
+    if      (getHorizontalScrollBarPolicy() ==
+        HORIZONTAL_SCROLLBAR_ALWAYS) { sH = 0; }
+    else if (getHorizontalScrollBarPolicy() ==
+        HORIZONTAL_SCROLLBAR_NEVER)  { eH = mH; }
+    
+    int fitWi = (int)(100d * (vW + sW) / iW);
+    int fitHi = (int)(100d * (vH + sH) / iH);
+    
+    int fitWe = (int)(100d * (vW + eW - mW) / iW);
+    int fitHe = (int)(100d * (vH + eH - mH) / iH);
+    
+    imageScaleInternalFit = (fitWi < fitHi) ? fitWi : fitHi;
+    imageScaleExternalFit = (fitWe > fitHe) ? fitWe : fitHe;
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private void calculateScaledImageSize() {
+    
+    imageScaleW = (int)(image.getWidth(null)  * imageScale / 100d);
+    imageScaleH = (int)(image.getHeight(null) * imageScale / 100d);
+    
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private Point2D.Float getPercentagePoint (Point origin) {
+
+    if (!isValid()) { validate(); }
+    var point = SwingUtilities.convertPoint(getViewport(), origin, panelRoot);
+    
+    return new Point2D.Float(point.x * 100f / panelRoot.getWidth(),
+                             point.y * 100f / panelRoot.getHeight());
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private Rectangle calculateScrollParams (Point2D.Float oldPosition,
+                                         Point2D.Float newPosition) {
+    
+    int Dx = (int)((oldPosition.x - newPosition.x)
+              * panelRoot.getWidth()  / 100);
+    int Dy = (int)((oldPosition.y - newPosition.y)
+              * panelRoot.getHeight() / 100); 
+
+    Rectangle params = getViewport().getViewRect();
+
+    params.x += Dx;
+    params.y += Dy;
+
+    return params;
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private Image getRandomImage() {
+    
+    String path = "/com/rutar/jimageview/images/%s.png";
+    String[] names = { "tree", "fire", "wave" };
+
+    //int index = (int)(Math.random() * 3);
+    int index = 0;
+    URL resource = getClass().getResource(String.format(path, names[index]));
+
+    try { return ImageIO.read(resource); }
+    catch (IOException e) { return null;}
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private Point getPointOnImage (MouseEvent me) {
+    return SwingUtilities.convertMouseEvent(getViewport(), me, panelRoot)
+                         .getPoint();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private boolean isScrollBarVisible()
+    { hScrollBar = getHorizontalScrollBar();
+      vScrollBar = getVerticalScrollBar();
+      
+      return hScrollBar.isVisible() || vScrollBar.isVisible(); }
+
+///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -695,28 +758,6 @@ private final ChangeListener changeListener = new ChangeListener() {
         
     }
 };
-
-///////////////////////////////////////////////////////////////////////////////
-
-private Point getPointOnImage (MouseEvent me) {
-    return SwingUtilities.convertMouseEvent(getViewport(), me, panelRoot)
-                         .getPoint();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-private boolean isScrollBarVisible()
-    { hScrollBar = getHorizontalScrollBar();
-      vScrollBar = getVerticalScrollBar();
-      
-      return hScrollBar.isVisible() || vScrollBar.isVisible(); }
-
-// Допоміжні перемінні ////////////////////////////////////////////////////////
-
-private int iX, iY;
-private int iW, vW, mW, sW, eW;
-private int iH, vH, mH, sH, eH;
-private int fitWi, fitHi, fitWe, fitHe;
 
 // Кінець класу JImageView ////////////////////////////////////////////////////
 
