@@ -6,11 +6,13 @@ import java.awt.*;
 import java.util.*;
 import java.beans.*;
 import javax.swing.*;
+import java.awt.geom.*;
 import javax.imageio.*;
+import java.awt.image.*;
 import java.awt.event.*;
-import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
 import javax.swing.event.*;
+
+import static java.awt.RenderingHints.*;
 
 // ............................................................................
 
@@ -73,15 +75,15 @@ private int imageScaleExternalFit;        // Масштаб для зовніш�
 
 // ............................................................................
 
-private Scale_Quality scaleQuality = Scale_Quality.SMOOTH;
-
 private boolean lmbEnable   = true;
 private boolean cmbEnable   = true;
 private boolean rmbEnable   = true;
 private boolean wheelEnable = true;
 private boolean wheelInvert = false;
 
-public enum Scale_Quality { FAST, SMOOTH }
+public enum ScaleType { FAST, SMOOTH }
+
+private ScaleType imageScaleType = ScaleType.SMOOTH;
 
 private JScrollBar hScrollBar, vScrollBar;
 
@@ -131,8 +133,7 @@ public void paintComponent (Graphics g) {
     
     if (gridVisible) {
 
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                            RenderingHints.VALUE_ANTIALIAS_OFF);
+        setImageScaleType(g2, ScaleType.FAST);
 
         g2.setColor(gridLightColor);
         g2.fillRect(0, 0, getWidth(), getHeight());
@@ -147,14 +148,12 @@ public void paintComponent (Graphics g) {
     
     }
     
-    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-    g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+    setImageScaleType(g2, imageScaleType);
     
     int iX = getWidth()/2  - imageScaleW/2;
     int iY = getHeight()/2 - imageScaleH/2;
     
-    if (imageScale >= 100 || scaleQuality == Scale_Quality.FAST)
+    if (imageScale >= 100 || imageScaleType == ScaleType.FAST)
         { g2.drawImage(image, iX, iY, imageScaleW, imageScaleH, null); }
     else
         { g2.drawImage(getSmoothThumbnail(), iX, iY, null); }
@@ -167,7 +166,7 @@ public void paintComponent (Graphics g) {
 //    g2.drawRect(iX, iY, imageScaleW, imageScaleH);
 
 }
-}
+    }
     
 ///////////////////////////////////////////////////////////////////////////////
 // Активні методи - для виконання певних маніпуляцій із зображенням ///////////
@@ -315,18 +314,6 @@ public void setErrorImage (Image errorImage)
       fireEvent("errorImage", oldValue, errorImage);
       getPropertyChangeSupport()
      .firePropertyChange("errorImage", oldValue, errorImage); }
-
-///////////////////////////////////////////////////////////////////////////////
-
-public Scale_Quality getScaleQuality() { return scaleQuality; }
-
-public void setScaleQuality (Scale_Quality scaleQuality)
-    { Scale_Quality oldValue = this.scaleQuality;
-      this.scaleQuality = scaleQuality;
-      panelRoot.repaint();
-      fireEvent("scaleQuality", oldValue, scaleQuality);
-      getPropertyChangeSupport()
-     .firePropertyChange("scaleQuality", oldValue, scaleQuality); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -486,6 +473,18 @@ public void setImageScale (int imageScale)
       fireEvent("imageScale", oldValue, imageScale);
       getPropertyChangeSupport()
      .firePropertyChange("imageScale", oldValue, imageScale); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+public ScaleType getImageScaleType() { return imageScaleType; }
+
+public void setImageScaleType (ScaleType imageScaleType)
+    { ScaleType oldValue = this.imageScaleType;
+      this.imageScaleType = imageScaleType;
+      panelRoot.repaint();
+      fireEvent("imageScaleType", oldValue, imageScaleType);
+      getPropertyChangeSupport()
+     .firePropertyChange("imageScaleType", oldValue, imageScaleType); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -660,6 +659,49 @@ private Image getRandomImage() {
     try { return ImageIO.read(resource); }
     catch (IOException e) { return null;}
 
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private void setImageScaleType (Graphics2D g2, ScaleType scaleType) {
+    
+if (scaleType == ScaleType.FAST) {
+
+    // Інтерполяція альфа-каналу: швидка
+    g2.setRenderingHint(KEY_ALPHA_INTERPOLATION,
+                        VALUE_ALPHA_INTERPOLATION_SPEED);
+    // Згладжування: вимкнено
+    g2.setRenderingHint(KEY_ANTIALIASING,
+                        VALUE_ANTIALIAS_OFF);
+    // Рендеринг кольорів: швидкий
+    g2.setRenderingHint(KEY_COLOR_RENDERING,
+                        VALUE_COLOR_RENDER_SPEED);
+    // Інтерполяція: метод найближчого сусіда
+    g2.setRenderingHint(KEY_INTERPOLATION,
+                        VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+    // Рендеринг: швидкий
+    g2.setRenderingHint(KEY_RENDERING,
+                        VALUE_RENDER_SPEED);
+}
+    
+else {
+    
+    // Інтерполяція альфа-каналу: якісна
+    g2.setRenderingHint(KEY_ALPHA_INTERPOLATION,
+                        VALUE_ALPHA_INTERPOLATION_QUALITY);
+    // Згладжування: увімкнене
+    g2.setRenderingHint(KEY_ANTIALIASING,
+                        VALUE_ANTIALIAS_ON);
+    // Рендеринг кольорів: якісний
+    g2.setRenderingHint(KEY_COLOR_RENDERING,
+                        VALUE_COLOR_RENDER_QUALITY);
+    // Інтерполяція: метод бікубічної інтерполяції
+    g2.setRenderingHint(KEY_INTERPOLATION,
+                        VALUE_INTERPOLATION_BICUBIC);
+    // Рендеринг: якісний
+    g2.setRenderingHint(KEY_RENDERING,
+                        VALUE_RENDER_SPEED);
+}
 }
 
 ///////////////////////////////////////////////////////////////////////////////

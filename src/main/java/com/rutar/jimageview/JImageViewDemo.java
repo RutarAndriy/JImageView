@@ -493,9 +493,9 @@ private void radioButtonPressed (ActionEvent ae) {
     switch (ae.getActionCommand()) {
         
         case "rb_zoom_fast"    ->
-            { imageView.setScaleQuality(Scale_Quality.FAST); }
+            { imageView.setImageScaleType(ScaleType.FAST); }
         case "rb_zoom_smooth"  ->
-            { imageView.setScaleQuality(Scale_Quality.SMOOTH); }
+            { imageView.setImageScaleType(ScaleType.SMOOTH); }
         
         case "rb_sb_always"    ->
             { imageView.setHorizontalScrollBarPolicy(32);
