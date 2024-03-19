@@ -83,7 +83,7 @@ private boolean wheelInvert = false;
 
 public enum ScaleType { FAST, SMOOTH }
 
-private ScaleType imageScaleType = ScaleType.SMOOTH;
+private ScaleType imageScaleType = ScaleType.FAST;
 
 private JScrollBar hScrollBar, vScrollBar;
 

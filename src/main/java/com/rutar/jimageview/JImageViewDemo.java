@@ -10,6 +10,8 @@ import java.awt.event.*;
 import com.rutar.jimageview.JImageView.*;
 
 import static java.awt.Color.*;
+import java.awt.image.BufferedImage;
+import java.net.URL;
 import static javax.swing.GroupLayout.*;
 
 // ............................................................................
@@ -215,13 +217,13 @@ cb_invert.setMargin(new Insets(2, 0, 2, 5));
 cb_invert.addActionListener(this::checkBoxPressed);
 
 bg_zoom.add(rb_zoom_fast);
+rb_zoom_fast.setSelected(true);
 rb_zoom_fast.setText("Швидке масштабування");
 rb_zoom_fast.setActionCommand("rb_zoom_fast");
 rb_zoom_fast.setMargin(new Insets(2, 0, 2, 5));
 rb_zoom_fast.addActionListener(this::radioButtonPressed);
 
 bg_zoom.add(rb_zoom_smooth);
-rb_zoom_smooth.setSelected(true);
 rb_zoom_smooth.setText("Згладжене масштабування");
 rb_zoom_smooth.setActionCommand("rb_zoom_smooth");
 rb_zoom_smooth.setMargin(new Insets(2, 0, 2, 5));
@@ -427,6 +429,9 @@ private void buttonPressed (ActionEvent ae) {
         
         case "btn_open" -> {
             JFileChooser chooser = new JFileChooser();
+            chooser.getActionMap().get("viewTypeDetails")
+                                  .actionPerformed(null);
+            chooser.setAccessory(new ImagePreviewComponent(chooser));
             chooser.setSelectedFile(new File("/home/rutar/test_1.jpg"));
             chooser.showOpenDialog(this);
             File file = chooser.getSelectedFile();
@@ -558,6 +563,87 @@ public static void main (String args[]) {
     EventQueue.invokeLater(() -> {
         new JImageViewDemo().setVisible(true);
     });
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private class ImagePreviewComponent extends JComponent
+                                    implements PropertyChangeListener {
+
+private BufferedImage image;
+private int gridSize = 15;
+
+// ............................................................................
+
+public ImagePreviewComponent (JFileChooser chooser) {
+
+    chooser.addPropertyChangeListener(this);
+    setPreferredSize(new Dimension(300, 300));
+
+}
+
+// ............................................................................
+
+@Override
+protected void paintComponent (Graphics g) {
+
+    g.setColor(Color.LIGHT_GRAY);
+    g.fillRect(0, 0, getWidth(), getHeight());
+    g.setColor(Color.DARK_GRAY);
+
+    for (int col = 0; col < getWidth();  col += gridSize) {
+    for (int row = 0; row < getHeight(); row += gridSize*2) {
+        g.fillRect(col, row + (col/gridSize%2 == 0 ? gridSize : 0),
+                   gridSize, gridSize);
+    }
+    }
+    
+    if (image == null) { return; }
+
+    int w = image.getWidth();
+    int h = image.getHeight();
+    float z = (w > h) ? getWidth()  * 1f / w :
+                        getHeight() * 1f / h;
+    
+    int x = getWidth()/2  - (int)(w * z / 2);
+    int y = getHeight()/2 - (int)(h * z / 2);
+    
+    g.drawImage(image, x, y, (int)(w * z), (int)(h * z), null);
+
+}
+
+// ............................................................................
+
+@Override
+public void propertyChange (PropertyChangeEvent e) {
+
+    switch (e.getPropertyName()) {
+        
+        case JFileChooser.DIRECTORY_CHANGED_PROPERTY -> {
+            image = null;
+            repaint();
+        }
+        
+        case JFileChooser.SELECTED_FILE_CHANGED_PROPERTY -> {
+                
+            File file = (File) e.getNewValue();
+
+            if (file == null) {
+                image = null;
+                repaint();
+                return;
+            }
+            
+            else {
+                
+                try { image = ImageIO.read(file);
+                      repaint(); }
+                catch (IOException ex) { image = null; }
+                
+            }
+        }
+    }
+}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
