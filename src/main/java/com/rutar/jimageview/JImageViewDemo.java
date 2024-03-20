@@ -416,8 +416,9 @@ private void buttonPressed (ActionEvent ae) {
         case "btn_maximize"     -> imageView.maximize();
         case "btn_internal_fit" -> imageView.fitInternal();
         case "btn_external_fit" -> imageView.fitExternal();
-        case "btn_original"     -> imageView.zoomToOriginal();
         case "btn_center"       -> imageView.center();
+        case "btn_region_fit"   -> imageView.setImageScaleRegion();
+        case "btn_original"     -> imageView.zoomToOriginal();
         
         // ....................................................................
         

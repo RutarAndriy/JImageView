@@ -26,8 +26,14 @@ public class JImageView extends JScrollPane {
 
 // ............................................................................
 
-private static final Cursor CURSOR_HAND = new Cursor(Cursor.HAND_CURSOR);
-private static final Cursor CURSOR_MOVE = new Cursor(Cursor.MOVE_CURSOR);
+private static final Cursor CURSOR_HAND
+    = new Cursor(Cursor.HAND_CURSOR);
+
+private static final Cursor CURSOR_MOVE
+    = new Cursor(Cursor.MOVE_CURSOR);
+
+private static final Cursor CURSOR_REGION
+    = new Cursor(Cursor.CROSSHAIR_CURSOR);
 
 private static Cursor CURSOR_DEFAULT = null;
 
@@ -83,16 +89,20 @@ private int imageScaleExternalFit;        // Масштаб для зовніш�
 private boolean cursorOnImage;      // Знаходження курсора всередині компонента
 private boolean scrollBarVisible;        // Видимість скролбарів, хоча б одного
 
-// ............................................................................
-
-private JPanel panelRoot;                    // Панель для малювання зображення
-private JScrollBar hScrollBar, vScrollBar;           // Гор. та верт. скролбари
-
-private Point origin;        // Точка, у якій відбулося натискання клавіші миші
-
-private Rectangle   regionRect;
+private boolean specifyRegion;                 // Задання регіону масштабування
+private Rectangle regionRectOriginal;                    // Оригінальний регіон
+private Rectangle regionRectNormalized;                // Нормалізований регіон
+private Color regionLightColor = Color.WHITE;          // I колір рамки регіону
+private Color regionDarkColor  = Color.DARK_GRAY;     // II колір рамки регіону
 private BasicStroke regionStroke;           // Основний штрих виділення регіону
 private BasicStroke regionStrokeAdditional;     // Доп. штрих виділення регіону
+private boolean regionAdditionalStroke = true;  // Малювання додаткового штриха
+
+// ............................................................................
+
+private Point origin;        // Точка, у якій відбулося натискання клавіші миші
+private JPanel panelRoot;                    // Панель для малювання зображення
+private JScrollBar hScrollBar, vScrollBar;           // Гор. та верт. скролбари
 
 // ............................................................................
 
@@ -129,7 +139,7 @@ setViewportView(panelRoot);
 
 /**
  * Клас RootPane
- * Реалізує 
+ * Малює основне зображення та прослуховує події введення
  */
 private final class RootPane extends JPanel {
 
@@ -166,16 +176,24 @@ public void paintComponent (Graphics g) {
     else
         { g2.drawImage(getSmoothThumbnail(), iX, iY, null); }
 
-//    g2.setColor(Color.WHITE);
-//    g2.setStroke(regionStrokeAdditional);
-//    g2.drawRect(iX, iY, imageScaleW, imageScaleH);
-//    g2.setColor(Color.BLACK);
-//    g2.setStroke(regionStroke);
-//    g2.drawRect(iX, iY, imageScaleW, imageScaleH);
-
-}
-    }
+    if (specifyRegion) {
+        
+        normalizeRegionRect(iX, iY);
+        
+        if (regionAdditionalStroke) {
+            g2.setColor(regionDarkColor);
+            g2.setStroke(regionStrokeAdditional);
+            g2.draw(regionRectNormalized);
+        }
+        
+        g2.setColor(regionLightColor);
+        g2.setStroke(regionStroke);
+        g2.draw(regionRectNormalized);
     
+    }
+}
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Активні методи - для виконання певних маніпуляцій із зображенням ///////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -325,6 +343,17 @@ public void setErrorImage (Image errorImage)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+public boolean isRegionAdditionalStroke() { return regionAdditionalStroke; }
+
+public void setRegionAdditionalStroke (boolean regionAdditionalStroke)
+    { boolean oldValue = this.regionAdditionalStroke;
+      this.regionAdditionalStroke = regionAdditionalStroke;
+      fireEvent("regionAdditionalStroke", oldValue, regionAdditionalStroke);
+      getPropertyChangeSupport().firePropertyChange("regionAdditionalStroke",
+                                 oldValue, regionAdditionalStroke); }
+
+///////////////////////////////////////////////////////////////////////////////
+
 public BasicStroke getRegionStroke() { return regionStroke; }
 
 public void setRegionStroke (BasicStroke regionStroke)
@@ -344,6 +373,30 @@ public void setRegionStroke (BasicStroke regionStroke)
       fireEvent("regionStroke", oldValue, regionStroke);
       getPropertyChangeSupport()
      .firePropertyChange("regionStroke", oldValue, regionStroke); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+public Color getRegionLightColor() { return regionLightColor; }
+
+public void setRegionLightColor (Color regionLightColor)
+    { if (regionLightColor == null) { regionLightColor = Color.WHITE; }
+      Color oldValue = this.regionLightColor;
+      this.regionLightColor = regionLightColor;
+      fireEvent("regionLightColor", oldValue, regionLightColor);
+      getPropertyChangeSupport()
+     .firePropertyChange("regionLightColor", oldValue, regionLightColor); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+public Color getRegionDarkColor() { return regionDarkColor; }
+
+public void setRegionDarkColor (Color regionDarkColor)
+    { if (regionDarkColor == null) { regionDarkColor = Color.DARK_GRAY; }
+      Color oldValue = this.regionDarkColor;
+      this.regionDarkColor = regionDarkColor;
+      fireEvent("regionDarkColor", oldValue, regionDarkColor);
+      getPropertyChangeSupport()
+     .firePropertyChange("regionDarkColor", oldValue, regionDarkColor); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -660,6 +713,52 @@ private Rectangle calculateScrollParams (Point2D.Float oldPosition,
 
 ///////////////////////////////////////////////////////////////////////////////
 
+public void setImageScaleRegion() {
+    
+    panelRoot.setCursor(CURSOR_REGION);
+    regionRectOriginal = new Rectangle();
+    regionRectNormalized = new Rectangle();
+    specifyRegion = true;
+    
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+public void setImageScaleRegion (Rectangle region) {
+    
+    specifyRegion = false;
+    panelRoot.repaint();
+    
+    System.out.printf("Region: [ %d, %d, %d, %d ]\n",
+                       region.x, region.y, region.width, region.height);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private void normalizeRegionRect (int iX, int iY) {
+    
+    int x = regionRectOriginal.x;
+    int y = regionRectOriginal.y;
+    int w = regionRectOriginal.width;
+    int h = regionRectOriginal.height;
+    
+    // Обробка від'ємних координат
+    if (w < 0) { w = -w; x -= w; }
+    if (h < 0) { h = -h; y -= h; }
+
+    // Заборона виходу за початкову точку зображення
+    if (x < iX) { w -= (iX - x); x = iX; }
+    if (y < iY) { h -= (iY - y); y = iY; }
+    
+    // Заборона виходу за межі розмірів зображення
+    if (w > imageScaleW - (x - iX)) { w = imageScaleW - (x - iX); }
+    if (h > imageScaleH - (y - iY)) { h = imageScaleH - (y - iY); }
+
+    regionRectNormalized = new Rectangle(x, y, w, h);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 private Image getRandomImage() {
     
     String path = "/com/rutar/jimageview/images/%s.png";
@@ -802,7 +901,10 @@ public void mousePressed (MouseEvent me) {
         // Ліва клавіша миші
         case MouseEvent.BUTTON1 -> {
             
-            if (!lmbEnable) { return; }
+            if (specifyRegion)
+                { regionRectOriginal.setLocation(getPointOnImage(me)); }
+            
+            if (!lmbEnable || specifyRegion) { return; }
             
             origin = getPointOnImage(me);
             panelRoot.setCursor(isScrollBarVisible() ? CURSOR_HAND :
@@ -812,7 +914,7 @@ public void mousePressed (MouseEvent me) {
         // Середня клавіша миші
         case MouseEvent.BUTTON2 -> {
         
-            if (!cmbEnable) { return; }
+            if (!cmbEnable || specifyRegion) { return; }
             
             if (imageScale == 100)                        { fitInternal();    }
             else if (imageScale == imageScaleInternalFit) { fitExternal();    }
@@ -822,7 +924,7 @@ public void mousePressed (MouseEvent me) {
         // Права клавіша миші
         case MouseEvent.BUTTON3 -> {
             
-            if (!rmbEnable) { return; }
+            if (!rmbEnable || specifyRegion) { return; }
             
             System.out.println("Right mouse button pressed");     
         }
@@ -839,7 +941,10 @@ public void mouseReleased (MouseEvent me) {
         // Ліва клавіша миші
         case MouseEvent.BUTTON1 -> {
             
-            if (!lmbEnable) { return; }
+            if (specifyRegion) { updateCursor();
+                                 setImageScaleRegion(regionRectNormalized); }
+            
+            if (!lmbEnable || specifyRegion) { return; }
             
             origin = null;
             panelRoot.setCursor(CURSOR_DEFAULT);
@@ -848,7 +953,7 @@ public void mouseReleased (MouseEvent me) {
         // Права клавіша миші
         case MouseEvent.BUTTON3 -> {
             
-            if (!rmbEnable) { return; }
+            if (!rmbEnable || specifyRegion) { return; }
             
             System.out.println("Right mouse button released");     
         }
@@ -860,7 +965,7 @@ public void mouseReleased (MouseEvent me) {
 @Override
 public void mouseWheelMoved (MouseWheelEvent mwe) {
     
-    if (!wheelEnable) { return; }
+    if (!wheelEnable || specifyRegion) { return; }
     
     if (mwe.getWheelRotation() > 0)
         { if (wheelInvert) { zoomOut(mwe.getPoint()); }
@@ -880,6 +985,17 @@ public final MouseMotionListener mouseMotionListener
 @Override
 public void mouseDragged (MouseEvent me) {
 
+    if (specifyRegion) { 
+        
+        Point point_new = getPointOnImage(me);
+        Point point_old = regionRectOriginal.getLocation();
+        
+        regionRectOriginal.setSize(point_new.x - point_old.x,
+                           point_new.y - point_old.y);
+        
+        panelRoot.repaint();
+    }
+    
     if (origin != null) {
         
         if (!drugImageOut && !cursorOnImage) { return; }
