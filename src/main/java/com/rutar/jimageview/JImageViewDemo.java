@@ -13,6 +13,7 @@ import static java.awt.Color.*;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import static javax.swing.GroupLayout.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 // ............................................................................
 
@@ -432,6 +433,8 @@ private void buttonPressed (ActionEvent ae) {
             chooser.getActionMap().get("viewTypeDetails")
                                   .actionPerformed(null);
             chooser.setAccessory(new ImagePreviewComponent(chooser));
+            chooser.setFileFilter(new FileNameExtensionFilter("Image files",
+                                      ImageIO.getReaderFileSuffixes()));
             chooser.setSelectedFile(new File("/home/rutar/test_1.jpg"));
             chooser.showOpenDialog(this);
             File file = chooser.getSelectedFile();
@@ -571,16 +574,13 @@ private class ImagePreviewComponent extends JComponent
                                     implements PropertyChangeListener {
 
 private BufferedImage image;
-private int gridSize = 15;
+private final int gridSize = 15;
 
 // ............................................................................
 
-public ImagePreviewComponent (JFileChooser chooser) {
-
-    chooser.addPropertyChangeListener(this);
-    setPreferredSize(new Dimension(300, 300));
-
-}
+public ImagePreviewComponent (JFileChooser chooser)
+    { chooser.addPropertyChangeListener(this);
+      setPreferredSize(new Dimension(300, 300)); }
 
 // ............................................................................
 
@@ -602,8 +602,10 @@ protected void paintComponent (Graphics g) {
 
     int w = image.getWidth();
     int h = image.getHeight();
-    float z = (w > h) ? getWidth()  * 1f / w :
-                        getHeight() * 1f / h;
+    
+    float p = getWidth()  * 1f / w;
+    float q = getHeight() * 1f / h;
+    float z = (p < q) ? p : q;
     
     int x = getWidth()/2  - (int)(w * z / 2);
     int y = getHeight()/2 - (int)(h * z / 2);
