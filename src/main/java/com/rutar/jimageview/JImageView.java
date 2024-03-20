@@ -29,6 +29,8 @@ public class JImageView extends JScrollPane {
 private static final Cursor CURSOR_HAND = new Cursor(Cursor.HAND_CURSOR);
 private static final Cursor CURSOR_MOVE = new Cursor(Cursor.MOVE_CURSOR);
 
+private static Cursor CURSOR_DEFAULT = null;
+
 // ............................................................................
 
 // Масив стандартних масштабів
@@ -42,54 +44,60 @@ private final int[] scales =
 
 // ............................................................................
 
-private static ArrayList <JImageViewListener> listeners = null;
-private static transient PropertyChangeSupport propertyChangeSupport = null;
-private static Cursor CURSOR_DEFAULT = null;
+private Image image = null;                            // Зображення для показу
+private Image errorImage = null;      // Зображення яке показується при помилці
 
 // ............................................................................
 
-private JPanel panelRoot;
-
 private boolean drugImageOut = true;         // Переміщення за межею компонента
 
-private boolean gridVisible = true;                          // Фонова сітка
+private boolean gridVisible = true;                             // Фонова сітка
 private Color gridLightColor = Color.LIGHT_GRAY;       // I колір фонової сітки
 private Color gridDarkColor  = Color.DARK_GRAY;       // II колір фонової сітки
 private int gridSize = 25;                                      // Розмір сітки
 
-private int imageScale = 100;                             // Масштаб зображення
+private boolean lmbEnable   = true;  // Переміщення зображення за допомогою ЛКМ
+private boolean cmbEnable   = true;           // Зміна вигляду за допопогою СКМ
+private boolean rmbEnable   = true;            // Масштабування за допоогою ПКМ
+private boolean wheelEnable = true;             // Масштабування колесиком миші
+private boolean wheelInvert = false;              // Інвертування колесика миші
 
-private Image image = null;                            // Зображення для показу
-private Image errorImage = null;      // Зображення яке показується при помилці
+public enum ScaleType { FAST, SMOOTH }                // Усі види масштабування
+private ScaleType imageScaleType = ScaleType.FAST;         // Тип масштабування
+
+// ............................................................................
+
+private int imageScale;                                   // Масштаб зображення
 
 private int imageScaleW;                    // Ширина масштабованого зображення
 private int imageScaleH;                    // Висота масштабованого зображення
 
-private int globalScaleMin = scales[0];
-private int globalScaleMax = scales[scales.length - 1];
+private int globalScaleMin = scales[0];                  // Мінімальний масштаб
+private int globalScaleMax = scales[scales.length - 1]; // Максимальний масштаб
 
-private int imageScaleMax;             // Мінімальний масштаб заного зображення
-private int imageScaleMin;            // Максимальний масштаб заного зображення
+private int imageScaleMax;                    // Мінімальний масштаб зображення
+private int imageScaleMin;                   // Максимальний масштаб зображення
 private int imageScaleInternalFit;       // Масштаб для внутрішнього заповнення
 private int imageScaleExternalFit;        // Масштаб для зовнішнього заповнення
 
+private boolean cursorOnImage;      // Знаходження курсора всередині компонента
+private boolean scrollBarVisible;        // Видимість скролбарів, хоча б одного
+
 // ............................................................................
 
-private boolean lmbEnable   = true;
-private boolean cmbEnable   = true;
-private boolean rmbEnable   = true;
-private boolean wheelEnable = true;
-private boolean wheelInvert = false;
+private JPanel panelRoot;                    // Панель для малювання зображення
+private JScrollBar hScrollBar, vScrollBar;           // Гор. та верт. скролбари
 
-public enum ScaleType { FAST, SMOOTH }
-
-private ScaleType imageScaleType = ScaleType.FAST;
-
-private JScrollBar hScrollBar, vScrollBar;
+private Point origin;        // Точка, у якій відбулося натискання клавіші миші
 
 private Rectangle   regionRect;
-private BasicStroke regionStroke;
-private BasicStroke regionStrokeAdditional;
+private BasicStroke regionStroke;           // Основний штрих виділення регіону
+private BasicStroke regionStrokeAdditional;     // Доп. штрих виділення регіону
+
+// ............................................................................
+
+private static ArrayList <JImageViewListener> listeners = null;
+private static transient PropertyChangeSupport propertyChangeSupport = null;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -344,6 +352,7 @@ public boolean isLMBEnable() { return lmbEnable; }
 public void setLMBEnable (boolean lmbEnable)
     { boolean oldValue = this.lmbEnable;
       this.lmbEnable = lmbEnable;
+      updateCursor();
       fireEvent("lmbEnable", oldValue, lmbEnable);
       getPropertyChangeSupport()
      .firePropertyChange("lmbEnable", oldValue, lmbEnable); }
@@ -487,6 +496,8 @@ public void setImageScaleType (ScaleType imageScaleType)
      .firePropertyChange("imageScaleType", oldValue, imageScaleType); }
 
 ///////////////////////////////////////////////////////////////////////////////
+// Додавання та видалення прослуховувачів подій ///////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 @Override
 public void addPropertyChangeListener (PropertyChangeListener listener)
@@ -541,6 +552,8 @@ for (JImageViewListener listener : getListeners()) {
 }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+// Допоміжні методи ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
 private void calculateImageLimitScale() {
@@ -755,15 +768,20 @@ private boolean isScrollBarVisible()
 
 ///////////////////////////////////////////////////////////////////////////////
 
+private void updateCursor() {
+    
+    if (lmbEnable)
+        { scrollBarVisible = isScrollBarVisible();
+          CURSOR_DEFAULT = scrollBarVisible ? CURSOR_MOVE : null;
+          panelRoot.setCursor(CURSOR_DEFAULT); }
+    else
+        { CURSOR_DEFAULT = null;
+          panelRoot.setCursor(CURSOR_DEFAULT); }
+}
+
 ///////////////////////////////////////////////////////////////////////////////
-
-private Point origin;
-private JViewport imageViewport;
-
-private boolean cursorOnImage;
-private boolean scrollBarVisible;
-
-// ............................................................................
+// Прослуховування та обробка подій ///////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 private final MouseListener mouseListener
         = new MouseAdapter() {
@@ -783,6 +801,9 @@ public void mousePressed (MouseEvent me) {
         
         // Ліва клавіша миші
         case MouseEvent.BUTTON1 -> {
+            
+            if (!lmbEnable) { return; }
+            
             origin = getPointOnImage(me);
             panelRoot.setCursor(isScrollBarVisible() ? CURSOR_HAND :
                                                        CURSOR_DEFAULT);
@@ -796,7 +817,14 @@ public void mousePressed (MouseEvent me) {
             if (imageScale == 100)                        { fitInternal();    }
             else if (imageScale == imageScaleInternalFit) { fitExternal();    }
             else                                          { zoomToOriginal(); }
-        
+        }
+            
+        // Права клавіша миші
+        case MouseEvent.BUTTON3 -> {
+            
+            if (!rmbEnable) { return; }
+            
+            System.out.println("Right mouse button pressed");     
         }
     }
 }
@@ -810,9 +838,20 @@ public void mouseReleased (MouseEvent me) {
         
         // Ліва клавіша миші
         case MouseEvent.BUTTON1 -> {
+            
+            if (!lmbEnable) { return; }
+            
             origin = null;
             panelRoot.setCursor(CURSOR_DEFAULT);
-        }     
+        }
+        
+        // Права клавіша миші
+        case MouseEvent.BUTTON3 -> {
+            
+            if (!rmbEnable) { return; }
+            
+            System.out.println("Right mouse button released");     
+        }
     }
 }
 
@@ -820,6 +859,8 @@ public void mouseReleased (MouseEvent me) {
 
 @Override
 public void mouseWheelMoved (MouseWheelEvent mwe) {
+    
+    if (!wheelEnable) { return; }
     
     if (mwe.getWheelRotation() > 0)
         { if (wheelInvert) { zoomOut(mwe.getPoint()); }
@@ -870,13 +911,7 @@ private final ChangeListener changeListener = new ChangeListener() {
         // Якщо цього не зробити, компонент повертатиме некоректні властивості
         if (!isValid()) { validate(); }
         
-        if (scrollBarVisible != isScrollBarVisible()) {
-
-            scrollBarVisible = isScrollBarVisible();
-            CURSOR_DEFAULT = scrollBarVisible ? CURSOR_MOVE : null;
-            panelRoot.setCursor(CURSOR_DEFAULT);
-        
-        }
+        if (scrollBarVisible != isScrollBarVisible()) { updateCursor(); }
         
         calculateImageFitScale();
         
