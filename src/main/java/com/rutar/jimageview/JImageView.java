@@ -73,6 +73,9 @@ private ScaleType imageScaleType = ScaleType.FAST;         // Тип масшт�
 
 // ............................................................................
 
+private int imageW;                          // Ширина оригінального зображення
+private int imageH;                          // Висота оригінального зображення
+
 private int imageScale;                                   // Масштаб зображення
 
 private int imageScaleW;                    // Ширина масштабованого зображення
@@ -90,8 +93,9 @@ private boolean cursorOnImage;      // Знаходження курсора в�
 private boolean scrollBarVisible;        // Видимість скролбарів, хоча б одного
 
 private boolean specifyRegion;                 // Задання регіону масштабування
-private Rectangle regionRectOriginal;                    // Оригінальний регіон
-private Rectangle regionRectNormalized;                // Нормалізований регіон
+private Rectangle regionOrig;                            // Оригінальний регіон
+private Rectangle regionNorm;                          // Нормалізований регіон
+private Rectangle regionImage;               // Регіон в координатах зображення
 private Color regionLightColor = Color.WHITE;          // I колір рамки регіону
 private Color regionDarkColor  = Color.DARK_GRAY;     // II колір рамки регіону
 private BasicStroke regionStroke;           // Основний штрих виділення регіону
@@ -175,7 +179,7 @@ public void paintComponent (Graphics g) {
         { g2.drawImage(image, iX, iY, imageScaleW, imageScaleH, null); }
     else
         { g2.drawImage(getSmoothThumbnail(), iX, iY, null); }
-
+    
     if (specifyRegion) {
         
         normalizeRegionRect(iX, iY);
@@ -183,14 +187,25 @@ public void paintComponent (Graphics g) {
         if (regionAdditionalStroke) {
             g2.setColor(regionDarkColor);
             g2.setStroke(regionStrokeAdditional);
-            g2.draw(regionRectNormalized);
+            g2.draw(regionNorm);
         }
         
         g2.setColor(regionLightColor);
         g2.setStroke(regionStroke);
-        g2.draw(regionRectNormalized);
+        g2.draw(regionNorm);
     
     }
+    
+//    if (regionRectNormalized != null && !specifyRegion) {
+//    
+//    g2.setColor(Color.RED);
+//    g2.setStroke(regionStroke);
+//    g2.drawRect(regionRectNormalized.x,
+//                regionRectNormalized.y,
+//                (int)(regionRectNormalized.width  * imageScale / 100f),
+//                (int)(regionRectNormalized.height * imageScale / 100f));
+//    
+//    }
 }
 }
 
@@ -208,10 +223,11 @@ public void zoomIn (Point origin) {
     if (imageScale >= imageScaleMax) { return; }
     int scaleValue = imageScale;
 
+    if (!isValid()) { validate(); }
     if (origin == null) { origin = new Point(getWidth()/2,
                                              getHeight()/2); }
     
-    Point2D.Float oldPosition = getPercentagePoint(origin);
+    Point2D.Float oldPosition = getGlobalPercentagePoint(origin);
     
     for (int z = 0; z < scales.length; z++) {
         if (scaleValue < scales[z]) {
@@ -221,7 +237,7 @@ public void zoomIn (Point origin) {
         }
     }
     
-    Point2D.Float newPosition = getPercentagePoint(origin);
+    Point2D.Float newPosition = getGlobalPercentagePoint(origin);
 
     panelRoot.scrollRectToVisible
              (calculateScrollParams(oldPosition, newPosition));
@@ -240,10 +256,11 @@ public void zoomOut (Point origin) {
     if (imageScale <= imageScaleMin) { return; }
     int scaleValue = imageScale;
 
-        if (origin == null) { origin = new Point(getWidth()/2,
-                                                 getHeight()/2); }
+    if (!isValid()) { validate(); }
+    if (origin == null) { origin = new Point(getWidth()/2,
+                                             getHeight()/2); }
 
-    Point2D.Float oldPosition = getPercentagePoint(origin);
+    Point2D.Float oldPosition = getGlobalPercentagePoint(origin);
 
     for (int z = scales.length - 1; z >= 0; z--) {
         if (scaleValue > scales[z]) {
@@ -253,7 +270,7 @@ public void zoomOut (Point origin) {
         }
     }
 
-    Point2D.Float newPosition = getPercentagePoint(origin);
+    Point2D.Float newPosition = getGlobalPercentagePoint(origin);
 
     panelRoot.scrollRectToVisible
              (calculateScrollParams(oldPosition, newPosition));
@@ -324,6 +341,8 @@ public void setImage (Image image)
     { if (image == null) { image = getErrorImage(); }       
       Image oldValue = this.image;
       this.image = image;
+      this.imageW = image.getWidth(null);
+      this.imageH = image.getHeight(null);
       zoomToOriginal();
       fireEvent("image", oldValue, image);
       getPropertyChangeSupport()
@@ -629,8 +648,20 @@ private void calculateImageLimitScale() {
 
 private void calculateImageFitScale() {
     
+    int[] fitScale = calculateFitScale(image.getWidth(null),
+                                       image.getHeight(null));
+    
+    imageScaleInternalFit = fitScale[0];
+    imageScaleExternalFit = fitScale[1];
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private int[] calculateFitScale (int regionW, int regionH) {
+    
     // Ширина зображення
-    int iW = image.getWidth(null);
+    int iW = regionW;
     // Ширина області перегляду
     int vW = getViewport().getWidth();
     // Ширина вертикального скролбару
@@ -641,7 +672,7 @@ private void calculateImageFitScale() {
     int eW = sW;
     
     // Висота зображення
-    int iH = image.getHeight(null);
+    int iH = regionH;
     // Висота області перегляду
     int vH = getViewport().getHeight();
     // Висота горизонтального скролбару
@@ -666,8 +697,8 @@ private void calculateImageFitScale() {
     int fitWe = (int)(100d * (vW + eW - mW) / iW);
     int fitHe = (int)(100d * (vH + eH - mH) / iH);
     
-    imageScaleInternalFit = (fitWi < fitHi) ? fitWi : fitHi;
-    imageScaleExternalFit = (fitWe > fitHe) ? fitWe : fitHe;
+    return new int[] { (fitWi < fitHi) ? fitWi : fitHi,
+                       (fitWe > fitHe) ? fitWe : fitHe };
 
 }
 
@@ -682,14 +713,38 @@ private void calculateScaledImageSize() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-private Point2D.Float getPercentagePoint (Point origin) {
+private Point2D.Float getLocalPercentagePoint (Point point, int width,
+                                                            int height) {
+    
+    return new Point2D.Float(point.x * 100f / width,
+                             point.y * 100f / height);
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private Point2D.Float getGlobalPercentagePoint (Point point) {
 
     if (!isValid()) { validate(); }
-    var point = SwingUtilities.convertPoint(getViewport(), origin, panelRoot);
+    point = getPointOnImage(point);
+    //var point = SwingUtilities.convertPoint(getViewport(), origin, panelRoot);
     
-    return new Point2D.Float(point.x * 100f / panelRoot.getWidth(),
-                             point.y * 100f / panelRoot.getHeight());
+    return getLocalPercentagePoint(point, panelRoot.getWidth(),
+                                          panelRoot.getHeight());
+    
+//    return new Point2D.Float(point.x * 100f / panelRoot.getWidth(),
+//                             point.y * 100f / panelRoot.getHeight());
 
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private Dimension getDimensionByPercentagePoint (Point2D.Float point,
+                                                 int width, int height) {
+    
+    return new Dimension((int)(point.x * width  / 100f),
+                         (int)(point.y * height / 100));
+    
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -713,34 +768,52 @@ private Rectangle calculateScrollParams (Point2D.Float oldPosition,
 
 ///////////////////////////////////////////////////////////////////////////////
 
-public void setImageScaleRegion() {
+public void setRegion() {
     
     panelRoot.setCursor(CURSOR_REGION);
-    regionRectOriginal = new Rectangle();
-    regionRectNormalized = new Rectangle();
+    regionOrig  = new Rectangle();
+//    regionNorm  = new Rectangle();
+//    regionImage = new Rectangle();
     specifyRegion = true;
     
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-public void setImageScaleRegion (Rectangle region) {
+public void setRegion (Rectangle region) {
     
     specifyRegion = false;
     panelRoot.repaint();
     
-    System.out.printf("Region: [ %d, %d, %d, %d ]\n",
-                       region.x, region.y, region.width, region.height);
+    int x = regionImage.x;
+    int y = regionImage.y;
+    
+    int w = regionImage.width;
+    int h = regionImage.height;
+    
+    System.out.printf("[ %d, %d ] > [ %d. %d ]\n", x, y, w, h);
+    
+    int fitType = 0;
+    int fitScale = calculateFitScale(w, h)[fitType];
+    
+    //System.out.println(dX + "/" + dY);
+    
+    //setImageScale(fitScale);
+    
+    
+    
+//    System.out.printf("Region: [ %d, %d, %d, %d ]\n",
+//                       region.x, region.y, region.width, region.height);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 private void normalizeRegionRect (int iX, int iY) {
     
-    int x = regionRectOriginal.x;
-    int y = regionRectOriginal.y;
-    int w = regionRectOriginal.width;
-    int h = regionRectOriginal.height;
+    int x = regionOrig.x;
+    int y = regionOrig.y;
+    int w = regionOrig.width;
+    int h = regionOrig.height;
     
     // Обробка від'ємних координат
     if (w < 0) { w = -w; x -= w; }
@@ -754,7 +827,26 @@ private void normalizeRegionRect (int iX, int iY) {
     if (w > imageScaleW - (x - iX)) { w = imageScaleW - (x - iX); }
     if (h > imageScaleH - (y - iY)) { h = imageScaleH - (y - iY); }
 
-    regionRectNormalized = new Rectangle(x, y, w, h);
+    regionNorm = new Rectangle(x, y, w, h);
+    
+    x -= iX;
+    y -= iY;
+    
+    Point2D.Float pXY = getLocalPercentagePoint(new Point(x, y),
+                                                imageScaleW, imageScaleH);
+    Point2D.Float pWH = getLocalPercentagePoint(new Point(w, h),
+                                                imageScaleW, imageScaleH);
+    
+    Dimension dXY = getDimensionByPercentagePoint(pXY, imageW, imageH);
+    Dimension dWH = getDimensionByPercentagePoint(pWH, imageW, imageH);
+    
+    x = dXY.width;
+    y = dXY.height;
+    w = dWH.width;
+    h = dWH.height;
+    
+    regionImage = new Rectangle(x, y, w, h);
+    
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -764,8 +856,7 @@ private Image getRandomImage() {
     String path = "/com/rutar/jimageview/images/%s.png";
     String[] names = { "tree", "fire", "wave" };
 
-    //int index = (int)(Math.random() * 3);
-    int index = 0;
+    int index = (int)(Math.random() * 3);
     URL resource = getClass().getResource(String.format(path, names[index]));
 
     try { return ImageIO.read(resource); }
@@ -852,6 +943,11 @@ return thumbnail;
 
 ///////////////////////////////////////////////////////////////////////////////
 
+private Point getPointOnImage (Point point)
+    { return SwingUtilities.convertPoint(getViewport(), point, panelRoot);}
+
+///////////////////////////////////////////////////////////////////////////////
+
 private Point getPointOnImage (MouseEvent me) {
     return SwingUtilities.convertMouseEvent(getViewport(), me, panelRoot)
                          .getPoint();
@@ -902,7 +998,7 @@ public void mousePressed (MouseEvent me) {
         case MouseEvent.BUTTON1 -> {
             
             if (specifyRegion)
-                { regionRectOriginal.setLocation(getPointOnImage(me)); }
+                { regionOrig.setLocation(getPointOnImage(me)); }
             
             if (!lmbEnable || specifyRegion) { return; }
             
@@ -942,7 +1038,7 @@ public void mouseReleased (MouseEvent me) {
         case MouseEvent.BUTTON1 -> {
             
             if (specifyRegion) { updateCursor();
-                                 setImageScaleRegion(regionRectNormalized); }
+                                 setRegion(regionNorm); }
             
             if (!lmbEnable || specifyRegion) { return; }
             
@@ -975,7 +1071,7 @@ public void mouseWheelMoved (MouseWheelEvent mwe) {
           else             { zoomOut(mwe.getPoint()); } }
 
 }
-};
+    };
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -988,9 +1084,9 @@ public void mouseDragged (MouseEvent me) {
     if (specifyRegion) { 
         
         Point point_new = getPointOnImage(me);
-        Point point_old = regionRectOriginal.getLocation();
+        Point point_old = regionOrig.getLocation();
         
-        regionRectOriginal.setSize(point_new.x - point_old.x,
+        regionOrig.setSize(point_new.x - point_old.x,
                            point_new.y - point_old.y);
         
         panelRoot.repaint();
