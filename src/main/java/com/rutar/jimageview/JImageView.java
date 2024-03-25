@@ -295,7 +295,8 @@ public void maximize() { setImageScale(imageScaleMax);
  * Задання розміру зображення таким чином, щоб його 
  * більша сторона максимально замістила доступний простір компонента
  */
-public void fitInternal() { setImageScale(imageScaleInternalFit); }
+public void fitInternal() { setImageScale(imageScaleInternalFit);
+                            center(); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -303,27 +304,38 @@ public void fitInternal() { setImageScale(imageScaleInternalFit); }
  * Задання розміру зображення таким чином, щоб його 
  * менша сторона максимально замістила доступний простір компонента
  */
-public void fitExternal() { setImageScale(imageScaleExternalFit); }
+public void fitExternal() { setImageScale(imageScaleExternalFit);
+                            center(); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 /** 
- * Переміщує зображння таким чином, щоб воно відображалося в центрі компонента.
- * Метод доцільно використовувати лише тоді, коли зображення не поміщається 
- * в межах компонента і є доступними смуги прокручування
+ * Переміщує зображення таким чином, щоб воно відображалося в центрі
+ * компонента. Метод доцільно використовувати лише тоді, коли зображення
+ * не поміщається в межах компонента і є доступними смуги прокручування
  */
-public void center() {
+public void center() { centerOnPoint(new Point(imageScaleW/2,
+                                               imageScaleH/2)); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/** 
+ * Переміщує зображення таким чином, щоб задана точка відображалася в центрі
+ * компонента. Метод доцільно використовувати лише тоді, коли зображення
+ * не поміщається в межах компонента і є доступними смуги прокручування
+ * @param point точка зображення
+ */
+public void centerOnPoint (Point point) {
     
     if (!isValid()) { validate(); }
-    
-    Dimension size = panelRoot.getSize();
-    Rectangle viewRect = getViewport().getViewRect();
 
-    viewRect.x = (size.width  - viewRect.width)  / 2;
-    viewRect.y = (size.height - viewRect.height) / 2;
+    Rectangle viewRect = getViewport().getViewRect();
+    
+    viewRect.x = point.x - viewRect.width  / 2;
+    viewRect.y = point.y - viewRect.height / 2;
     
     panelRoot.scrollRectToVisible(viewRect);
-    
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -343,10 +355,9 @@ public void setImage (Image image)
       this.image = image;
       this.imageW = image.getWidth(null);
       this.imageH = image.getHeight(null);
+      this.changeListener.stateChanged(null);
       zoomToOriginal();
-      fireEvent("image", oldValue, image);
-      getPropertyChangeSupport()
-     .firePropertyChange("image", oldValue, image); }
+      fireAll("image", oldValue, image); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -356,9 +367,7 @@ public void setErrorImage (Image errorImage)
     { if (errorImage == null) { errorImage = getRandomImage(); }
       Image oldValue = this.errorImage;
       this.errorImage = errorImage;
-      fireEvent("errorImage", oldValue, errorImage);
-      getPropertyChangeSupport()
-     .firePropertyChange("errorImage", oldValue, errorImage); }
+      fireAll("errorImage", oldValue, errorImage); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -367,9 +376,7 @@ public boolean isRegionAdditionalStroke() { return regionAdditionalStroke; }
 public void setRegionAdditionalStroke (boolean regionAdditionalStroke)
     { boolean oldValue = this.regionAdditionalStroke;
       this.regionAdditionalStroke = regionAdditionalStroke;
-      fireEvent("regionAdditionalStroke", oldValue, regionAdditionalStroke);
-      getPropertyChangeSupport().firePropertyChange("regionAdditionalStroke",
-                                 oldValue, regionAdditionalStroke); }
+      fireAll("regionAdditionalStroke", oldValue, regionAdditionalStroke); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -385,13 +392,9 @@ public void setRegionStroke (BasicStroke regionStroke)
                                                regionStroke.getEndCap(),
                                                regionStroke.getLineJoin());
       
-      // ......................................................................
-      
       BasicStroke oldValue = this.regionStroke;
       this.regionStroke = regionStroke;
-      fireEvent("regionStroke", oldValue, regionStroke);
-      getPropertyChangeSupport()
-     .firePropertyChange("regionStroke", oldValue, regionStroke); }
+      fireAll("regionStroke", oldValue, regionStroke); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -401,9 +404,7 @@ public void setRegionLightColor (Color regionLightColor)
     { if (regionLightColor == null) { regionLightColor = Color.WHITE; }
       Color oldValue = this.regionLightColor;
       this.regionLightColor = regionLightColor;
-      fireEvent("regionLightColor", oldValue, regionLightColor);
-      getPropertyChangeSupport()
-     .firePropertyChange("regionLightColor", oldValue, regionLightColor); }
+      fireAll("regionLightColor", oldValue, regionLightColor); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -413,9 +414,7 @@ public void setRegionDarkColor (Color regionDarkColor)
     { if (regionDarkColor == null) { regionDarkColor = Color.DARK_GRAY; }
       Color oldValue = this.regionDarkColor;
       this.regionDarkColor = regionDarkColor;
-      fireEvent("regionDarkColor", oldValue, regionDarkColor);
-      getPropertyChangeSupport()
-     .firePropertyChange("regionDarkColor", oldValue, regionDarkColor); }
+      fireAll("regionDarkColor", oldValue, regionDarkColor); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -425,9 +424,7 @@ public void setLMBEnable (boolean lmbEnable)
     { boolean oldValue = this.lmbEnable;
       this.lmbEnable = lmbEnable;
       updateCursor();
-      fireEvent("lmbEnable", oldValue, lmbEnable);
-      getPropertyChangeSupport()
-     .firePropertyChange("lmbEnable", oldValue, lmbEnable); }
+      fireAll("lmbEnable", oldValue, lmbEnable); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -436,9 +433,7 @@ public boolean isCMBEnable() { return cmbEnable; }
 public void setCMBEnable (boolean cmbEnable)
     { boolean oldValue = this.cmbEnable;
       this.cmbEnable = cmbEnable;
-      fireEvent("cmbEnable", oldValue, cmbEnable);
-      getPropertyChangeSupport()
-     .firePropertyChange("cmbEnable", oldValue, cmbEnable); }
+      fireAll("cmbEnable", oldValue, cmbEnable); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -447,9 +442,7 @@ public boolean isRMBEnable() { return rmbEnable; }
 public void setRMBEnable (boolean rmbEnable)
     { boolean oldValue = this.rmbEnable;
       this.rmbEnable = rmbEnable;
-      fireEvent("rmbEnable", oldValue, rmbEnable);
-      getPropertyChangeSupport()
-     .firePropertyChange("rmbEnable", oldValue, rmbEnable); }
+      fireAll("rmbEnable", oldValue, rmbEnable); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -458,9 +451,7 @@ public boolean isWheelEnable() { return wheelEnable; }
 public void setWheelEnable (boolean wheelEnable)
     { boolean oldValue = this.wheelEnable;
       this.wheelEnable = wheelEnable;
-      fireEvent("wheelEnable", oldValue, wheelEnable);
-      getPropertyChangeSupport()
-     .firePropertyChange("wheelEnable", oldValue, wheelEnable); }
+      fireAll("wheelEnable", oldValue, wheelEnable); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -469,9 +460,7 @@ public boolean isWheelInvert() { return wheelInvert; }
 public void setWheelInvert (boolean wheelInvert)
     { boolean oldValue = this.wheelInvert;
       this.wheelInvert = wheelInvert;
-      fireEvent("wheelInvert", oldValue, wheelInvert);
-      getPropertyChangeSupport()
-     .firePropertyChange("wheelEnable", oldValue, wheelInvert); }
+      fireAll("wheelInvert", oldValue, wheelInvert); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -480,9 +469,7 @@ public boolean isDrugImageOut() { return drugImageOut; }
 public void setDrugImageOut (boolean drugImageOut)
     { boolean oldValue = this.drugImageOut;
       this.drugImageOut = drugImageOut;
-      fireEvent("drugImageOut", oldValue, drugImageOut);
-      getPropertyChangeSupport()
-     .firePropertyChange("drugImageOut", oldValue, drugImageOut); }
+      fireAll("drugImageOut", oldValue, drugImageOut); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -492,9 +479,7 @@ public void setGridVisible (boolean gridVisible)
     { boolean oldValue = this.gridVisible;
       this.gridVisible = gridVisible;
       panelRoot.repaint();
-      fireEvent("gridVisible", oldValue, gridVisible);
-      getPropertyChangeSupport()
-     .firePropertyChange("gridVisible", oldValue, gridVisible); }
+      fireAll("gridVisible", oldValue, gridVisible); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -505,9 +490,7 @@ public void setGridLightColor (Color gridLightColor)
       Color oldValue = this.gridLightColor;
       this.gridLightColor = gridLightColor;
       panelRoot.repaint();
-      fireEvent("gridLightColor", oldValue, gridLightColor);
-      getPropertyChangeSupport()
-     .firePropertyChange("gridLightColor", oldValue, gridLightColor); }
+      fireAll("gridLightColor", oldValue, gridLightColor); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -518,9 +501,7 @@ public void setGridDarkColor (Color gridDarkColor)
       Color oldValue = this.gridDarkColor;
       this.gridDarkColor = gridDarkColor;
       panelRoot.repaint();
-      fireEvent("gridDarkColor", oldValue, gridDarkColor);
-      getPropertyChangeSupport()
-     .firePropertyChange("gridDarkColor", oldValue, gridDarkColor); }
+      fireAll("gridDarkColor", oldValue, gridDarkColor); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -532,9 +513,7 @@ public void setGridSize (int gridSize)
       int oldValue = this.gridSize;
       this.gridSize = gridSize;
       panelRoot.repaint();
-      fireEvent("gridSize", oldValue, gridSize);
-      getPropertyChangeSupport()
-     .firePropertyChange("gridSize", oldValue, gridSize); }
+      fireAll("gridSize", oldValue, gridSize); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -551,9 +530,7 @@ public void setImageScale (int imageScale)
       calculateScaledImageSize();
       panelRoot.setPreferredSize(new Dimension(imageScaleW, imageScaleH));
       panelRoot.updateUI();
-      fireEvent("imageScale", oldValue, imageScale);
-      getPropertyChangeSupport()
-     .firePropertyChange("imageScale", oldValue, imageScale); }
+      fireAll("imageScale", oldValue, imageScale); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -563,9 +540,7 @@ public void setImageScaleType (ScaleType imageScaleType)
     { ScaleType oldValue = this.imageScaleType;
       this.imageScaleType = imageScaleType;
       panelRoot.repaint();
-      fireEvent("imageScaleType", oldValue, imageScaleType);
-      getPropertyChangeSupport()
-     .firePropertyChange("imageScaleType", oldValue, imageScaleType); }
+      fireAll("imageScaleType", oldValue, imageScaleType); }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Додавання та видалення прослуховувачів подій ///////////////////////////////
@@ -608,6 +583,17 @@ private ArrayList <JImageViewListener> getListeners()
 
 ///////////////////////////////////////////////////////////////////////////////
 
+private void fireAll (String type, Object oldValue, Object newValue) {
+    
+    fireEvent
+        (type, oldValue, newValue);
+    getPropertyChangeSupport().firePropertyChange
+        (type, oldValue, newValue);
+    
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 private void fireEvent (String type, Object oldValue, Object newValue) {
 
 JImageViewEvent event = new JImageViewEvent(this, oldValue, newValue);
@@ -630,8 +616,8 @@ for (JImageViewListener listener : getListeners()) {
 
 private void calculateImageLimitScale() {
     
-    int w = image.getWidth(null);
-    int h = image.getHeight(null);
+    int w = imageW;
+    int h = imageH;
 
     int q = (w > h) ? h : w;
     int z = (w > h) ? w : h;
@@ -648,8 +634,7 @@ private void calculateImageLimitScale() {
 
 private void calculateImageFitScale() {
     
-    int[] fitScale = calculateFitScale(image.getWidth(null),
-                                       image.getHeight(null));
+    int[] fitScale = calculateFitScale(imageW, imageH);
     
     imageScaleInternalFit = fitScale[0];
     imageScaleExternalFit = fitScale[1];
@@ -668,7 +653,9 @@ private int[] calculateFitScale (int regionW, int regionH) {
     int mW = vScrollBar.getMaximumSize().width;
     // Активна ширина вертикального скролбару
     int sW = vScrollBar.isVisible() ? mW : 0;
-    // Комія змінної sW, використовується для розрахунку imageScaleExternalFit
+    // Допоміжна змінна, використовується для розрахунку imageScaleInternalFit    
+    int qW = (regionW < imageW) ? mW : 0;
+    // Копія змінної sW, використовується для розрахунку imageScaleExternalFit
     int eW = sW;
     
     // Висота зображення
@@ -679,20 +666,22 @@ private int[] calculateFitScale (int regionW, int regionH) {
     int mH = hScrollBar.getMaximumSize().height;
     // Активна висота горизонтального скролбару
     int sH = hScrollBar.isVisible() ? mH : 0;
-    // Комія змінної sH, використовується для розрахунку imageScaleExternalFit
+    // Допоміжна змінна, використовується для розрахунку imageScaleInternalFit
+    int qH = (regionH < imageH) ? mH : 0;
+    // Копія змінної sH, використовується для розрахунку imageScaleExternalFit
     int eH = sH;
     
     if      (getVerticalScrollBarPolicy() ==
-        VERTICAL_SCROLLBAR_ALWAYS)   { sW = 0; }
+        VERTICAL_SCROLLBAR_ALWAYS)   { sW = 0;  qW = 0;  }
     else if (getVerticalScrollBarPolicy() ==
-        VERTICAL_SCROLLBAR_NEVER)    { eW = mW; }
+        VERTICAL_SCROLLBAR_NEVER)    { eW = mW; qW = mW; }
     if      (getHorizontalScrollBarPolicy() ==
-        HORIZONTAL_SCROLLBAR_ALWAYS) { sH = 0; }
+        HORIZONTAL_SCROLLBAR_ALWAYS) { sH = 0;  qH = 0;  }
     else if (getHorizontalScrollBarPolicy() ==
-        HORIZONTAL_SCROLLBAR_NEVER)  { eH = mH; }
+        HORIZONTAL_SCROLLBAR_NEVER)  { eH = mH; qH = mH; }
     
-    int fitWi = (int)(100d * (vW + sW) / iW);
-    int fitHi = (int)(100d * (vH + sH) / iH);
+    int fitWi = (int)(100d * (vW + sW - qW) / iW);
+    int fitHi = (int)(100d * (vH + sH - qH) / iH);
     
     int fitWe = (int)(100d * (vW + eW - mW) / iW);
     int fitHe = (int)(100d * (vH + eH - mH) / iH);
@@ -706,8 +695,8 @@ private int[] calculateFitScale (int regionW, int regionH) {
 
 private void calculateScaledImageSize() {
     
-    imageScaleW = (int)(image.getWidth(null)  * imageScale / 100d);
-    imageScaleH = (int)(image.getHeight(null) * imageScale / 100d);
+    imageScaleW = (int)(imageW * imageScale / 100d);
+    imageScaleH = (int)(imageH * imageScale / 100d);
     
 }
 
@@ -727,23 +716,19 @@ private Point2D.Float getGlobalPercentagePoint (Point point) {
 
     if (!isValid()) { validate(); }
     point = getPointOnImage(point);
-    //var point = SwingUtilities.convertPoint(getViewport(), origin, panelRoot);
     
     return getLocalPercentagePoint(point, panelRoot.getWidth(),
                                           panelRoot.getHeight());
-    
-//    return new Point2D.Float(point.x * 100f / panelRoot.getWidth(),
-//                             point.y * 100f / panelRoot.getHeight());
 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-private Dimension getDimensionByPercentagePoint (Point2D.Float point,
-                                                 int width, int height) {
+private Point getLocationPoint (Point2D.Float point,
+                                int width, int height) {
     
-    return new Dimension((int)(point.x * width  / 100f),
-                         (int)(point.y * height / 100));
+    return new Point((int)(point.x * width  / 100f),
+                     (int)(point.y * height / 100));
     
 }
 
@@ -772,8 +757,6 @@ public void setRegion() {
     
     panelRoot.setCursor(CURSOR_REGION);
     regionOrig  = new Rectangle();
-//    regionNorm  = new Rectangle();
-//    regionImage = new Rectangle();
     specifyRegion = true;
     
 }
@@ -791,19 +774,17 @@ public void setRegion (Rectangle region) {
     int w = regionImage.width;
     int h = regionImage.height;
     
-    System.out.printf("[ %d, %d ] > [ %d. %d ]\n", x, y, w, h);
-    
     int fitType = 0;
     int fitScale = calculateFitScale(w, h)[fitType];
     
-    //System.out.println(dX + "/" + dY);
+    Point center = new Point(x + w/2, y + h/2);
+    Point2D.Float percent = getLocalPercentagePoint(center, imageW, imageH);
     
-    //setImageScale(fitScale);
-    
-    
-    
-//    System.out.printf("Region: [ %d, %d, %d, %d ]\n",
-//                       region.x, region.y, region.width, region.height);
+    setImageScale(fitScale);
+
+    Point location = getLocationPoint(percent, imageScaleW, imageScaleH);
+    centerOnPoint(location);
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -829,6 +810,8 @@ private void normalizeRegionRect (int iX, int iY) {
 
     regionNorm = new Rectangle(x, y, w, h);
     
+    // ........................................................................
+    
     x -= iX;
     y -= iY;
     
@@ -837,13 +820,13 @@ private void normalizeRegionRect (int iX, int iY) {
     Point2D.Float pWH = getLocalPercentagePoint(new Point(w, h),
                                                 imageScaleW, imageScaleH);
     
-    Dimension dXY = getDimensionByPercentagePoint(pXY, imageW, imageH);
-    Dimension dWH = getDimensionByPercentagePoint(pWH, imageW, imageH);
+    Point xy = getLocationPoint(pXY, imageW, imageH);
+    Point wh = getLocationPoint(pWH, imageW, imageH);
     
-    x = dXY.width;
-    y = dXY.height;
-    w = dWH.width;
-    h = dWH.height;
+    x = xy.x;
+    y = xy.y;
+    w = wh.x;
+    h = wh.y;
     
     regionImage = new Rectangle(x, y, w, h);
     

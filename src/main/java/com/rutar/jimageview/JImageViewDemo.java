@@ -6,14 +6,13 @@ import java.util.*;
 import java.beans.*;
 import javax.swing.*;
 import javax.imageio.*;
+import java.awt.image.*;
 import java.awt.event.*;
+import javax.swing.filechooser.*;
 import com.rutar.jimageview.JImageView.*;
 
 import static java.awt.Color.*;
-import java.awt.image.BufferedImage;
-import java.net.URL;
 import static javax.swing.GroupLayout.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 // ............................................................................
 
