@@ -438,8 +438,7 @@ private void buttonPressed (ActionEvent ae) {
             chooser.setSelectedFile(new File("/home/rutar/test_1.jpg"));
             chooser.showOpenDialog(this);
             File file = chooser.getSelectedFile();
-            try { imageView.setImage(ImageIO.read(file)); }
-            catch (IOException e) {}
+            imageView.setImage(JImageViewUtils.getImageQuickly(file));
         }
         
         // ....................................................................
@@ -629,20 +628,8 @@ public void propertyChange (PropertyChangeEvent e) {
         case JFileChooser.SELECTED_FILE_CHANGED_PROPERTY -> {
                 
             File file = (File) e.getNewValue();
-
-            if (file == null) {
-                image = null;
-                repaint();
-                return;
-            }
-            
-            else {
-                
-                try { image = ImageIO.read(file);
-                      repaint(); }
-                catch (IOException ex) { image = null; }
-                
-            }
+            image = JImageViewUtils.getImageQuickly(file);
+            repaint();
         }
     }
 }

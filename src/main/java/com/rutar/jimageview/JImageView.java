@@ -50,8 +50,8 @@ private final int[] scales =
 
 // ............................................................................
 
-private Image image = null;                            // Зображення для показу
-private Image errorImage = null;      // Зображення яке показується при помилці
+private BufferedImage image;                           // Зображення для показу
+private BufferedImage errorImage;     // Зображення яке показується при помилці
 
 // ............................................................................
 
@@ -70,6 +70,9 @@ private boolean wheelInvert = false;              // Інвертування к
 
 public enum ScaleType { FAST, SMOOTH }                // Усі види масштабування
 private ScaleType imageScaleType = ScaleType.FAST;         // Тип масштабування
+
+public enum OpenSize { ORIGINAL, INTERNAL_FIT, EXTERNAL_FIT }
+private OpenSize imageOpenSize = OpenSize.INTERNAL_FIT;
 
 // ............................................................................
 
@@ -124,10 +127,6 @@ private void initComponents() {
 
 panelRoot = new RootPane();
 
-setRegionStroke(null);
-setErrorImage(null);
-setImage(null);
-
 setWheelScrollingEnabled(false);
 
 getViewport().addMouseListener(mouseListener);
@@ -136,6 +135,12 @@ getViewport().addMouseMotionListener(mouseMotionListener);
 getViewport().addMouseWheelListener((MouseWheelListener) mouseListener);
 
 setViewportView(panelRoot);
+
+setRegionStroke(null);
+setErrorImage(null);
+setImage(null);
+
+zoomToOriginal();
 
 }
 
@@ -295,7 +300,8 @@ public void maximize() { setImageScale(imageScaleMax);
  * Задання розміру зображення таким чином, щоб його 
  * більша сторона максимально замістила доступний простір компонента
  */
-public void fitInternal() { setImageScale(imageScaleInternalFit);
+public void fitInternal() { calculateImageFitScale();
+                            setImageScale(imageScaleInternalFit);
                             center(); }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -304,7 +310,8 @@ public void fitInternal() { setImageScale(imageScaleInternalFit);
  * Задання розміру зображення таким чином, щоб його 
  * менша сторона максимально замістила доступний простір компонента
  */
-public void fitExternal() { setImageScale(imageScaleExternalFit);
+public void fitExternal() { calculateImageFitScale();
+                            setImageScale(imageScaleExternalFit);
                             center(); }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -347,23 +354,27 @@ public void zoomToOriginal() { setImageScale(100); }
 // Getter'и та Setter'и - повертають та задають властивості компонента ////////
 ///////////////////////////////////////////////////////////////////////////////
 
-public Image getImage() { return image; }
+public BufferedImage getImage() { return image; }
 
-public void setImage (Image image)
+public void setImage (BufferedImage image)
     { if (image == null) { image = getErrorImage(); }       
       Image oldValue = this.image;
       this.image = image;
-      this.imageW = image.getWidth(null);
-      this.imageH = image.getHeight(null);
+      this.imageW = image.getWidth();
+      this.imageH = image.getHeight();
       this.changeListener.stateChanged(null);
-      zoomToOriginal();
+      switch (imageOpenSize) {
+          case ORIGINAL     -> zoomToOriginal();
+          case INTERNAL_FIT -> fitInternal();
+          case EXTERNAL_FIT -> fitExternal();
+      }
       fireAll("image", oldValue, image); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-public Image getErrorImage() { return errorImage; }
+public BufferedImage getErrorImage() { return errorImage; }
 
-public void setErrorImage (Image errorImage)
+public void setErrorImage (BufferedImage errorImage)
     { if (errorImage == null) { errorImage = getRandomImage(); }
       Image oldValue = this.errorImage;
       this.errorImage = errorImage;
@@ -543,6 +554,15 @@ public void setImageScaleType (ScaleType imageScaleType)
       fireAll("imageScaleType", oldValue, imageScaleType); }
 
 ///////////////////////////////////////////////////////////////////////////////
+
+public OpenSize getImageOpenSize() { return imageOpenSize; }
+
+public void setImageOpenSize (OpenSize imageOpenSize)
+    { OpenSize oldValue = this.imageOpenSize;
+      this.imageOpenSize = imageOpenSize;
+      fireAll("imageOpenSize", oldValue, imageOpenSize); }
+
+///////////////////////////////////////////////////////////////////////////////
 // Додавання та видалення прослуховувачів подій ///////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -644,6 +664,8 @@ private void calculateImageFitScale() {
 ///////////////////////////////////////////////////////////////////////////////
 
 private int[] calculateFitScale (int regionW, int regionH) {
+    
+    if (!isValid()) { validate(); }
     
     // Ширина зображення
     int iW = regionW;
@@ -795,7 +817,8 @@ private void normalizeRegionRect (int iX, int iY) {
     int y = regionOrig.y;
     int w = regionOrig.width;
     int h = regionOrig.height;
-    
+    Rectangle r = getViewport().getViewRect();
+        
     // Обробка від'ємних координат
     if (w < 0) { w = -w; x -= w; }
     if (h < 0) { h = -h; y -= h; }
@@ -808,6 +831,14 @@ private void normalizeRegionRect (int iX, int iY) {
     if (w > imageScaleW - (x - iX)) { w = imageScaleW - (x - iX); }
     if (h > imageScaleH - (y - iY)) { h = imageScaleH - (y - iY); }
 
+    // Заборона виходу за початкову точку компонента
+    if (x < r.x) { w -= (r.x - x); x = r.x; }
+    if (y < r.y) { h -= (r.y - y); y = r.y; }
+    
+    // Заборона виходу за межі розмірів компонента
+    if (x + w > r.x + r.width)  { w = r.x + r.width  - x; }
+    if (y + h > r.y + r.height) { h = r.y + r.height - y; }
+    
     regionNorm = new Rectangle(x, y, w, h);
     
     // ........................................................................
@@ -834,7 +865,7 @@ private void normalizeRegionRect (int iX, int iY) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-private Image getRandomImage() {
+private BufferedImage getRandomImage() {
     
     String path = "/com/rutar/jimageview/images/%s.png";
     String[] names = { "tree", "fire", "wave" };
@@ -1107,8 +1138,6 @@ private final ChangeListener changeListener = new ChangeListener() {
         if (!isValid()) { validate(); }
         
         if (scrollBarVisible != isScrollBarVisible()) { updateCursor(); }
-        
-        calculateImageFitScale();
         
     }
 };
