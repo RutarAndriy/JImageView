@@ -43,7 +43,7 @@ public JImageViewDemo() { initComponents();
 
 @SuppressWarnings("unchecked")
 private void initComponents() {
-        
+
 imageView = new JImageView();
 panel_components = new JPanel();
 panel_1 = new JPanel();
@@ -432,11 +432,13 @@ private void buttonPressed (ActionEvent ae) {
             JFileChooser chooser = new JFileChooser();
             chooser.getActionMap().get("viewTypeDetails")
                                   .actionPerformed(null);
-            chooser.setAccessory(new ImagePreviewComponent(chooser));
+            ImagePreviewComponent preview = new ImagePreviewComponent(chooser);
+            chooser.setAccessory(preview);
             chooser.setFileFilter(new FileNameExtensionFilter("Image files",
                                       ImageIO.getReaderFileSuffixes()));
             chooser.setSelectedFile(new File("/home/rutar/test_1.jpg"));
             chooser.showOpenDialog(this);
+            preview.deletePreview();
             File file = chooser.getSelectedFile();
             imageView.setImage(JImageViewUtils.getImageQuickly(file));
         }
@@ -628,11 +630,22 @@ public void propertyChange (PropertyChangeEvent e) {
         case JFileChooser.SELECTED_FILE_CHANGED_PROPERTY -> {
                 
             File file = (File) e.getNewValue();
-            image = JImageViewUtils.getImageQuickly(file);
+            
+                image = JImageViewUtils.getImageQuickly(file);
+                
+            if (image == null) {
+                image = JImageViewUtils.getImageSlowly(file);
+            }
+            
             repaint();
         }
     }
 }
+
+// ............................................................................
+
+private void deletePreview() { image = null; }
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////

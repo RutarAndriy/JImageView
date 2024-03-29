@@ -3,6 +3,7 @@ package com.rutar.jimageview;
 import java.io.*;
 import java.awt.*;
 import javax.swing.*;
+import javax.imageio.*;
 import java.awt.image.*;
 
 // ............................................................................
@@ -24,7 +25,9 @@ public class JImageViewUtils {
  * @return об'єкт типу BufferedImage
  */
 public static BufferedImage getImageQuickly (File file) {
-    
+
+if (file == null) { return null; }
+
 try {
 
     MediaTracker tracker = new MediaTracker(new JPanel());
@@ -39,7 +42,7 @@ try {
     tracker.addImage(toolkitImage, 1);
     tracker.waitForID(1);
     tracker.removeImage(toolkitImage);
-                    
+    
     BufferedImage result = new BufferedImage(toolkitImage.getWidth(null),
                                              toolkitImage.getHeight(null),
                                              BufferedImage.TYPE_INT_ARGB);
@@ -51,6 +54,23 @@ try {
 }
     
 catch (IOException | InterruptedException e) { return null; }
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Стандартний метод завантаження зображень, 
+ * може бути корисний, якщо метод getImageQuickly() не працює
+ * @param file файл, який містить зображення
+ * @return об'єкт типу BufferedImage
+ */
+public static BufferedImage getImageSlowly (File file) {
+
+if (file == null) { return null; }
+    
+try                   { return ImageIO.read(file); }
+catch (IOException e) { return null;               }
 
 }
 
