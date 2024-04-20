@@ -13,19 +13,61 @@ public class JImageViewAdapter implements JImageViewListener {
 ///////////////////////////////////////////////////////////////////////////////
 
 @Override
-public void smileChange (JImageViewEvent evt) {}
+public void imageChange (JImageViewEvent evt) {}
 
 @Override
-public void lineWidthChange (JImageViewEvent evt) {}
+public void errorImageChange (JImageViewEvent evt) {}
 
 @Override
-public void mouthWidthChange (JImageViewEvent evt) {}
+public void imageScaleChange (JImageViewEvent evt) {}
 
 @Override
-public void backgroundChange (JImageViewEvent evt) {}
+public void imageScaleTypeChange (JImageViewEvent evt) {}
 
 @Override
-public void foregroundChange (JImageViewEvent evt) {}
+public void imageOpenSizeChange (JImageViewEvent evt) {}
+
+@Override
+public void LMBEnableChange (JImageViewEvent evt) {}
+
+@Override
+public void CMBEnableChange (JImageViewEvent evt) {}
+
+@Override
+public void RMBEnableChange (JImageViewEvent evt) {}
+
+@Override
+public void wheelEnableChange (JImageViewEvent evt) {}
+
+@Override
+public void wheelInvertChange (JImageViewEvent evt) {}
+
+@Override
+public void drugImageOutChange (JImageViewEvent evt) {}
+
+@Override
+public void gridVisibleChange (JImageViewEvent evt) {}
+
+@Override
+public void gridLightColorChange (JImageViewEvent evt) {}
+
+@Override
+public void gridDarkColorChange (JImageViewEvent evt) {}
+
+@Override
+public void gridSizeChange (JImageViewEvent evt) {}
+
+@Override
+public void regionStrokeChange (JImageViewEvent evt) {}
+
+@Override
+public void regionAdditionalStrokeChange (JImageViewEvent evt) {}
+
+@Override
+public void regionLightColorChange (JImageViewEvent evt) {}
+
+@Override
+public void regionDarkColorChange (JImageViewEvent evt) {}
 
 // Кінець класу JImageViewAdapter /////////////////////////////////////////////
 

@@ -24,6 +24,13 @@ import static java.awt.RenderingHints.*;
 
 public class JImageView extends JScrollPane {
 
+public static final int SCALE_TYPE_FAST = 0;
+public static final int SCALE_TYPE_SMOOTH = 1;
+
+public static final int OPEN_SIZE_ORIGINAL = 0;
+public static final int OPEN_SIZE_INTERNAL_FIT = 1;
+public static final int OPEN_SIZE_EXTERNAL_FIT = 2;
+
 // ............................................................................
 
 private static final Cursor CURSOR_HAND
@@ -68,12 +75,6 @@ private boolean rmbEnable   = true;            // Масштабування з�
 private boolean wheelEnable = true;             // Масштабування колесиком миші
 private boolean wheelInvert = false;              // Інвертування колесика миші
 
-public enum ScaleType { FAST, SMOOTH }                // Усі види масштабування
-private ScaleType imageScaleType = ScaleType.FAST;         // Тип масштабування
-
-public enum OpenSize { ORIGINAL, INTERNAL_FIT, EXTERNAL_FIT }
-private OpenSize imageOpenSize = OpenSize.INTERNAL_FIT;
-
 // ............................................................................
 
 private int imageW;                          // Ширина оригінального зображення
@@ -91,6 +92,9 @@ private int imageScaleMax;                    // Мінімальний масш
 private int imageScaleMin;                   // Максимальний масштаб зображення
 private int imageScaleInternalFit;       // Масштаб для внутрішнього заповнення
 private int imageScaleExternalFit;        // Масштаб для зовнішнього заповнення
+
+private int imageScaleType = SCALE_TYPE_FAST;              // Тип масштабування
+private int imageOpenSize = OPEN_SIZE_INTERNAL_FIT;        // Розмір зображення
 
 private boolean cursorOnImage;      // Знаходження курсора всередині компонента
 private boolean scrollBarVisible;        // Видимість скролбарів, хоча б одного
@@ -160,7 +164,7 @@ public void paintComponent (Graphics g) {
     
     if (gridVisible) {
 
-        setImageScaleType(g2, ScaleType.FAST);
+        setImageScaleType(g2, SCALE_TYPE_FAST);
 
         g2.setColor(gridLightColor);
         g2.fillRect(0, 0, getWidth(), getHeight());
@@ -180,7 +184,7 @@ public void paintComponent (Graphics g) {
     int iX = getWidth()/2  - imageScaleW/2;
     int iY = getHeight()/2 - imageScaleH/2;
     
-    if (imageScale >= 100 || imageScaleType == ScaleType.FAST)
+    if (imageScale >= 100 || imageScaleType == SCALE_TYPE_FAST)
         { g2.drawImage(image, iX, iY, imageScaleW, imageScaleH, null); }
     else
         { g2.drawImage(getSmoothThumbnail(), iX, iY, null); }
@@ -188,6 +192,7 @@ public void paintComponent (Graphics g) {
     if (specifyRegion) {
         
         normalizeRegionRect(iX, iY);
+        setImageScaleType(g2, SCALE_TYPE_FAST);
         
         if (regionAdditionalStroke) {
             g2.setColor(regionDarkColor);
@@ -200,17 +205,6 @@ public void paintComponent (Graphics g) {
         g2.draw(regionNorm);
     
     }
-    
-//    if (regionRectNormalized != null && !specifyRegion) {
-//    
-//    g2.setColor(Color.RED);
-//    g2.setStroke(regionStroke);
-//    g2.drawRect(regionRectNormalized.x,
-//                regionRectNormalized.y,
-//                (int)(regionRectNormalized.width  * imageScale / 100f),
-//                (int)(regionRectNormalized.height * imageScale / 100f));
-//    
-//    }
 }
 }
 
@@ -364,9 +358,9 @@ public void setImage (BufferedImage image)
       this.imageH = image.getHeight();
       this.changeListener.stateChanged(null);
       switch (imageOpenSize) {
-          case ORIGINAL     -> zoomToOriginal();
-          case INTERNAL_FIT -> fitInternal();
-          case EXTERNAL_FIT -> fitExternal();
+          case OPEN_SIZE_ORIGINAL     -> zoomToOriginal();
+          case OPEN_SIZE_INTERNAL_FIT -> fitInternal();
+          case OPEN_SIZE_EXTERNAL_FIT -> fitExternal();
       }
       fireAll("image", oldValue, image); }
 
@@ -382,50 +376,39 @@ public void setErrorImage (BufferedImage errorImage)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-public boolean isRegionAdditionalStroke() { return regionAdditionalStroke; }
+public int getImageScale() { return imageScale; }
 
-public void setRegionAdditionalStroke (boolean regionAdditionalStroke)
-    { boolean oldValue = this.regionAdditionalStroke;
-      this.regionAdditionalStroke = regionAdditionalStroke;
-      fireAll("regionAdditionalStroke", oldValue, regionAdditionalStroke); }
-
-///////////////////////////////////////////////////////////////////////////////
-
-public BasicStroke getRegionStroke() { return regionStroke; }
-
-public void setRegionStroke (BasicStroke regionStroke)
-    { if (regionStroke == null) {
-          regionStroke = new BasicStroke(2f, BasicStroke.CAP_BUTT, 
-                                             BasicStroke.JOIN_MITER, 10, 
-                                             new float[] { 3, 3 }, 0); }
-    
-      regionStrokeAdditional = new BasicStroke(regionStroke.getLineWidth(),
-                                               regionStroke.getEndCap(),
-                                               regionStroke.getLineJoin());
-      
-      BasicStroke oldValue = this.regionStroke;
-      this.regionStroke = regionStroke;
-      fireAll("regionStroke", oldValue, regionStroke); }
+public void setImageScale (int imageScale)
+    { calculateImageLimitScale();
+      if      (imageScale > globalScaleMax) { imageScale = globalScaleMax; }
+      else if (imageScale < globalScaleMin) { imageScale = globalScaleMin; }
+      if      (imageScale > imageScaleMax)  { imageScale = imageScaleMax;  }
+      else if (imageScale < imageScaleMin)  { imageScale = imageScaleMin;  }
+      int oldValue = this.imageScale;
+      this.imageScale = imageScale;
+      calculateScaledImageSize();
+      panelRoot.setPreferredSize(new Dimension(imageScaleW, imageScaleH));
+      panelRoot.updateUI();
+      fireAll("imageScale", oldValue, imageScale); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-public Color getRegionLightColor() { return regionLightColor; }
+public int getImageScaleType() { return imageScaleType; }
 
-public void setRegionLightColor (Color regionLightColor)
-    { if (regionLightColor == null) { regionLightColor = Color.WHITE; }
-      Color oldValue = this.regionLightColor;
-      this.regionLightColor = regionLightColor;
-      fireAll("regionLightColor", oldValue, regionLightColor); }
+public void setImageScaleType (int imageScaleType)
+    { int oldValue = this.imageScaleType;
+      this.imageScaleType = imageScaleType;
+      panelRoot.repaint();
+      fireAll("imageScaleType", oldValue, imageScaleType); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-public Color getRegionDarkColor() { return regionDarkColor; }
+public int getImageOpenSize() { return imageOpenSize; }
 
-public void setRegionDarkColor (Color regionDarkColor)
-    { if (regionDarkColor == null) { regionDarkColor = Color.DARK_GRAY; }
-      Color oldValue = this.regionDarkColor;
-      this.regionDarkColor = regionDarkColor;
-      fireAll("regionDarkColor", oldValue, regionDarkColor); }
+public void setImageOpenSize (int imageOpenSize)
+    { int oldValue = this.imageOpenSize;
+      this.imageOpenSize = imageOpenSize;
+      fireAll("imageOpenSize", oldValue, imageOpenSize); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -528,63 +511,53 @@ public void setGridSize (int gridSize)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-public int getImageScale() { return imageScale; }
+public BasicStroke getRegionStroke() { return regionStroke; }
 
-public void setImageScale (int imageScale)
-    { calculateImageLimitScale();
-      if      (imageScale > globalScaleMax) { imageScale = globalScaleMax; }
-      else if (imageScale < globalScaleMin) { imageScale = globalScaleMin; }
-      if      (imageScale > imageScaleMax)  { imageScale = imageScaleMax;  }
-      else if (imageScale < imageScaleMin)  { imageScale = imageScaleMin;  }
-      int oldValue = this.imageScale;
-      this.imageScale = imageScale;
-      calculateScaledImageSize();
-      panelRoot.setPreferredSize(new Dimension(imageScaleW, imageScaleH));
-      panelRoot.updateUI();
-      fireAll("imageScale", oldValue, imageScale); }
-
-///////////////////////////////////////////////////////////////////////////////
-
-public ScaleType getImageScaleType() { return imageScaleType; }
-
-public void setImageScaleType (ScaleType imageScaleType)
-    { ScaleType oldValue = this.imageScaleType;
-      this.imageScaleType = imageScaleType;
-      panelRoot.repaint();
-      fireAll("imageScaleType", oldValue, imageScaleType); }
+public void setRegionStroke (BasicStroke regionStroke)
+    { if (regionStroke == null) {
+          regionStroke = new BasicStroke(2f, BasicStroke.CAP_BUTT, 
+                                             BasicStroke.JOIN_MITER, 10, 
+                                             new float[] { 3, 3 }, 0); }
+    
+      regionStrokeAdditional = new BasicStroke(regionStroke.getLineWidth(),
+                                               regionStroke.getEndCap(),
+                                               regionStroke.getLineJoin());
+      
+      BasicStroke oldValue = this.regionStroke;
+      this.regionStroke = regionStroke;
+      fireAll("regionStroke", oldValue, regionStroke); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-public OpenSize getImageOpenSize() { return imageOpenSize; }
+public boolean isRegionAdditionalStroke() { return regionAdditionalStroke; }
 
-public void setImageOpenSize (OpenSize imageOpenSize)
-    { OpenSize oldValue = this.imageOpenSize;
-      this.imageOpenSize = imageOpenSize;
-      fireAll("imageOpenSize", oldValue, imageOpenSize); }
+public void setRegionAdditionalStroke (boolean regionAdditionalStroke)
+    { boolean oldValue = this.regionAdditionalStroke;
+      this.regionAdditionalStroke = regionAdditionalStroke;
+      fireAll("regionAdditionalStroke", oldValue, regionAdditionalStroke); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+public Color getRegionLightColor() { return regionLightColor; }
+
+public void setRegionLightColor (Color regionLightColor)
+    { if (regionLightColor == null) { regionLightColor = Color.WHITE; }
+      Color oldValue = this.regionLightColor;
+      this.regionLightColor = regionLightColor;
+      fireAll("regionLightColor", oldValue, regionLightColor); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+public Color getRegionDarkColor() { return regionDarkColor; }
+
+public void setRegionDarkColor (Color regionDarkColor)
+    { if (regionDarkColor == null) { regionDarkColor = Color.DARK_GRAY; }
+      Color oldValue = this.regionDarkColor;
+      this.regionDarkColor = regionDarkColor;
+      fireAll("regionDarkColor", oldValue, regionDarkColor); }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Додавання та видалення прослуховувачів подій ///////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-@Override
-public void addPropertyChangeListener (PropertyChangeListener listener)
-    { getPropertyChangeSupport().addPropertyChangeListener(listener); }
-
-///////////////////////////////////////////////////////////////////////////////
-
-@Override
-public void removePropertyChangeListener (PropertyChangeListener listener)
-    { getPropertyChangeSupport().removePropertyChangeListener(listener); }
-
-///////////////////////////////////////////////////////////////////////////////
-
-private PropertyChangeSupport getPropertyChangeSupport() {
-    if (propertyChangeSupport == null) {
-        propertyChangeSupport = new PropertyChangeSupport(this);
-    }
-    return propertyChangeSupport;
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 
 public void addJImageViewListener (JImageViewListener listener)
@@ -603,29 +576,61 @@ private ArrayList <JImageViewListener> getListeners()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-private void fireAll (String type, Object oldValue, Object newValue) {
+private void fireAll (String name, Object oldValue, Object newValue) {
     
-    fireEvent
-        (type, oldValue, newValue);
-    getPropertyChangeSupport().firePropertyChange
-        (type, oldValue, newValue);
+    fireEvent          (name, oldValue, newValue);
+    firePropertyChange (name, oldValue, newValue);
     
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-private void fireEvent (String type, Object oldValue, Object newValue) {
+private void fireEvent (String name, Object oldValue, Object newValue) {
 
 JImageViewEvent event = new JImageViewEvent(this, oldValue, newValue);
 
 for (JImageViewListener listener : getListeners()) {
 
-    switch (type) {
-        case "smile"      -> listener.smileChange(event);
-        case "lineWidth"  -> listener.lineWidthChange(event);
-        case "mouthWidth" -> listener.mouthWidthChange(event);
-        case "background" -> listener.backgroundChange(event);
-        case "foreground" -> listener.foregroundChange(event);
+    switch (name) {
+        case "image"
+              -> listener.imageChange(event);
+        case "errorImage"
+              -> listener.errorImageChange(event);
+        case "imageScale"
+              -> listener.imageScaleChange(event);
+        case "imageScaleType"
+              -> listener.imageScaleTypeChange(event);
+        case "imageOpenSize"
+              -> listener.imageOpenSizeChange(event);
+        case "LMBEnable"
+              -> listener.LMBEnableChange(event);
+        case "CMBEnable"
+              -> listener.CMBEnableChange(event);
+        case "RMBEnable"
+              -> listener.RMBEnableChange(event);
+        case "wheelEnable"
+              -> listener.wheelEnableChange(event);
+        case "wheelInvert"
+              -> listener.wheelInvertChange(event);
+        case "drugImageOut"
+              -> listener.drugImageOutChange(event);
+        case "gridVisible"
+              -> listener.gridVisibleChange(event);
+        case "gridLightColor"
+              -> listener.gridLightColorChange(event);
+        case "gridDarkColor"
+              -> listener.gridDarkColorChange(event);
+        case "gridSize"
+              -> listener.gridSizeChange(event);
+        case "regionStroke"
+              -> listener.regionStrokeChange(event);
+        case "regionAdditionalStroke"
+              -> listener.regionAdditionalStrokeChange(event);
+        case "regionLightColor"
+              -> listener.regionLightColorChange(event);
+        case "regionDarkColor"
+              -> listener.regionDarkColorChange(event);
+        
     }
 }
 }
@@ -880,9 +885,9 @@ private BufferedImage getRandomImage() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-private void setImageScaleType (Graphics2D g2, ScaleType scaleType) {
+private void setImageScaleType (Graphics2D g2, int scaleType) {
     
-if (scaleType == ScaleType.FAST) {
+if (scaleType == SCALE_TYPE_FAST) {
 
     // Інтерполяція альфа-каналу: швидка
     g2.setRenderingHint(KEY_ALPHA_INTERPOLATION,

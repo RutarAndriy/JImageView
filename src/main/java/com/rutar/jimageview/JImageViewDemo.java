@@ -9,10 +9,10 @@ import javax.imageio.*;
 import java.awt.image.*;
 import java.awt.event.*;
 import javax.swing.filechooser.*;
-import com.rutar.jimageview.JImageView.*;
 
 import static java.awt.Color.*;
 import static javax.swing.GroupLayout.*;
+import static com.rutar.jimageview.JImageView.*;
 
 // ............................................................................
 
@@ -502,9 +502,9 @@ private void radioButtonPressed (ActionEvent ae) {
     switch (ae.getActionCommand()) {
         
         case "rb_zoom_fast"    ->
-            { imageView.setImageScaleType(ScaleType.FAST); }
+            { imageView.setImageScaleType(SCALE_TYPE_FAST); }
         case "rb_zoom_smooth"  ->
-            { imageView.setImageScaleType(ScaleType.SMOOTH); }
+            { imageView.setImageScaleType(SCALE_TYPE_SMOOTH); }
         
         case "rb_sb_always"    ->
             { imageView.setHorizontalScrollBarPolicy(32);
