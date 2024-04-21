@@ -109,6 +109,18 @@ private BasicStroke regionStroke;           // Основний штрих ви�
 private BasicStroke regionStrokeAdditional;     // Доп. штрих виділення регіону
 private boolean regionAdditionalStroke = true;  // Малювання додаткового штриха
 
+private boolean zoomRegion;               // Масштабування фрагмента зображення
+private Point zoomOrigin;                          // Центр вікна масштабування
+private int zoomW = 180;                          // Ширина вікна масштабування
+private int zoomH = 180;                          // Висота вікна масштабування
+private int zoomShapeType = 1;                       // Тип вікна масштабування
+private int zoomFirstBorderWidth = 1;     // Ширина I рамки вікна масштабування
+private int zoomSecondBorderWidth = 3;   // Ширина II рамки вікна масштабування
+private int zoomFirstBorderGap = 1;      // Відступ I рамки вікна масштабування
+private int zoomSecondBorderGap = 3;     // Віступ II рамки вікна масштабування
+private Color zoomFirstBorderColor = Color.DARK_GRAY;          // Колір I рамки
+private Color zoomSecondBorderColor = Color.GRAY;             // Колір II рамки
+
 // ............................................................................
 
 private Point origin;        // Точка, у якій відбулося натискання клавіші миші
@@ -118,7 +130,6 @@ private JScrollBar hScrollBar, vScrollBar;           // Гор. та верт. �
 // ............................................................................
 
 private static ArrayList <JImageViewListener> listeners = null;
-private static transient PropertyChangeSupport propertyChangeSupport = null;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -188,6 +199,54 @@ public void paintComponent (Graphics g) {
         { g2.drawImage(image, iX, iY, imageScaleW, imageScaleH, null); }
     else
         { g2.drawImage(getSmoothThumbnail(), iX, iY, null); }
+    
+    ///////////////////////////////////////////////////////////////////////////
+    
+    if (zoomRegion) {
+        
+        Shape old_clip = g2.getClip();
+
+        int x = zoomOrigin.x - zoomW/2;
+        int y = zoomOrigin.y - zoomH/2;
+
+        int s1 = zoomFirstBorderWidth + zoomFirstBorderGap +
+                 zoomSecondBorderWidth*2 + zoomSecondBorderGap;
+        int s2 = zoomSecondBorderWidth   + zoomSecondBorderGap;
+        
+        setImageScaleType(g2, SCALE_TYPE_SMOOTH);
+        
+        // ....................................................................
+        
+        g2.setColor(zoomFirstBorderColor);
+        g2.setStroke(new BasicStroke(zoomFirstBorderWidth*2));
+        if (zoomShapeType == 0)
+            { g2.drawRect(x - s1, y - s1, zoomW + s1*2, zoomH + s1*2); }
+        else
+            { g2.drawOval(x - s1, y - s1, zoomW + s1*2, zoomH + s1*2); }
+
+        g2.setColor(zoomSecondBorderColor);
+        g2.setStroke(new BasicStroke(zoomSecondBorderWidth*2));
+        if (zoomShapeType == 0)
+            { g2.drawRect(x - s2, y - s2, zoomW + s2*2, zoomH + s2*2); }
+        else
+            { g2.drawOval(x - s2, y - s2, zoomW + s2*2, zoomH + s2*2); }
+        
+        // ....................................................................
+        
+        if (zoomShapeType == 0)
+            { g2.setClip(new Rectangle2D.Float(x, y, zoomW+1, zoomH+1)); }
+        else
+            { g2.setClip(new Ellipse2D.Float(x, y, zoomW+1, zoomH+1)); }
+        
+        g2.setColor(new Color(0x33ff00ff, true));
+        g2.fillRect(0, 0, getWidth(), getHeight());
+        //g2.drawImage(image, 0, 0, imageScaleW*3, imageScaleH*3, null);
+        
+        setImageScaleType(g2, imageScaleType);
+        g2.setClip(old_clip);
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////
     
     if (specifyRegion) {
         
@@ -1040,8 +1099,9 @@ public void mousePressed (MouseEvent me) {
         case MouseEvent.BUTTON3 -> {
             
             if (!rmbEnable || specifyRegion) { return; }
-            
-            System.out.println("Right mouse button pressed");     
+            zoomOrigin = getPointOnImage(me);
+            zoomRegion = true;
+            repaint();
         }
     }
 }
@@ -1069,8 +1129,8 @@ public void mouseReleased (MouseEvent me) {
         case MouseEvent.BUTTON3 -> {
             
             if (!rmbEnable || specifyRegion) { return; }
-            
-            System.out.println("Right mouse button released");     
+            zoomRegion = false;
+            repaint();
         }
     }
 }
@@ -1100,7 +1160,7 @@ public final MouseMotionListener mouseMotionListener
 @Override
 public void mouseDragged (MouseEvent me) {
 
-    if (specifyRegion) { 
+    if (specifyRegion) {
         
         Point point_new = getPointOnImage(me);
         Point point_old = regionOrig.getLocation();
@@ -1126,6 +1186,13 @@ public void mouseDragged (MouseEvent me) {
 
             panelRoot.scrollRectToVisible(view);
             
+    }
+    
+    if (zoomRegion) {
+        
+        zoomOrigin = getPointOnImage(me);
+        repaint();
+        
     }
 }
 };
