@@ -4,7 +4,6 @@ import java.io.*;
 import java.net.*;
 import java.awt.*;
 import java.util.*;
-import java.beans.*;
 import javax.swing.*;
 import java.awt.geom.*;
 import javax.imageio.*;
@@ -111,13 +110,14 @@ private boolean regionAdditionalStroke = true;  // Малювання додат
 
 private boolean zoomRegion;               // Масштабування фрагмента зображення
 private Point zoomOrigin;                          // Центр вікна масштабування
-private int zoomW = 180;                          // Ширина вікна масштабування
-private int zoomH = 180;                          // Висота вікна масштабування
+private int zoomAreaW = 200;                      // Ширина вікна масштабування
+private int zoomAreaH = 200;                      // Висота вікна масштабування
+private float zoomLevel = 3.0f;
 private int zoomShapeType = 1;                       // Тип вікна масштабування
 private int zoomFirstBorderWidth = 1;     // Ширина I рамки вікна масштабування
 private int zoomSecondBorderWidth = 3;   // Ширина II рамки вікна масштабування
 private int zoomFirstBorderGap = 1;      // Відступ I рамки вікна масштабування
-private int zoomSecondBorderGap = 3;     // Віступ II рамки вікна масштабування
+private int zoomSecondBorderGap = -1;    // Віступ II рамки вікна масштабування
 private Color zoomFirstBorderColor = Color.DARK_GRAY;          // Колір I рамки
 private Color zoomSecondBorderColor = Color.GRAY;             // Колір II рамки
 
@@ -173,22 +173,7 @@ public void paintComponent (Graphics g) {
     super.paintComponent(g);
     Graphics2D g2 = (Graphics2D)g;
     
-    if (gridVisible) {
-
-        setImageScaleType(g2, SCALE_TYPE_FAST);
-
-        g2.setColor(gridLightColor);
-        g2.fillRect(0, 0, getWidth(), getHeight());
-        g2.setColor(gridDarkColor);
-
-        for (int col = 0; col < getWidth();  col += gridSize) {
-        for (int row = 0; row < getHeight(); row += gridSize*2) {
-            g.fillRect(col, row + (col/gridSize%2 == 0 ? gridSize : 0),
-                       gridSize, gridSize);
-        }
-        }
-    
-    }
+    if (gridVisible) { drawGrid(g2); }
     
     setImageScaleType(g2, imageScaleType);
     
@@ -205,45 +190,57 @@ public void paintComponent (Graphics g) {
     if (zoomRegion) {
         
         Shape old_clip = g2.getClip();
-
-        int x = zoomOrigin.x - zoomW/2;
-        int y = zoomOrigin.y - zoomH/2;
-
+        Point pointOnImage = getPointOnImage(zoomOrigin);
+        
+        int x = pointOnImage.x - zoomAreaW/2;
+        int y = pointOnImage.y - zoomAreaH/2;
+        
+        int zoomX = (int)(iX - (pointOnImage.x - iX) * (zoomLevel-1));
+        int zoomY = (int)(iY - (pointOnImage.y - iY) * (zoomLevel-1));
+        
+        int zoomW = (int)(imageScaleW*zoomLevel);
+        int zoomH = (int)(imageScaleH*zoomLevel);
+        
+        int zX = zoomX - (int)(iX * zoomLevel);
+        int zY = zoomY - (int)(iY * zoomLevel);
+        
         int s1 = zoomFirstBorderWidth + zoomFirstBorderGap +
                  zoomSecondBorderWidth*2 + zoomSecondBorderGap;
         int s2 = zoomSecondBorderWidth   + zoomSecondBorderGap;
         
-        setImageScaleType(g2, SCALE_TYPE_SMOOTH);
+        // ....................................................................
+        
+        if (zoomShapeType == 0)
+            { g2.setClip(new Rectangle2D.Float
+                        (x, y, zoomAreaW + 1, zoomAreaH + 1)); }
+        else
+            { g2.setClip(new Ellipse2D.Float
+                        (x, y, zoomAreaW + 1, zoomAreaH + 1)); }
+        
+        drawGrid(g2, zoomLevel, zX, zY);
+        g2.drawImage(image, zoomX, zoomY, zoomW, zoomH, null);
+        g2.setClip(old_clip);
         
         // ....................................................................
+        
+        setImageScaleType(g2, SCALE_TYPE_SMOOTH);
         
         g2.setColor(zoomFirstBorderColor);
         g2.setStroke(new BasicStroke(zoomFirstBorderWidth*2));
         if (zoomShapeType == 0)
-            { g2.drawRect(x - s1, y - s1, zoomW + s1*2, zoomH + s1*2); }
+            { g2.drawRect(x-s1, y-s1, zoomAreaW + s1*2, zoomAreaH + s1*2); }
         else
-            { g2.drawOval(x - s1, y - s1, zoomW + s1*2, zoomH + s1*2); }
+            { g2.drawOval(x-s1, y-s1, zoomAreaW + s1*2, zoomAreaH + s1*2); }
 
         g2.setColor(zoomSecondBorderColor);
         g2.setStroke(new BasicStroke(zoomSecondBorderWidth*2));
         if (zoomShapeType == 0)
-            { g2.drawRect(x - s2, y - s2, zoomW + s2*2, zoomH + s2*2); }
+            { g2.drawRect(x-s2, y-s2, zoomAreaW + s2*2, zoomAreaH + s2*2); }
         else
-            { g2.drawOval(x - s2, y - s2, zoomW + s2*2, zoomH + s2*2); }
-        
-        // ....................................................................
-        
-        if (zoomShapeType == 0)
-            { g2.setClip(new Rectangle2D.Float(x, y, zoomW+1, zoomH+1)); }
-        else
-            { g2.setClip(new Ellipse2D.Float(x, y, zoomW+1, zoomH+1)); }
-        
-        g2.setColor(new Color(0x33ff00ff, true));
-        g2.fillRect(0, 0, getWidth(), getHeight());
-        //g2.drawImage(image, 0, 0, imageScaleW*3, imageScaleH*3, null);
+            { g2.drawOval(x-s2, y-s2, zoomAreaW + s2*2, zoomAreaH + s2*2); }
         
         setImageScaleType(g2, imageScaleType);
-        g2.setClip(old_clip);
+        
     }
     
     ///////////////////////////////////////////////////////////////////////////
@@ -263,6 +260,35 @@ public void paintComponent (Graphics g) {
         g2.setStroke(regionStroke);
         g2.draw(regionNorm);
     
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private void drawGrid (Graphics2D g2) {
+
+    setImageScaleType(g2, SCALE_TYPE_FAST);
+    drawGrid(g2, 1, 0, 0);
+    setImageScaleType(g2, imageScaleType);
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private void drawGrid (Graphics2D g2, float sF, int dX, int dY) {
+
+    int gW = (int)(getWidth()  * sF) + 1;
+    int gH = (int)(getHeight() * sF) + 1;
+    int gS = (int)(gridSize * sF);
+    
+    g2.setColor(gridLightColor);
+    g2.fillRect(0, 0, gW, gH);
+    g2.setColor(gridDarkColor);
+
+    for (int col = 0; col < gW; col += gS) {
+    for (int row = 0; row < gH; row += gS*2) {
+        g2.fillRect(col + dX, row + (col/gS%2 == 0 ? gS : 0) + dY, gS, gS);
+    }
     }
 }
 }
@@ -1099,7 +1125,7 @@ public void mousePressed (MouseEvent me) {
         case MouseEvent.BUTTON3 -> {
             
             if (!rmbEnable || specifyRegion) { return; }
-            zoomOrigin = getPointOnImage(me);
+            zoomOrigin = me.getPoint();
             zoomRegion = true;
             repaint();
         }
@@ -1190,7 +1216,7 @@ public void mouseDragged (MouseEvent me) {
     
     if (zoomRegion) {
         
-        zoomOrigin = getPointOnImage(me);
+        zoomOrigin = me.getPoint();
         repaint();
         
     }
