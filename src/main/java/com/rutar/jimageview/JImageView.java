@@ -114,6 +114,7 @@ private boolean cursorOnImage;      // Знаходження курсора в�
 private boolean scrollBarVisible;        // Видимість скролбарів, хоча б одного
 
 private boolean specifyRegion;                 // Задання регіону масштабування
+private boolean specifyRegionMode;         // Перехід в режим задавання регіону
 private Rectangle regionOrig;                            // Оригінальний регіон
 private Rectangle regionNorm;                          // Нормалізований регіон
 private Rectangle regionImage;               // Регіон в координатах зображення
@@ -188,11 +189,11 @@ public void paintComponent (Graphics g) {
 
     super.paintComponent(g);
     Graphics2D g2 = (Graphics2D)g;
-    
+
     if (gridVisible) { drawGrid(g2); }
     
     setImageScaleType(g2, imageScaleType);
-    
+
     int iX = getWidth()/2  - imageScaleW/2;
     int iY = getHeight()/2 - imageScaleH/2;
     
@@ -313,19 +314,19 @@ private void drawGrid (Graphics2D g2) {
 
 private void drawGrid (Graphics2D g2, float sF, int dX, int dY) {
 
-    int gW = (int)(getWidth()  * sF) + 1;
-    int gH = (int)(getHeight() * sF) + 1;
-    int gS = (int)(gridSize * sF);
+    float gW = getWidth()  * sF;
+    float gH = getHeight() * sF;
+    float gS = gridSize    * sF;
     
     g2.setColor(gridLightColor);
-    g2.fillRect(0, 0, gW, gH);
+    g2.fillRect((int)(-gS*3), (int)(-gS*3), (int)(gW+gS*3), (int)(gH+gS*3));
     g2.setColor(gridDarkColor);
 
-    for (int col = 0; col < gW; col += gS) {
-    for (int row = 0; row < gH; row += gS*2) {
-        g2.fillRect(col + dX, row + (col/gS%2 == 0 ? gS : 0) + dY, gS, gS);
-    }
-    }
+    for (float col = -gS*3; col < gW+gS*3; col += gS) {
+    for (float row = -gS*3; row < gH+gS*3; row += gS*2) {
+        g2.fillRect((int)(col + dX),
+                    (int)(row + (col/gS%2 == 0 ? gS : 0) + dY),
+                    (int)(gS), (int)(gS)); } }
 }
 }
 
@@ -1196,7 +1197,7 @@ public void mouseExited (MouseEvent me) { cursorOnImage = false; }
 
 @Override
 public void mousePressed (MouseEvent me) {
-    
+
     switch (me.getButton()) {
         
         // Ліва клавіша миші
@@ -1205,7 +1206,8 @@ public void mousePressed (MouseEvent me) {
             moveRegion = true;
             
             if (specifyRegion)
-                { regionOrig.setLocation(getPointOnImage(me)); }
+                { specifyRegionMode = false;
+                  regionOrig.setLocation(getPointOnImage(me)); }
             
             if (!lmbEnable || specifyRegion || zoomRegion) { return; }
             
@@ -1228,8 +1230,13 @@ public void mousePressed (MouseEvent me) {
         // Права клавіша миші
         case MouseEvent.BUTTON3 -> {
             
-            if (!rmbEnable || specifyRegion || moveRegion) { return; }
+            if (moveRegion) { specifyRegionMode = true;
+                              this.mouseReleased(me);
+                              setRegion();
+                              return; }
             
+            if (!rmbEnable || specifyRegion) { return; }
+
             zoomOrigin = me.getPoint();
             zoomRegion = true;
             updateCursor();
@@ -1250,6 +1257,7 @@ public void mouseReleased (MouseEvent me) {
             
             moveRegion = false;
             
+            if (specifyRegionMode) { return; }
             if (specifyRegion) { updateCursor();
                                  setRegion(regionNorm); }
             
@@ -1262,6 +1270,7 @@ public void mouseReleased (MouseEvent me) {
         // Права клавіша миші
         case MouseEvent.BUTTON3 -> {
             
+            if (specifyRegionMode) { return; }
             if (!rmbEnable || specifyRegion || moveRegion) { return; }
             
             zoomRegion = false;
@@ -1309,7 +1318,7 @@ public void mouseDragged (MouseEvent me) {
 
     if (specifyRegion) {
         
-        if (!moveRegion) { return; }
+        if (!moveRegion || specifyRegionMode) { return; }
         
         Point point_new = getPointOnImage(me);
         Point point_old = regionOrig.getLocation();
@@ -1320,7 +1329,7 @@ public void mouseDragged (MouseEvent me) {
         panelRoot.repaint();
     }
     
-    if (origin != null) {
+    else if (origin != null) {
         
         if (!drugImageOut && !cursorOnImage) { return; }
 
