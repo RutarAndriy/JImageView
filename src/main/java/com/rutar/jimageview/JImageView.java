@@ -113,6 +113,8 @@ private Point zoomOrigin;                          // Центр вікна ма
 private int zoomAreaW = 200;                      // Ширина вікна масштабування
 private int zoomAreaH = 200;                      // Висота вікна масштабування
 private float zoomLevel = 3.0f;
+private int zoomOffsetX = 0;
+private int zoomOffsetY = 0;
 private int zoomShapeType = 1;                       // Тип вікна масштабування
 private int zoomFirstBorderWidth = 1;     // Ширина I рамки вікна масштабування
 private int zoomSecondBorderWidth = 3;   // Ширина II рамки вікна масштабування
@@ -120,6 +122,7 @@ private int zoomFirstBorderGap = 1;      // Відступ I рамки вікн
 private int zoomSecondBorderGap = -1;    // Віступ II рамки вікна масштабування
 private Color zoomFirstBorderColor = Color.DARK_GRAY;          // Колір I рамки
 private Color zoomSecondBorderColor = Color.GRAY;             // Колір II рамки
+private boolean zoomShowCursor = true;                     // Видимість курсора
 
 // ............................................................................
 
@@ -189,7 +192,8 @@ public void paintComponent (Graphics g) {
     
     if (zoomRegion) {
         
-        Shape old_clip = g2.getClip();
+        Area newClip;
+        Shape oldClip = g2.getClip();
         Point pointOnImage = getPointOnImage(zoomOrigin);
         
         int x = pointOnImage.x - zoomAreaW/2;
@@ -211,15 +215,23 @@ public void paintComponent (Graphics g) {
         // ....................................................................
         
         if (zoomShapeType == 0)
-            { g2.setClip(new Rectangle2D.Float
-                        (x, y, zoomAreaW + 1, zoomAreaH + 1)); }
+            { newClip = new Area(new Rectangle2D.Float(x+zoomOffsetX,
+                                                       y-zoomOffsetY,
+                                                       zoomAreaW + 1,
+                                                       zoomAreaH + 1)); }
         else
-            { g2.setClip(new Ellipse2D.Float
-                        (x, y, zoomAreaW + 1, zoomAreaH + 1)); }
+            { newClip = new Area(new Ellipse2D.Float(x+zoomOffsetX,
+                                                     y-zoomOffsetY,
+                                                     zoomAreaW + 1,
+                                                     zoomAreaH + 1)); }
+
+        newClip.intersect(new Area(oldClip));
+        g2.setClip(newClip);
         
-        drawGrid(g2, zoomLevel, zX, zY);
-        g2.drawImage(image, zoomX, zoomY, zoomW, zoomH, null);
-        g2.setClip(old_clip);
+        drawGrid(g2, zoomLevel, zX+zoomOffsetX, zY-zoomOffsetY);
+        g2.drawImage(image, zoomX+zoomOffsetX, zoomY-zoomOffsetY,
+                     zoomW, zoomH, null);
+        g2.setClip(oldClip);
         
         // ....................................................................
         
@@ -228,16 +240,20 @@ public void paintComponent (Graphics g) {
         g2.setColor(zoomFirstBorderColor);
         g2.setStroke(new BasicStroke(zoomFirstBorderWidth*2));
         if (zoomShapeType == 0)
-            { g2.drawRect(x-s1, y-s1, zoomAreaW + s1*2, zoomAreaH + s1*2); }
+            { g2.drawRect(x-s1+zoomOffsetX, y-s1-zoomOffsetY,
+                          zoomAreaW + s1*2, zoomAreaH + s1*2); }
         else
-            { g2.drawOval(x-s1, y-s1, zoomAreaW + s1*2, zoomAreaH + s1*2); }
+            { g2.drawOval(x-s1+zoomOffsetX, y-s1-zoomOffsetY,
+                          zoomAreaW + s1*2, zoomAreaH + s1*2); }
 
         g2.setColor(zoomSecondBorderColor);
         g2.setStroke(new BasicStroke(zoomSecondBorderWidth*2));
         if (zoomShapeType == 0)
-            { g2.drawRect(x-s2, y-s2, zoomAreaW + s2*2, zoomAreaH + s2*2); }
+            { g2.drawRect(x-s2+zoomOffsetX, y-s2-zoomOffsetY,
+                          zoomAreaW + s2*2, zoomAreaH + s2*2); }
         else
-            { g2.drawOval(x-s2, y-s2, zoomAreaW + s2*2, zoomAreaH + s2*2); }
+            { g2.drawOval(x-s2+zoomOffsetX, y-s2-zoomOffsetY,
+                          zoomAreaW + s2*2, zoomAreaH + s2*2); }
         
         setImageScaleType(g2, imageScaleType);
         
@@ -249,6 +265,13 @@ public void paintComponent (Graphics g) {
         
         normalizeRegionRect(iX, iY);
         setImageScaleType(g2, SCALE_TYPE_FAST);
+        
+        Area area = new Area(new Rectangle2D
+                       .Float(0, 0, getWidth(), getHeight()));
+        
+        area.subtract(new Area(regionNorm));
+        g2.setColor(new Color(0x78000000, true));
+        g2.fill(area);
         
         if (regionAdditionalStroke) {
             g2.setColor(regionDarkColor);
@@ -870,6 +893,7 @@ public void setRegion() {
     panelRoot.setCursor(CURSOR_REGION);
     regionOrig  = new Rectangle();
     specifyRegion = true;
+    panelRoot.repaint();
     
 }
 
@@ -1068,6 +1092,12 @@ private boolean isScrollBarVisible()
 ///////////////////////////////////////////////////////////////////////////////
 
 private void updateCursor() {
+
+    if (zoomRegion)
+        { CURSOR_DEFAULT = zoomShowCursor ? CURSOR_REGION :
+                                            getUnvisibleCursor();
+          panelRoot.setCursor(CURSOR_DEFAULT);
+          return; }
     
     if (lmbEnable)
         { scrollBarVisible = isScrollBarVisible();
@@ -1076,6 +1106,17 @@ private void updateCursor() {
     else
         { CURSOR_DEFAULT = null;
           panelRoot.setCursor(CURSOR_DEFAULT); }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+private Cursor getUnvisibleCursor() {
+    
+    Toolkit toolkit = Toolkit.getDefaultToolkit();
+    
+    return toolkit.createCustomCursor(toolkit.createImage(new byte[0]),
+                                      new Point(0, 0), null);
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1127,6 +1168,7 @@ public void mousePressed (MouseEvent me) {
             if (!rmbEnable || specifyRegion) { return; }
             zoomOrigin = me.getPoint();
             zoomRegion = true;
+            updateCursor();
             repaint();
         }
     }
@@ -1156,6 +1198,7 @@ public void mouseReleased (MouseEvent me) {
             
             if (!rmbEnable || specifyRegion) { return; }
             zoomRegion = false;
+            updateCursor();
             repaint();
         }
     }
@@ -1176,7 +1219,7 @@ public void mouseWheelMoved (MouseWheelEvent mwe) {
           else             { zoomOut(mwe.getPoint()); } }
 
 }
-    };
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 
