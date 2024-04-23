@@ -30,6 +30,16 @@ public static final int OPEN_SIZE_ORIGINAL = 0;
 public static final int OPEN_SIZE_INTERNAL_FIT = 1;
 public static final int OPEN_SIZE_EXTERNAL_FIT = 2;
 
+public static final float ZOOM_SCALE_X1_25 = 1.25f;
+public static final float ZOOM_SCALE_X1_50 = 1.50f;
+public static final float ZOOM_SCALE_X1_75 = 1.75f;
+public static final float ZOOM_SCALE_X2_00 = 2.00f;
+public static final float ZOOM_SCALE_X2_25 = 2.25f;
+public static final float ZOOM_SCALE_X2_50 = 2.50f;
+public static final float ZOOM_SCALE_X3_00 = 3.00f;
+public static final float ZOOM_SCALE_X4_00 = 4.00f;
+public static final float ZOOM_SCALE_X5_00 = 5.00f;
+
 // ............................................................................
 
 private static final Cursor CURSOR_HAND
@@ -53,6 +63,10 @@ private final int[] scales =
                                 350,  400,  450,  500,
                                 600,  700,  800,  900,
                          1000, 1500, 2000, 2500, 3000 };
+
+// Масив стандартних масштабів вікна масштабування
+private final float[] zoomLevels =
+    { 1.25f, 1.50f, 1.75f, 2.00f, 2.25f, 2.50f, 3.00f, 4.00f, 5.00f };
 
 // ............................................................................
 
@@ -95,6 +109,7 @@ private int imageScaleExternalFit;        // Масштаб для зовніш�
 private int imageScaleType = SCALE_TYPE_FAST;              // Тип масштабування
 private int imageOpenSize = OPEN_SIZE_INTERNAL_FIT;        // Розмір зображення
 
+private boolean moveRegion;                           // Переміщення зображення
 private boolean cursorOnImage;      // Знаходження курсора всередині компонента
 private boolean scrollBarVisible;        // Видимість скролбарів, хоча б одного
 
@@ -110,11 +125,9 @@ private boolean regionAdditionalStroke = true;  // Малювання додат
 
 private boolean zoomRegion;               // Масштабування фрагмента зображення
 private Point zoomOrigin;                          // Центр вікна масштабування
-private int zoomAreaW = 200;                      // Ширина вікна масштабування
-private int zoomAreaH = 200;                      // Висота вікна масштабування
-private float zoomLevel = 3.0f;
-private int zoomOffsetX = 0;
-private int zoomOffsetY = 0;
+private Dimension zoomArea = new Dimension(200, 200);          // Розміри вікна
+private Dimension zoomOffset = new Dimension(0, 0);            // Відступ вікна
+private float zoomLevel = ZOOM_SCALE_X2_50;       // Рівень масштабування вікна
 private int zoomShapeType = 1;                       // Тип вікна масштабування
 private int zoomFirstBorderWidth = 1;     // Ширина I рамки вікна масштабування
 private int zoomSecondBorderWidth = 3;   // Ширина II рамки вікна масштабування
@@ -196,8 +209,8 @@ public void paintComponent (Graphics g) {
         Shape oldClip = g2.getClip();
         Point pointOnImage = getPointOnImage(zoomOrigin);
         
-        int x = pointOnImage.x - zoomAreaW/2;
-        int y = pointOnImage.y - zoomAreaH/2;
+        int x = pointOnImage.x - zoomArea.width/2;
+        int y = pointOnImage.y - zoomArea.height/2;
         
         int zoomX = (int)(iX - (pointOnImage.x - iX) * (zoomLevel-1));
         int zoomY = (int)(iY - (pointOnImage.y - iY) * (zoomLevel-1));
@@ -215,21 +228,21 @@ public void paintComponent (Graphics g) {
         // ....................................................................
         
         if (zoomShapeType == 0)
-            { newClip = new Area(new Rectangle2D.Float(x+zoomOffsetX,
-                                                       y-zoomOffsetY,
-                                                       zoomAreaW + 1,
-                                                       zoomAreaH + 1)); }
+            { newClip = new Area(new Rectangle2D.Float(x+zoomOffset.width,
+                                                       y-zoomOffset.height,
+                                                       zoomArea.width + 1,
+                                                       zoomArea.height + 1)); }
         else
-            { newClip = new Area(new Ellipse2D.Float(x+zoomOffsetX,
-                                                     y-zoomOffsetY,
-                                                     zoomAreaW + 1,
-                                                     zoomAreaH + 1)); }
+            { newClip = new Area(new Ellipse2D.Float(x+zoomOffset.width,
+                                                     y-zoomOffset.height,
+                                                     zoomArea.width + 1,
+                                                     zoomArea.height + 1)); }
 
         newClip.intersect(new Area(oldClip));
         g2.setClip(newClip);
         
-        drawGrid(g2, zoomLevel, zX+zoomOffsetX, zY-zoomOffsetY);
-        g2.drawImage(image, zoomX+zoomOffsetX, zoomY-zoomOffsetY,
+        drawGrid(g2, zoomLevel, zX+zoomOffset.width, zY-zoomOffset.height);
+        g2.drawImage(image, zoomX+zoomOffset.width, zoomY-zoomOffset.height,
                      zoomW, zoomH, null);
         g2.setClip(oldClip);
         
@@ -240,20 +253,20 @@ public void paintComponent (Graphics g) {
         g2.setColor(zoomFirstBorderColor);
         g2.setStroke(new BasicStroke(zoomFirstBorderWidth*2));
         if (zoomShapeType == 0)
-            { g2.drawRect(x-s1+zoomOffsetX, y-s1-zoomOffsetY,
-                          zoomAreaW + s1*2, zoomAreaH + s1*2); }
+            { g2.drawRect(x-s1+zoomOffset.width, y-s1-zoomOffset.height,
+                          zoomArea.width + s1*2, zoomArea.height + s1*2); }
         else
-            { g2.drawOval(x-s1+zoomOffsetX, y-s1-zoomOffsetY,
-                          zoomAreaW + s1*2, zoomAreaH + s1*2); }
+            { g2.drawOval(x-s1+zoomOffset.width, y-s1-zoomOffset.height,
+                          zoomArea.width + s1*2, zoomArea.height + s1*2); }
 
         g2.setColor(zoomSecondBorderColor);
         g2.setStroke(new BasicStroke(zoomSecondBorderWidth*2));
         if (zoomShapeType == 0)
-            { g2.drawRect(x-s2+zoomOffsetX, y-s2-zoomOffsetY,
-                          zoomAreaW + s2*2, zoomAreaH + s2*2); }
+            { g2.drawRect(x-s2+zoomOffset.width, y-s2-zoomOffset.height,
+                          zoomArea.width + s2*2, zoomArea.height + s2*2); }
         else
-            { g2.drawOval(x-s2+zoomOffsetX, y-s2-zoomOffsetY,
-                          zoomAreaW + s2*2, zoomAreaH + s2*2); }
+            { g2.drawOval(x-s2+zoomOffset.width, y-s2-zoomOffset.height,
+                          zoomArea.width + s2*2, zoomArea.height + s2*2); }
         
         setImageScaleType(g2, imageScaleType);
         
@@ -451,6 +464,32 @@ public void centerOnPoint (Point point) {
 
 /** Відновлення оригінального розміру відображуваного зображення */
 public void zoomToOriginal() { setImageScale(100); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+public void magnifierZoomIn() {
+    
+    int id = zoomLevels.length - 1;
+    float currentLevel = getZoomLevel();
+    for (int z = 0; z < zoomLevels.length - 1; z++) {
+        if (zoomLevels[z] == currentLevel) { id = z + 1; } }
+    
+    setZoomLevel(zoomLevels[id]);
+    
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+public void magnifierZoomOut() {
+    
+    int id = 0;
+    float currentLevel = getZoomLevel();
+    for (int z = zoomLevels.length - 1; z > 0; z--) {
+        if (zoomLevels[z] == currentLevel) { id = z - 1; } }
+
+    setZoomLevel(zoomLevels[id]);
+    
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Getter'и та Setter'и - повертають та задають властивості компонента ////////
@@ -663,6 +702,27 @@ public void setRegionDarkColor (Color regionDarkColor)
       Color oldValue = this.regionDarkColor;
       this.regionDarkColor = regionDarkColor;
       fireAll("regionDarkColor", oldValue, regionDarkColor); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+public float getZoomLevel() { return zoomLevel; }
+
+public void setZoomLevel (float zoomLevel)
+    { if (zoomLevel < zoomLevels[0])
+          { zoomLevel = zoomLevels[0]; }
+      else if (zoomLevel > zoomLevels[zoomLevels.length-1])
+          { zoomLevel = zoomLevels[zoomLevels.length-1]; }
+      else
+          { float copy = zoomLevel;
+            zoomLevel = ZOOM_SCALE_X3_00;
+            for (float level : zoomLevels) {
+                if (level == copy) { zoomLevel = level;
+                                     break; } } }
+    
+      float oldValue = this.zoomLevel;
+      this.zoomLevel = zoomLevel;
+      panelRoot.repaint();
+      fireAll("zoomLevel", oldValue, zoomLevel); }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Додавання та видалення прослуховувачів подій ///////////////////////////////
@@ -1142,10 +1202,12 @@ public void mousePressed (MouseEvent me) {
         // Ліва клавіша миші
         case MouseEvent.BUTTON1 -> {
             
+            moveRegion = true;
+            
             if (specifyRegion)
                 { regionOrig.setLocation(getPointOnImage(me)); }
             
-            if (!lmbEnable || specifyRegion) { return; }
+            if (!lmbEnable || specifyRegion || zoomRegion) { return; }
             
             origin = getPointOnImage(me);
             panelRoot.setCursor(isScrollBarVisible() ? CURSOR_HAND :
@@ -1155,7 +1217,8 @@ public void mousePressed (MouseEvent me) {
         // Середня клавіша миші
         case MouseEvent.BUTTON2 -> {
         
-            if (!cmbEnable || specifyRegion) { return; }
+            if (!cmbEnable || specifyRegion ||
+                moveRegion || zoomRegion) { return; }
             
             if (imageScale == 100)                        { fitInternal();    }
             else if (imageScale == imageScaleInternalFit) { fitExternal();    }
@@ -1165,7 +1228,8 @@ public void mousePressed (MouseEvent me) {
         // Права клавіша миші
         case MouseEvent.BUTTON3 -> {
             
-            if (!rmbEnable || specifyRegion) { return; }
+            if (!rmbEnable || specifyRegion || moveRegion) { return; }
+            
             zoomOrigin = me.getPoint();
             zoomRegion = true;
             updateCursor();
@@ -1184,10 +1248,12 @@ public void mouseReleased (MouseEvent me) {
         // Ліва клавіша миші
         case MouseEvent.BUTTON1 -> {
             
+            moveRegion = false;
+            
             if (specifyRegion) { updateCursor();
                                  setRegion(regionNorm); }
             
-            if (!lmbEnable || specifyRegion) { return; }
+            if (!lmbEnable || specifyRegion || zoomRegion) { return; }
             
             origin = null;
             panelRoot.setCursor(CURSOR_DEFAULT);
@@ -1196,7 +1262,8 @@ public void mouseReleased (MouseEvent me) {
         // Права клавіша миші
         case MouseEvent.BUTTON3 -> {
             
-            if (!rmbEnable || specifyRegion) { return; }
+            if (!rmbEnable || specifyRegion || moveRegion) { return; }
+            
             zoomRegion = false;
             updateCursor();
             repaint();
@@ -1209,14 +1276,25 @@ public void mouseReleased (MouseEvent me) {
 @Override
 public void mouseWheelMoved (MouseWheelEvent mwe) {
     
-    if (!wheelEnable || specifyRegion) { return; }
+    if (!wheelEnable || specifyRegion || moveRegion) { return; }
     
-    if (mwe.getWheelRotation() > 0)
-        { if (wheelInvert) { zoomOut(mwe.getPoint()); }
-          else             { zoomIn(mwe.getPoint());  } }
+    // Масштабування лупи
+    if (zoomRegion)
+        { if (mwe.getWheelRotation() > 0)
+              { if (wheelInvert) { magnifierZoomOut(); }
+                else             { magnifierZoomIn();  } }
+          else
+              { if (wheelInvert) { magnifierZoomIn();  }
+                else             { magnifierZoomOut(); } } }
+    
+    // Масштабування зображення
     else
-        { if (wheelInvert) { zoomIn(mwe.getPoint());  }
-          else             { zoomOut(mwe.getPoint()); } }
+        { if (mwe.getWheelRotation() > 0)
+              { if (wheelInvert) { zoomOut(mwe.getPoint()); }
+                else             { zoomIn(mwe.getPoint());  } }
+          else
+              { if (wheelInvert) { zoomIn(mwe.getPoint());  }
+                else             { zoomOut(mwe.getPoint()); } } }
 
 }
 };
@@ -1230,6 +1308,8 @@ public final MouseMotionListener mouseMotionListener
 public void mouseDragged (MouseEvent me) {
 
     if (specifyRegion) {
+        
+        if (!moveRegion) { return; }
         
         Point point_new = getPointOnImage(me);
         Point point_old = regionOrig.getLocation();
