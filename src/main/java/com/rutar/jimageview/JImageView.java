@@ -85,6 +85,7 @@ private int gridSize = 25;                                      // Розмір 
 private boolean lmbEnable   = true;  // Переміщення зображення за допомогою ЛКМ
 private boolean cmbEnable   = true;           // Зміна вигляду за допопогою СКМ
 private boolean rmbEnable   = true;            // Масштабування за допоогою ПКМ
+private boolean zmbEnable   = true;     // Вибір регіону за допомогою ЛКМ + ПКМ
 private boolean wheelEnable = true;             // Масштабування колесиком миші
 private boolean wheelInvert = false;              // Інвертування колесика миші
 
@@ -109,22 +110,25 @@ private int imageScaleExternalFit;        // Масштаб для зовніш�
 private int imageScaleType = SCALE_TYPE_FAST;              // Тип масштабування
 private int imageOpenSize = OPEN_SIZE_INTERNAL_FIT;        // Розмір зображення
 
-private boolean moveRegion;                           // Переміщення зображення
+private boolean lmbPressed;                                    // ЛКМ натиснута
+private boolean cmbPressed;                                    // СКМ натиснута
+private boolean rmbPressed;                                    // ПКМ натиснута
+private boolean zmbPressed;                              // ЛКМ і ПКМ натиснуті
+
 private boolean cursorOnImage;      // Знаходження курсора всередині компонента
 private boolean scrollBarVisible;        // Видимість скролбарів, хоча б одного
 
 private boolean specifyRegion;                 // Задання регіону масштабування
-private boolean specifyRegionMode;         // Перехід в режим задавання регіону
 private Rectangle regionOrig;                            // Оригінальний регіон
 private Rectangle regionNorm;                          // Нормалізований регіон
 private Rectangle regionImage;               // Регіон в координатах зображення
+private int regionMinSize = 9;          // Мінімальний розмір виділення регіону
 private Color regionLightColor = Color.WHITE;          // I колір рамки регіону
 private Color regionDarkColor  = Color.DARK_GRAY;     // II колір рамки регіону
 private BasicStroke regionStroke;           // Основний штрих виділення регіону
 private BasicStroke regionStrokeAdditional;     // Доп. штрих виділення регіону
 private boolean regionAdditionalStroke = true;  // Малювання додаткового штриха
 
-private boolean zoomRegion;               // Масштабування фрагмента зображення
 private Point zoomOrigin;                          // Центр вікна масштабування
 private Dimension zoomArea = new Dimension(200, 200);          // Розміри вікна
 private Dimension zoomOffset = new Dimension(0, 0);            // Відступ вікна
@@ -203,8 +207,8 @@ public void paintComponent (Graphics g) {
         { g2.drawImage(getSmoothThumbnail(), iX, iY, null); }
     
     ///////////////////////////////////////////////////////////////////////////
-    
-    if (zoomRegion) {
+
+    if (zoomOrigin != null) {
         
         Area newClip;
         Shape oldClip = g2.getClip();
@@ -952,7 +956,7 @@ private Rectangle calculateScrollParams (Point2D.Float oldPosition,
 public void setRegion() {
     
     panelRoot.setCursor(CURSOR_REGION);
-    regionOrig  = new Rectangle();
+    regionOrig = new Rectangle();
     specifyRegion = true;
     panelRoot.repaint();
     
@@ -1154,7 +1158,7 @@ private boolean isScrollBarVisible()
 
 private void updateCursor() {
 
-    if (zoomRegion)
+    if (rmbPressed)
         { CURSOR_DEFAULT = zoomShowCursor ? CURSOR_REGION :
                                             getUnvisibleCursor();
           panelRoot.setCursor(CURSOR_DEFAULT);
@@ -1203,24 +1207,25 @@ public void mousePressed (MouseEvent me) {
         // Ліва клавіша миші
         case MouseEvent.BUTTON1 -> {
             
-            moveRegion = true;
+            if (!lmbEnable) { return; }
+            if (cmbPressed || rmbPressed) { return; }
+            lmbPressed = true;
             
             if (specifyRegion)
-                { specifyRegionMode = false;
+                { zmbPressed = false;
                   regionOrig.setLocation(getPointOnImage(me)); }
-            
-            if (!lmbEnable || specifyRegion || zoomRegion) { return; }
-            
-            origin = getPointOnImage(me);
-            panelRoot.setCursor(isScrollBarVisible() ? CURSOR_HAND :
-                                                       CURSOR_DEFAULT);
+            else
+                { origin = getPointOnImage(me);
+                  panelRoot.setCursor(isScrollBarVisible() ? CURSOR_HAND :
+                                                             CURSOR_DEFAULT); }
         }
         
         // Середня клавіша миші
         case MouseEvent.BUTTON2 -> {
         
-            if (!cmbEnable || specifyRegion ||
-                moveRegion || zoomRegion) { return; }
+            if (!cmbEnable) { return; }
+            if (specifyRegion || lmbPressed || rmbPressed) { return; }
+            cmbPressed = true;
             
             if (imageScale == 100)                        { fitInternal();    }
             else if (imageScale == imageScaleInternalFit) { fitExternal();    }
@@ -1230,15 +1235,19 @@ public void mousePressed (MouseEvent me) {
         // Права клавіша миші
         case MouseEvent.BUTTON3 -> {
             
-            if (moveRegion) { specifyRegionMode = true;
-                              this.mouseReleased(me);
-                              setRegion();
-                              return; }
+            if (!rmbEnable) { return; }
+            if (specifyRegion || cmbPressed) { return; }
+
+            if (lmbPressed) { 
+                if (!zmbEnable) { return; }
+                else { lmbPressed = cmbPressed = rmbPressed = false;
+                       zmbPressed = true;
+                       setRegion();
+                       return; } }
             
-            if (!rmbEnable || specifyRegion) { return; }
+            rmbPressed = true;
 
             zoomOrigin = me.getPoint();
-            zoomRegion = true;
             updateCursor();
             repaint();
         }
@@ -1254,26 +1263,30 @@ public void mouseReleased (MouseEvent me) {
         
         // Ліва клавіша миші
         case MouseEvent.BUTTON1 -> {
+
+            lmbPressed = false;
+            if (zmbPressed || cmbPressed || rmbPressed) { return; }
             
-            moveRegion = false;
-            
-            if (specifyRegionMode) { return; }
-            if (specifyRegion) { updateCursor();
-                                 setRegion(regionNorm); }
-            
-            if (!lmbEnable || specifyRegion || zoomRegion) { return; }
-            
-            origin = null;
-            panelRoot.setCursor(CURSOR_DEFAULT);
+            if (specifyRegion)
+                { if (regionNorm.width  <= regionMinSize ||
+                      regionNorm.height <= regionMinSize) { setRegion(); }
+                  else { updateCursor();
+                         setRegion(regionNorm); } }
+            else
+                { origin = null;
+                  panelRoot.setCursor(CURSOR_DEFAULT); }
         }
+        
+        // Середня клавіша миші
+        case MouseEvent.BUTTON2 -> { cmbPressed = false; }
         
         // Права клавіша миші
         case MouseEvent.BUTTON3 -> {
             
-            if (specifyRegionMode) { return; }
-            if (!rmbEnable || specifyRegion || moveRegion) { return; }
-            
-            zoomRegion = false;
+            rmbPressed = false;
+            if (specifyRegion || lmbPressed || cmbPressed) { return; }
+
+            zoomOrigin = null;
             updateCursor();
             repaint();
         }
@@ -1285,10 +1298,10 @@ public void mouseReleased (MouseEvent me) {
 @Override
 public void mouseWheelMoved (MouseWheelEvent mwe) {
     
-    if (!wheelEnable || specifyRegion || moveRegion) { return; }
+    if (!wheelEnable || specifyRegion || lmbPressed || cmbPressed) { return; }
     
     // Масштабування лупи
-    if (zoomRegion)
+    if (rmbPressed)
         { if (mwe.getWheelRotation() > 0)
               { if (wheelInvert) { magnifierZoomOut(); }
                 else             { magnifierZoomIn();  } }
@@ -1316,9 +1329,10 @@ public final MouseMotionListener mouseMotionListener
 @Override
 public void mouseDragged (MouseEvent me) {
 
+    // Задання регіону масштабування
     if (specifyRegion) {
-        
-        if (!moveRegion || specifyRegionMode) { return; }
+
+        if (!lmbPressed) { return; }
         
         Point point_new = getPointOnImage(me);
         Point point_old = regionOrig.getLocation();
@@ -1327,30 +1341,36 @@ public void mouseDragged (MouseEvent me) {
                            point_new.y - point_old.y);
         
         panelRoot.repaint();
+    
     }
     
-    else if (origin != null) {
-        
+    // Ліва клавіша миші
+    else if (lmbPressed) {
+    
         if (!drugImageOut && !cursorOnImage) { return; }
+        if (cmbPressed || rmbPressed || zmbPressed) { return; }
+        
+        Point point = getPointOnImage(me);
 
-            Point point = getPointOnImage(me);
-            
-            int deltaX = origin.x - point.x;
-            int deltaY = origin.y - point.y;
-            
-            Rectangle view = getViewport().getViewRect();
-            view.x += deltaX;
-            view.y += deltaY;
+        int deltaX = origin.x - point.x;
+        int deltaY = origin.y - point.y;
 
-            panelRoot.scrollRectToVisible(view);
-            
+        Rectangle view = getViewport().getViewRect();
+        view.x += deltaX;
+        view.y += deltaY;
+
+        panelRoot.scrollRectToVisible(view);
+    
     }
     
-    if (zoomRegion) {
+    // Права клавіша миші
+    else if (rmbPressed) {
+    
+        if (lmbPressed || cmbPressed || zmbPressed) { return; }
         
         zoomOrigin = me.getPoint();
         repaint();
-        
+    
     }
 }
 };
