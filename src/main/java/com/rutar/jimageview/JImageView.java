@@ -140,7 +140,7 @@ private int zoomFirstBorderGap = 1;      // Відступ I рамки вікн
 private int zoomSecondBorderGap = -1;    // Віступ II рамки вікна масштабування
 private Color zoomFirstBorderColor = Color.DARK_GRAY;          // Колір I рамки
 private Color zoomSecondBorderColor = Color.GRAY;             // Колір II рамки
-private boolean zoomShowCursor = true;                     // Видимість курсора
+private boolean zoomShowCursor = true;      // Видимість курсора при збільшенні
 
 // ............................................................................
 
