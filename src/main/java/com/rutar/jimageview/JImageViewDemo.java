@@ -1,10 +1,16 @@
 package com.rutar.jimageview;
 
+import java.io.*;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.awt.image.*;
 
-public class JImageViewDemo extends javax.swing.JFrame {
+import static com.rutar.jimageview.JImageViewUtils.*;
+
+public class JImageViewDemo extends JFrame {
+
+// ............................................................................
 
 /**
  * Клас JImageViewDemo
@@ -1054,8 +1060,62 @@ public JImageViewDemo() { initComponents(); }
 ///////////////////////////////////////////////////////////////////////////////
 
     private void onAction(ActionEvent evt) {//GEN-FIRST:event_onAction
-        System.out.println(evt.getActionCommand());
+        //System.out.println(evt.getActionCommand());
+        
+        switch (evt.getActionCommand()) {
+
+            case "btn_open" ->
+                { File file = new File("/home/rutar/test_2.jpg");
+                  BufferedImage image = getImageQuickly(file);
+                  image_view.setImage(image); }
+
+            case "btn_zoom_in" ->
+                { image_view.zoomIn(null);
+                  fld_scale.setText(getRoundedValue
+                                   (image_view.getImageScale())); }
+            case "btn_zoom_out" ->
+                { image_view.zoomOut(null);
+                  fld_scale.setText(getRoundedValue
+                                   (image_view.getImageScale())); }
+                
+            case "btn_minimize" ->
+                { image_view.minimize();
+                  fld_scale.setText(getRoundedValue
+                                   (image_view.getImageScale())); }
+            case "btn_maximize" ->
+                { image_view.maximize();
+                  fld_scale.setText(getRoundedValue
+                                   (image_view.getImageScale())); }
+            case "btn_internal_fit" ->
+                { image_view.fitInternal();
+                  fld_scale.setText(getRoundedValue
+                                   (image_view.getImageScale())); }
+            case "btn_external_fit" ->
+                { image_view.fitExternal();
+                  fld_scale.setText(getRoundedValue
+                                   (image_view.getImageScale())); }
+            case "btn_original" ->
+                { image_view.zoomToOriginal();
+                  fld_scale.setText(getRoundedValue
+                                   (image_view.getImageScale())); }
+                
+            case "btn_region_fit" -> { image_view.setRegion(); }
+            case "btn_center"     -> { image_view.center();    }
+                
+            case "btn_set_scale", "fld_scale" ->
+                { float newScale = Float.parseFloat(fld_scale.getText());
+                  image_view.setImageScale(newScale);
+                  fld_scale.setText(getRoundedValue
+                                   (image_view.getImageScale())); }
+        }
+        
     }//GEN-LAST:event_onAction
+
+///////////////////////////////////////////////////////////////////////////////
+
+private String getRoundedValue (float value) {
+    return String.format("%.2f", value);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
