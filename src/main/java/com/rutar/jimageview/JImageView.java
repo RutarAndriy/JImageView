@@ -94,7 +94,7 @@ private boolean wheelInvert = false;              // Інвертування к
 private int imageW;                          // Ширина оригінального зображення
 private int imageH;                          // Висота оригінального зображення
 
-private int imageScale;                                   // Масштаб зображення
+private float imageScale;                                 // Масштаб зображення
 
 private int imageScaleW;                    // Ширина масштабованого зображення
 private int imageScaleH;                    // Висота масштабованого зображення
@@ -102,10 +102,10 @@ private int imageScaleH;                    // Висота масштабова
 private int globalScaleMin = scales[0];                  // Мінімальний масштаб
 private int globalScaleMax = scales[scales.length - 1]; // Максимальний масштаб
 
-private int imageScaleMax;                    // Мінімальний масштаб зображення
-private int imageScaleMin;                   // Максимальний масштаб зображення
-private int imageScaleInternalFit;       // Масштаб для внутрішнього заповнення
-private int imageScaleExternalFit;        // Масштаб для зовнішнього заповнення
+private float imageScaleMax;                  // Мінімальний масштаб зображення
+private float imageScaleMin;                 // Максимальний масштаб зображення
+private float imageScaleInternalFit;     // Масштаб для внутрішнього заповнення
+private float imageScaleExternalFit;      // Масштаб для зовнішнього заповнення
 
 private int imageScaleType = SCALE_TYPE_FAST;              // Тип масштабування
 private int imageOpenSize = OPEN_SIZE_INTERNAL_FIT;        // Розмір зображення
@@ -346,7 +346,7 @@ private void drawGrid (Graphics2D g2, float sF, int dX, int dY) {
 public void zoomIn (Point origin) {
 
     if (imageScale >= imageScaleMax) { return; }
-    int scaleValue = imageScale;
+    float scaleValue = imageScale;
 
     if (!isValid()) { validate(); }
     if (origin == null) { origin = new Point(getWidth()/2,
@@ -379,7 +379,7 @@ public void zoomIn (Point origin) {
 public void zoomOut (Point origin) {
     
     if (imageScale <= imageScaleMin) { return; }
-    int scaleValue = imageScale;
+    float scaleValue = imageScale;
 
     if (!isValid()) { validate(); }
     if (origin == null) { origin = new Point(getWidth()/2,
@@ -528,15 +528,15 @@ public void setErrorImage (BufferedImage errorImage)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-public int getImageScale() { return imageScale; }
+public float getImageScale() { return imageScale; }
 
-public void setImageScale (int imageScale)
+public void setImageScale (float imageScale)
     { calculateImageLimitScale();
       if      (imageScale > globalScaleMax) { imageScale = globalScaleMax; }
       else if (imageScale < globalScaleMin) { imageScale = globalScaleMin; }
       if      (imageScale > imageScaleMax)  { imageScale = imageScaleMax;  }
       else if (imageScale < imageScaleMin)  { imageScale = imageScaleMin;  }
-      int oldValue = this.imageScale;
+      float oldValue = this.imageScale;
       this.imageScale = imageScale;
       calculateScaledImageSize();
       panelRoot.setPreferredSize(new Dimension(imageScaleW, imageScaleH));
@@ -820,8 +820,8 @@ private void calculateImageLimitScale() {
     int q = (w > h) ? h : w;
     int z = (w > h) ? w : h;
     
-    imageScaleMin = (int)(48d   / q * 100);
-    imageScaleMax = (int)(7000d / z * 100);
+    imageScaleMin = (48f   / q * 100);
+    imageScaleMax = (7000f / z * 100);
     
     if (imageScaleMin > 100) { imageScaleMin = 100; }
     if (imageScaleMax < 100) { imageScaleMax = 100; }
@@ -832,7 +832,7 @@ private void calculateImageLimitScale() {
 
 private void calculateImageFitScale() {
     
-    int[] fitScale = calculateFitScale(imageW, imageH);
+    float[] fitScale = calculateFitScale(imageW, imageH);
     
     imageScaleInternalFit = fitScale[0];
     imageScaleExternalFit = fitScale[1];
@@ -841,7 +841,7 @@ private void calculateImageFitScale() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-private int[] calculateFitScale (int regionW, int regionH) {
+private float[] calculateFitScale (int regionW, int regionH) {
     
     if (!isValid()) { validate(); }
     
@@ -880,14 +880,14 @@ private int[] calculateFitScale (int regionW, int regionH) {
     else if (getHorizontalScrollBarPolicy() ==
         HORIZONTAL_SCROLLBAR_NEVER)  { eH = mH; qH = mH; }
     
-    int fitWi = (int)(100d * (vW + sW - qW) / iW);
-    int fitHi = (int)(100d * (vH + sH - qH) / iH);
+    float fitWi = (100f * (vW + sW - qW) / iW);
+    float fitHi = (100f * (vH + sH - qH) / iH);
     
-    int fitWe = (int)(100d * (vW + eW - mW) / iW);
-    int fitHe = (int)(100d * (vH + eH - mH) / iH);
+    float fitWe = (100f * (vW + eW - mW) / iW);
+    float fitHe = (100f * (vH + eH - mH) / iH);
     
-    return new int[] { (fitWi < fitHi) ? fitWi : fitHi,
-                       (fitWe > fitHe) ? fitWe : fitHe };
+    return new float[] { (fitWi < fitHi) ? fitWi : fitHi,
+                         (fitWe > fitHe) ? fitWe : fitHe };
 
 }
 
@@ -976,7 +976,7 @@ public void setRegion (Rectangle region) {
     int h = regionImage.height;
     
     int fitType = 0;
-    int fitScale = calculateFitScale(w, h)[fitType];
+    float fitScale = calculateFitScale(w, h)[fitType];
     
     Point center = new Point(x + w/2, y + h/2);
     Point2D.Float percent = getLocalPercentagePoint(center, imageW, imageH);
@@ -1231,7 +1231,7 @@ public void mousePressed (MouseEvent me) {
             else if (imageScale == imageScaleInternalFit) { fitExternal();    }
             else                                          { zoomToOriginal(); }
         }
-            
+        
         // Права клавіша миші
         case MouseEvent.BUTTON3 -> {
             
