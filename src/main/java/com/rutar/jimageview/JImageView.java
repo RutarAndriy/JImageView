@@ -75,8 +75,6 @@ private BufferedImage errorImage;     // Зображення яке показ�
 
 // ............................................................................
 
-private boolean drugImageOut = true;         // Переміщення за межею компонента
-
 private boolean gridVisible = true;                             // Фонова сітка
 private Color gridLightColor = Color.LIGHT_GRAY;       // I колір фонової сітки
 private Color gridDarkColor  = Color.DARK_GRAY;       // II колір фонової сітки
@@ -110,6 +108,8 @@ private float imageScaleExternalFit;      // Масштаб для зовніш�
 private int imageScaleType = SCALE_TYPE_FAST;              // Тип масштабування
 private int imageOpenSize = OPEN_SIZE_INTERNAL_FIT;        // Розмір зображення
 
+private boolean drugImageOut = true;         // Переміщення за межею компонента
+
 private boolean lmbPressed;                                    // ЛКМ натиснута
 private boolean cmbPressed;                                    // СКМ натиснута
 private boolean rmbPressed;                                    // ПКМ натиснута
@@ -134,6 +134,8 @@ private Dimension zoomArea = new Dimension(200, 200);          // Розміри
 private Dimension zoomOffset = new Dimension(0, 0);            // Відступ вікна
 private float zoomLevel = ZOOM_SCALE_X2_50;       // Рівень масштабування вікна
 private int zoomShapeType = 1;                       // Тип вікна масштабування
+private boolean zoomFirstBorderVisible = true;             // Видимість I рамки
+private boolean zoomSecondBorderVisible = true;           // Видимість II рамки
 private int zoomFirstBorderWidth = 1;     // Ширина I рамки вікна масштабування
 private int zoomSecondBorderWidth = 3;   // Ширина II рамки вікна масштабування
 private int zoomFirstBorderGap = 1;      // Відступ I рамки вікна масштабування
@@ -141,6 +143,7 @@ private int zoomSecondBorderGap = -1;    // Віступ II рамки вікн�
 private Color zoomFirstBorderColor = Color.DARK_GRAY;          // Колір I рамки
 private Color zoomSecondBorderColor = Color.GRAY;             // Колір II рамки
 private boolean zoomShowCursor = true;      // Видимість курсора при збільшенні
+private boolean drugZoomOut = true;       // Видимість лупи за межею компонента
 
 // ............................................................................
 
@@ -210,6 +213,17 @@ public void paintComponent (Graphics g) {
 
     if (zoomOrigin != null) {
         
+        if (!drugZoomOut) {
+        
+        int vw = getViewport().getWidth() - 1;
+        int vh = getViewport().getHeight() - 1;
+        
+        if      (zoomOrigin.x < 0)  { zoomOrigin.x = 0;  }
+        else if (zoomOrigin.x > vw) { zoomOrigin.x = vw; }
+        
+        if      (zoomOrigin.y < 0)  { zoomOrigin.y = 0;  }
+        else if (zoomOrigin.y > vh) { zoomOrigin.y = vh; } }
+        
         Area newClip;
         Shape oldClip = g2.getClip();
         Point pointOnImage = getPointOnImage(zoomOrigin);
@@ -255,6 +269,7 @@ public void paintComponent (Graphics g) {
         
         setImageScaleType(g2, SCALE_TYPE_SMOOTH);
         
+        if (zoomFirstBorderVisible) {
         g2.setColor(zoomFirstBorderColor);
         g2.setStroke(new BasicStroke(zoomFirstBorderWidth*2));
         if (zoomShapeType == 0)
@@ -262,8 +277,9 @@ public void paintComponent (Graphics g) {
                           zoomArea.width + s1*2, zoomArea.height + s1*2); }
         else
             { g2.drawOval(x-s1+zoomOffset.width, y-s1-zoomOffset.height,
-                          zoomArea.width + s1*2, zoomArea.height + s1*2); }
+                          zoomArea.width + s1*2, zoomArea.height + s1*2); } }
 
+        if (zoomSecondBorderVisible) {
         g2.setColor(zoomSecondBorderColor);
         g2.setStroke(new BasicStroke(zoomSecondBorderWidth*2));
         if (zoomShapeType == 0)
@@ -271,7 +287,7 @@ public void paintComponent (Graphics g) {
                           zoomArea.width + s2*2, zoomArea.height + s2*2); }
         else
             { g2.drawOval(x-s2+zoomOffset.width, y-s2-zoomOffset.height,
-                          zoomArea.width + s2*2, zoomArea.height + s2*2); }
+                          zoomArea.width + s2*2, zoomArea.height + s2*2); } }
         
         setImageScaleType(g2, imageScaleType);
         
