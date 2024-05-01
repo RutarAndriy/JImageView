@@ -72,6 +72,54 @@ public void regionLightColorChange (JImageViewEvent evt) {}
 @Override
 public void regionDarkColorChange (JImageViewEvent evt) {}
 
+@Override
+public void regionMinimumSizeChange (JImageViewEvent evt) {}
+
+@Override
+public void zoomAreaChange (JImageViewEvent evt) {}
+
+@Override
+public void zoomOffsetChange (JImageViewEvent evt) {}
+
+@Override
+public void zoomLevelChange (JImageViewEvent evt) {}
+
+@Override
+public void zoomShapeTypeChange (JImageViewEvent evt) {}
+
+@Override
+public void zoomFirstBorderVisibleChange (JImageViewEvent evt) {}
+
+@Override
+public void zoomSecondBorderVisibleChange (JImageViewEvent evt) {}
+
+@Override
+public void zoomFirstBorderWidthChange (JImageViewEvent evt) {}
+
+@Override
+public void zoomSecondBorderWidthChange (JImageViewEvent evt) {}
+
+@Override
+public void zoomFirstBorderGapChange (JImageViewEvent evt) {}
+
+@Override
+public void zoomSecondBorderGapChange (JImageViewEvent evt) {}
+
+@Override
+public void zoomFirstBorderColorChange (JImageViewEvent evt) {}
+
+@Override
+public void zoomSecondBorderColorChange (JImageViewEvent evt) {}
+
+@Override
+public void zoomShowCursorChange (JImageViewEvent evt) {}
+
+@Override
+public void drugZoomOutChange (JImageViewEvent evt) {}
+
+@Override
+public void invertZoomOutChange (JImageViewEvent evt) {}
+
 // Кінець класу JImageViewAdapter /////////////////////////////////////////////
 
 }

@@ -109,28 +109,124 @@ public void gridDarkColorChange (JImageViewEvent evt);
 public void gridSizeChange (JImageViewEvent evt);
 
 /**
- * Зміна штриха виділення регіону
+ * Зміна штриха виділення регіону масштабування
  * @param evt Подія типу JImageViewEvent
  */
 public void regionStrokeChange (JImageViewEvent evt);
 
 /**
- * Зміна відображення додаткового штриха виділення регіону
+ * Зміна відображення додаткового штриха виділення регіону масштабування
  * @param evt Подія типу JImageViewEvent
  */
 public void regionAdditionalStrokeChange (JImageViewEvent evt);
 
 /**
- * Зміна I кольору рамки регіону
+ * Зміна I кольору рамки регіону масштабування
  * @param evt Подія типу JImageViewEvent
  */
 public void regionLightColorChange (JImageViewEvent evt);
 
 /**
- * Зміна II кольору рамки регіону
+ * Зміна II кольору рамки регіону масштабування
  * @param evt Подія типу JImageViewEvent
  */
 public void regionDarkColorChange (JImageViewEvent evt);
+
+/**
+ * Зміна мінімального розміру регіону масштабування
+ * @param evt Подія типу JImageViewEvent
+ */
+public void regionMinimumSizeChange (JImageViewEvent evt);
+
+/**
+ * Зміна розмірів області масштабування
+ * @param evt Подія типу JImageViewEvent
+ */
+public void zoomAreaChange (JImageViewEvent evt);
+
+/**
+ * Зміна відступів області масштабування
+ * @param evt Подія типу JImageViewEvent
+ */
+public void zoomOffsetChange (JImageViewEvent evt);
+
+/**
+ * Зміна рівня масштабування лупи
+ * @param evt Подія типу JImageViewEvent
+ */
+public void zoomLevelChange (JImageViewEvent evt);
+
+/**
+ * Зміна типу фігури області масштабування
+ * @param evt Подія типу JImageViewEvent
+ */
+public void zoomShapeTypeChange (JImageViewEvent evt);
+
+/**
+ * Зміна видимості I рамки лупи
+ * @param evt Подія типу JImageViewEvent
+ */
+public void zoomFirstBorderVisibleChange (JImageViewEvent evt);
+
+/**
+ * Зміна видимості II рамки лупи
+ * @param evt Подія типу JImageViewEvent
+ */
+public void zoomSecondBorderVisibleChange (JImageViewEvent evt);
+
+/**
+ * Зміна ширини I рамки лупи
+ * @param evt Подія типу JImageViewEvent
+ */
+public void zoomFirstBorderWidthChange (JImageViewEvent evt);
+
+/**
+ * Зміна ширини II рамки лупи
+ * @param evt Подія типу JImageViewEvent
+ */
+public void zoomSecondBorderWidthChange (JImageViewEvent evt);
+
+/**
+ * Зміна відступу I рамки лупи
+ * @param evt Подія типу JImageViewEvent
+ */
+public void zoomFirstBorderGapChange (JImageViewEvent evt);
+
+/**
+ * Зміна відступу II рамки лупи
+ * @param evt Подія типу JImageViewEvent
+ */
+public void zoomSecondBorderGapChange (JImageViewEvent evt);
+
+/**
+ * Зміна кольору I рамки лупи
+ * @param evt Подія типу JImageViewEvent
+ */
+public void zoomFirstBorderColorChange (JImageViewEvent evt);
+
+/**
+ * Зміна кольору II рамки лупи
+ * @param evt Подія типу JImageViewEvent
+ */
+public void zoomSecondBorderColorChange (JImageViewEvent evt);
+
+/**
+ * Зміна видимості курсора при збільшенні
+ * @param evt Подія типу JImageViewEvent
+ */
+public void zoomShowCursorChange (JImageViewEvent evt);
+
+/**
+ * Зміна видимості лупи за межею компонента
+ * @param evt Подія типу JImageViewEvent
+ */
+public void drugZoomOutChange (JImageViewEvent evt);
+
+/**
+ * Зміна інвертування лупи за межею компонента
+ * @param evt Подія типу JImageViewEvent
+ */
+public void invertZoomOutChange (JImageViewEvent evt);
 
 // Кінець класу JImageViewListener ////////////////////////////////////////////
 

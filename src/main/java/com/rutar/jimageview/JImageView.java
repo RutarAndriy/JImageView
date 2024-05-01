@@ -41,6 +41,9 @@ public static final float ZOOM_SCALE_X3_00 = 3.00f;
 public static final float ZOOM_SCALE_X4_00 = 4.00f;
 public static final float ZOOM_SCALE_X5_00 = 5.00f;
 
+public static final int ZOOM_SHAPE_RECTANGLE = 0;
+public static final int ZOOM_SHAPE_ELLIPSE   = 1;
+
 // ............................................................................
 
 private static final Cursor CURSOR_HAND    = new Cursor(HAND_CURSOR);
@@ -81,12 +84,12 @@ private float imageScaleInternalFit;     // Масштаб для внутріш
 private float imageScaleExternalFit;      // Масштаб для зовнішнього заповнення
 private int imageScaleType = SCALE_TYPE_FAST;              // Тип масштабування
 private int imageOpenSize = OPEN_SIZE_INTERNAL_FIT;        // Розмір зображення
-private boolean lmbEnable   = true;  // Переміщення зображення за допомогою ЛКМ
-private boolean cmbEnable   = true;           // Зміна вигляду за допопогою СКМ
-private boolean rmbEnable   = true;            // Масштабування за допоогою ПКМ
-private boolean zmbEnable   = true;     // Вибір регіону за допомогою ЛКМ + ПКМ
-private boolean wheelEnable = true;             // Масштабування колесиком миші
-private boolean wheelInvert = false;              // Інвертування колесика миші
+private boolean lmbEnable    = true; // Переміщення зображення за допомогою ЛКМ
+private boolean cmbEnable    = true;          // Зміна вигляду за допопогою СКМ
+private boolean rmbEnable    = true;           // Масштабування за допоогою ПКМ
+private boolean zmbEnable    = true;    // Вибір регіону за допомогою ЛКМ + ПКМ
+private boolean wheelEnable  = true;            // Масштабування колесиком миші
+private boolean wheelInvert  = false;             // Інвертування колесика миші
 private boolean drugImageOut = true;         // Переміщення за межею компонента
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -104,7 +107,7 @@ private boolean specifyRegion;                 // Задання регіону 
 private Rectangle regionOrig;                            // Оригінальний регіон
 private Rectangle regionNorm;                          // Нормалізований регіон
 private Rectangle regionImage;               // Регіон в координатах зображення
-private int regionMinSize = 9;          // Мінімальний розмір виділення регіону
+private int regionMinimumSize = 9;      // Мінімальний розмір виділення регіону
 private Color regionLightColor = Color.WHITE;          // I колір рамки регіону
 private Color regionDarkColor  = Color.DARK_GRAY;     // II колір рамки регіону
 private BasicStroke regionStroke;           // Основний штрих виділення регіону
@@ -114,11 +117,11 @@ private boolean regionAdditionalStroke = true;  // Малювання додат
 ///////////////////////////////////////////////////////////////////////////////
 // Змінні, які мають відношення до області масштабування (лупи) ///////////////
 
-private Point zoomOrigin;                          // Центр лупи
+private Point zoomOrigin;                                         // Центр лупи
 private Dimension zoomArea = new Dimension(200, 200);           // Розміри лупи
 private Dimension zoomOffset = new Dimension(0, 0);             // Відступ лупи
 private float zoomLevel = ZOOM_SCALE_X2_50;        // Рівень масштабування лупи
-private int zoomShapeType = 1;                                      // Тип лупи
+private int zoomShapeType = ZOOM_SHAPE_ELLIPSE;              // Тип фігури лупи
 private boolean zoomFirstBorderVisible = true;        // Видимість I рамки лупи
 private boolean zoomSecondBorderVisible = true;      // Видимість II рамки лупи
 private int zoomFirstBorderWidth = 1;                    // Ширина I рамки лупи
@@ -612,7 +615,7 @@ public void setImageScaleType (int imageScaleType)
     { int oldValue = this.imageScaleType;
       if (imageScaleType != SCALE_TYPE_FAST &&
           imageScaleType != SCALE_TYPE_SMOOTH)
-        { imageScaleType = SCALE_TYPE_FAST; }
+        { imageScaleType  = SCALE_TYPE_FAST; }
       this.imageScaleType = imageScaleType;
       panelRoot.repaint();
       fireAll("imageScaleType", oldValue, imageScaleType); }
@@ -636,7 +639,7 @@ public void setImageOpenSize (int imageOpenSize)
       if (imageOpenSize != OPEN_SIZE_ORIGINAL &&
           imageOpenSize != OPEN_SIZE_INTERNAL_FIT &&
           imageOpenSize != OPEN_SIZE_EXTERNAL_FIT)
-        { imageOpenSize = OPEN_SIZE_INTERNAL_FIT; }
+        { imageOpenSize  = OPEN_SIZE_INTERNAL_FIT; }
       this.imageOpenSize = imageOpenSize;
       fireAll("imageOpenSize", oldValue, imageOpenSize); }
 
@@ -788,7 +791,7 @@ public Color getGridLightColor() { return gridLightColor; }
 
 /**
  * Задання світлого кольору фонової сітки
- * @param gridLightColor світлий колір фонової сітки
+ * @param gridLightColor новий світлий колір фонової сітки
  */
 public void setGridLightColor (Color gridLightColor)
     { if (gridLightColor == null) { gridLightColor = Color.LIGHT_GRAY; }
@@ -807,7 +810,7 @@ public Color getGridDarkColor() { return gridDarkColor; }
 
 /**
  * Задання темного кольору фонової сітки
- * @param gridDarkColor темний колір фонової сітки
+ * @param gridDarkColor новий темний колір фонової сітки
  */
 public void setGridDarkColor (Color gridDarkColor)
     { if (gridDarkColor == null) { gridDarkColor = Color.DARK_GRAY; }
@@ -826,7 +829,7 @@ public int getGridSize() { return gridSize; }
 
 /**
  * Задання розміру фонової сітки
- * @param gridSize розмір фонової сітки
+ * @param gridSize новий розмір фонової сітки
  */
 public void setGridSize (int gridSize)
     { if      (gridSize > 99) { gridSize = 99; }
@@ -838,8 +841,16 @@ public void setGridSize (int gridSize)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання штриха регіону масштабування
+ * @return штрих регіону масштабування
+ */
 public BasicStroke getRegionStroke() { return regionStroke; }
 
+/**
+ * Задання штриха регіону масштабування
+ * @param regionStroke новий штрих регіону масштабування
+ */
 public void setRegionStroke (BasicStroke regionStroke)
     { if (regionStroke == null) {
           regionStroke = new BasicStroke(2f, BasicStroke.CAP_BUTT, 
@@ -856,8 +867,16 @@ public void setRegionStroke (BasicStroke regionStroke)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання видимості додаткового штриха регіону масштабування
+ * @return true, якщо видимий
+ */
 public boolean isRegionAdditionalStroke() { return regionAdditionalStroke; }
 
+/**
+ * Задання видимості додаткового штриха регіону масштабування
+ * @param regionAdditionalStroke true - видимий, false - невидимий
+ */
 public void setRegionAdditionalStroke (boolean regionAdditionalStroke)
     { boolean oldValue = this.regionAdditionalStroke;
       this.regionAdditionalStroke = regionAdditionalStroke;
@@ -865,8 +884,16 @@ public void setRegionAdditionalStroke (boolean regionAdditionalStroke)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання світлого кольору рамки регіону масштабування
+ * @return світлий колір рамки регіону масштабування
+ */
 public Color getRegionLightColor() { return regionLightColor; }
 
+/**
+ * Задання світлого кольору рамки регіону масштабування
+ * @param regionLightColor новий світлий колір рамки регіону масштабування
+ */
 public void setRegionLightColor (Color regionLightColor)
     { if (regionLightColor == null) { regionLightColor = Color.WHITE; }
       Color oldValue = this.regionLightColor;
@@ -875,8 +902,16 @@ public void setRegionLightColor (Color regionLightColor)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання темного кольору рамки регіону масштабування
+ * @return темний колір рамки регіону масштабування
+ */
 public Color getRegionDarkColor() { return regionDarkColor; }
 
+/**
+ * Задання темного кольору рамки регіону масштабування
+ * @param regionDarkColor новий темний колір рамки регіону масштабування
+ */
 public void setRegionDarkColor (Color regionDarkColor)
     { if (regionDarkColor == null) { regionDarkColor = Color.DARK_GRAY; }
       Color oldValue = this.regionDarkColor;
@@ -885,8 +920,70 @@ public void setRegionDarkColor (Color regionDarkColor)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання мінімального розміру регіону масштабування
+ * @return мінімальний розмір регіону масштабування
+ */
+public int getRegionMinimumSize() { return regionMinimumSize; }
+
+/**
+ * Задання мінімального розміру регіону масштабування
+ * @param regionMinimumSize новий мінімальний розмір регіону масштабування
+ */
+public void setRegionMinimumSize (int regionMinimumSize)
+    { if (regionMinimumSize < 3) { regionMinimumSize = 3; }
+      int oldValue = this.regionMinimumSize;
+      this.regionMinimumSize = regionMinimumSize;
+      fireAll("regionMinimumSize", oldValue, regionMinimumSize); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Отримання розмірів області масштабування
+ * @return розміри області масштабування
+ */
+public Dimension getZoomArea() { return zoomArea; }
+
+/**
+ * Задання розмірів області масштабування
+ * @param zoomArea нові розміри області масштабування
+ */
+public void setZoomArea (Dimension zoomArea)
+    { if (zoomArea == null) { zoomArea = new Dimension(200, 200); }
+      Dimension oldValue = this.zoomArea;
+      this.zoomArea = zoomArea;
+      fireAll("zoomArea", oldValue, zoomArea); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Отримання відступів області масштабування
+ * @return відступи області масштабування
+ */
+public Dimension getZoomOffset() { return zoomOffset; }
+
+/**
+ * Задання відступів області масштабування
+ * @param zoomOffset нові відступи області масштабування
+ */
+public void setZoomOffset (Dimension zoomOffset)
+    { if (zoomOffset == null) { zoomOffset = new Dimension(0, 0); }
+      Dimension oldValue = this.zoomOffset;
+      this.zoomOffset = zoomOffset;
+      fireAll("zoomOffset", oldValue, zoomOffset); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Отримання рівня масштабування лупи
+ * @return рівень масштабування лупи
+ */
 public float getZoomLevel() { return zoomLevel; }
 
+/**
+ * Задання рівня масштабування лупи
+ * @param zoomLevel новий рівень масштабування лупи
+ */
 public void setZoomLevel (float zoomLevel)
     { if (zoomLevel < zoomLevels[0])
           { zoomLevel = zoomLevels[0]; }
@@ -905,25 +1002,246 @@ public void setZoomLevel (float zoomLevel)
       fireAll("zoomLevel", oldValue, zoomLevel); }
 
 ///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Отримання типу фігури області масштабування
+ * @return ZOOM_SHAPE_RECTANGLE або ZOOM_SHAPE_ELLIPSE
+ */
+public int getZoomShapeType() { return zoomShapeType; }
+
+/**
+ * Задання типу фігури області масштабування
+ * @param zoomShapeType ZOOM_SHAPE_RECTANGLE або ZOOM_SHAPE_ELLIPSE
+ */
+public void setZoomShapeType (int zoomShapeType)
+    { int oldValue = this.zoomShapeType;
+      if (zoomShapeType != ZOOM_SHAPE_RECTANGLE &&
+          zoomShapeType != ZOOM_SHAPE_ELLIPSE)
+        { zoomShapeType  = ZOOM_SHAPE_ELLIPSE; }
+      this.zoomShapeType = zoomShapeType;
+      fireAll("zoomShapeType", oldValue, zoomShapeType); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Отримання видимості I рамки лупи
+ * @return true, якщо видима
+ */
+public boolean isZoomFirstBorderVisible() { return zoomFirstBorderVisible; }
+
+/**
+ * Задання видимості I рамки лупи
+ * @param zoomFirstBorderVisible true - видима, false - невидима
+ */
+public void setZoomFirstBorderVisible (boolean zoomFirstBorderVisible)
+    { boolean oldValue = this.zoomFirstBorderVisible;
+      this.zoomFirstBorderVisible = zoomFirstBorderVisible;
+      fireAll("zoomFirstBorderVisible", oldValue, zoomFirstBorderVisible); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Отримання видимості II рамки лупи
+ * @return true, якщо видима
+ */
+public boolean isZoomSecondBorderVisible() { return zoomSecondBorderVisible; }
+
+/**
+ * Задання видимості II рамки лупи
+ * @param zoomSecondBorderVisible true - видима, false - невидима
+ */
+public void setZoomsecondBorderVisible (boolean zoomSecondBorderVisible)
+    { boolean oldValue = this.zoomSecondBorderVisible;
+      this.zoomSecondBorderVisible = zoomSecondBorderVisible;
+      fireAll("zoomSecondBorderVisible", oldValue, zoomSecondBorderVisible); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Отримання ширини I рамки лупи
+ * @return ширина I рамки лупи
+ */
+public int getZoomFirstBorderWidth() { return zoomFirstBorderWidth; }
+
+/**
+ * Задання ширини I рамки лупи
+ * @param zoomFirstBorderWidth нова ширина I рамки лупи
+ */
+public void setZoomFirstBorderWidth (int zoomFirstBorderWidth)
+    { int oldValue = this.zoomFirstBorderWidth;
+      this.zoomFirstBorderWidth = zoomFirstBorderWidth;
+      fireAll("zoomFirstBorderWidth", oldValue, zoomFirstBorderWidth); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Отримання ширини II рамки лупи
+ * @return ширина II рамки лупи
+ */
+public int getZoomSecondBorderWidth() { return zoomSecondBorderWidth; }
+
+/**
+ * Задання ширини II рамки лупи
+ * @param zoomSecondBorderWidth нова ширина II рамки лупи
+ */
+public void setZoomSecondBorderWidth (int zoomSecondBorderWidth)
+    { int oldValue = this.zoomSecondBorderWidth;
+      this.zoomSecondBorderWidth = zoomSecondBorderWidth;
+      fireAll("zoomSecondBorderWidth", oldValue, zoomSecondBorderWidth); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Отримання відступу I рамки лупи
+ * @return відступ I рамки лупи
+ */
+public int getZoomFirstBorderGap() { return zoomFirstBorderGap; }
+
+/**
+ * Задання відступу I рамки лупи
+ * @param zoomFirstBorderGap новий відступ I рамки лупи
+ */
+public void setZoomFirstBorderGap (int zoomFirstBorderGap)
+    { int oldValue = this.zoomFirstBorderGap;
+      this.zoomFirstBorderGap = zoomFirstBorderGap;
+      fireAll("zoomFirstBorderGap", oldValue, zoomFirstBorderGap); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Отримання відступу II рамки лупи
+ * @return відступ II рамки лупи
+ */
+public int getZoomSecondBorderGap() { return zoomSecondBorderGap; }
+
+/**
+ * Задання відступу II рамки лупи
+ * @param zoomSecondBorderGap новий відступ II рамки лупи
+ */
+public void setZoomSecondBorderGap (int zoomSecondBorderGap)
+    { int oldValue = this.zoomSecondBorderGap;
+      this.zoomSecondBorderGap = zoomSecondBorderGap;
+      fireAll("zoomSecondBorderGap", oldValue, zoomSecondBorderGap); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Отримання кольору I рамки лупи
+ * @return колір I рамки лупи
+ */
+public Color getZoomFirstBorderColor() { return zoomFirstBorderColor; }
+
+/**
+ * Задання кольору I рамки лупи
+ * @param zoomFirstBorderColor новий колір I рамки лупи
+ */
+public void setZoomFirstBorderColor (Color zoomFirstBorderColor)
+    { if (zoomFirstBorderColor == null) { zoomFirstBorderColor =
+                                          Color.DARK_GRAY; }
+      Color oldValue = this.zoomFirstBorderColor;
+      this.zoomFirstBorderColor = zoomFirstBorderColor;
+      fireAll("zoomFirstBorderColor", oldValue, zoomFirstBorderColor); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Отримання кольору II рамки лупи
+ * @return колір II рамки лупи
+ */
+public Color getZoomSecondBorderColor() { return zoomSecondBorderColor; }
+
+/**
+ * Задання кольору II рамки лупи
+ * @param zoomSecondBorderColor новий колір II рамки лупи
+ */
+public void setZoomSecondBorderColor (Color zoomSecondBorderColor)
+    { if (zoomSecondBorderColor == null) { zoomSecondBorderColor =
+                                           Color.GRAY; }
+      Color oldValue = this.zoomSecondBorderColor;
+      this.zoomSecondBorderColor = zoomSecondBorderColor;
+      fireAll("zoomSecondBorderColor", oldValue, zoomSecondBorderColor); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Отримання видимості курсора при збільшенні
+ * @return true, якщо видимий
+ */
+public boolean isZoomShowCursor() { return zoomShowCursor; }
+
+/**
+ * Задання видимості курсора при збільшенні
+ * @param zoomShowCursor true - видимий, false - невидимий
+ */
+public void setZoomShowCursor (boolean zoomShowCursor)
+    { boolean oldValue = this.zoomShowCursor;
+      this.zoomShowCursor = zoomShowCursor;
+      fireAll("zoomShowCursor", oldValue, zoomShowCursor); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Отримання видимості лупи за межею компонента
+ * @return true, якщо видима
+ */
+public boolean isDrugZoomOut() { return drugZoomOut; }
+
+/**
+ * Задання видимості лупи за межею компонента
+ * @param drugZoomOut true - видима, false - невидима
+ */
+public void setDrugZoomOut (boolean drugZoomOut)
+    { boolean oldValue = this.drugZoomOut;
+      this.drugZoomOut = drugZoomOut;
+      fireAll("drugZoomOut", oldValue, drugZoomOut); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Отримання інвертування лупи за межею компонента
+ * @return true, якщо інвертовано
+ */
+public boolean isInvertZoomOut() { return invertZoomOut; }
+
+/**
+ * Задання інвертування лупи за межею компонента
+ * @param invertZoomOut true - інвертовано, false - неінвертовано
+ */
+public void setInvertZoomOut (boolean invertZoomOut)
+    { boolean oldValue = this.invertZoomOut;
+      this.invertZoomOut = invertZoomOut;
+      fireAll("invertZoomOut", oldValue, invertZoomOut); }
+
+///////////////////////////////////////////////////////////////////////////////
 // Додавання та видалення прослуховувачів подій ///////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Додавання нового прослуховувача типу JImageViewListener
+ * @param listener новий прослуховувач типу JImageViewListener
+ */
 public void addJImageViewListener (JImageViewListener listener)
     { getListeners().add(listener); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Видалення існуючого прослуховувача типу JImageViewListener
+ * @param listener існуючий прослуховувач типу JImageViewListener
+ */
 public void removeJImageViewListener (JImageViewListener listener)
     { getListeners().remove(listener); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+// Отримання доступних прослуховувачів типу JImageViewListener
 private ArrayList <JImageViewListener> getListeners()
     { if (listeners == null) { listeners = new ArrayList<>(); }
       return listeners; }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+// Відправка подій усім доступним прослуховувачам
 private void fireAll (String name, Object oldValue, Object newValue) {
     
     fireEvent          (name, oldValue, newValue);
@@ -933,6 +1251,7 @@ private void fireAll (String name, Object oldValue, Object newValue) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+// Відправка подій доступним прослуховувачам типу JImageViewListener
 private void fireEvent (String name, Object oldValue, Object newValue) {
 
 JImageViewEvent event = new JImageViewEvent(this, oldValue, newValue);
@@ -956,6 +1275,8 @@ for (JImageViewListener listener : getListeners()) {
               -> listener.CMBEnableChange(event);
         case "RMBEnable"
               -> listener.RMBEnableChange(event);
+        case "ZMBEnable"
+              -> listener.ZMBEnableChange(event);
         case "wheelEnable"
               -> listener.wheelEnableChange(event);
         case "wheelInvert"
@@ -978,7 +1299,38 @@ for (JImageViewListener listener : getListeners()) {
               -> listener.regionLightColorChange(event);
         case "regionDarkColor"
               -> listener.regionDarkColorChange(event);
-        
+        case "regionMinimumSize"
+              -> listener.regionMinimumSizeChange(event);
+        case "zoomArea"
+              -> listener.zoomAreaChange(event);
+        case "zoomOffset"
+              -> listener.zoomOffsetChange(event);
+        case "zoomLevel"
+              -> listener.zoomLevelChange(event);
+        case "zoomShapeType"
+              -> listener.zoomShapeTypeChange(event);
+        case "zoomFirstBorderVisible"
+              -> listener.zoomFirstBorderVisibleChange(event);
+        case "zoomSecondBorderVisible"
+              -> listener.zoomSecondBorderVisibleChange(event);
+        case "zoomFirstBorderWidth"
+              -> listener.zoomFirstBorderWidthChange(event);
+        case "zoomSecondBorderWidth"
+              -> listener.zoomSecondBorderWidthChange(event);
+        case "zoomFirstBorderGap"
+              -> listener.zoomFirstBorderGapChange(event);
+        case "zoomSecondBorderGap"
+              -> listener.zoomSecondBorderGapChange(event);
+        case "zoomFirstBorderColor"
+              -> listener.zoomFirstBorderColorChange(event);
+        case "zoomSecondBorderColor"
+              -> listener.zoomSecondBorderColorChange(event);
+        case "zoomShowCursor"
+              -> listener.zoomShowCursorChange(event);
+        case "drugZoomOut"
+              -> listener.drugZoomOutChange(event);
+        case "invertZoomOut"
+              -> listener.invertZoomOutChange(event);
     }
 }
 }
@@ -1363,8 +1715,7 @@ private Cursor getUnvisibleCursor() {
 // Прослуховування та обробка подій ///////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-private final MouseListener mouseListener
-        = new MouseAdapter() {
+private final MouseListener mouseListener = new MouseAdapter() {
 
 @Override
 public void mouseEntered (MouseEvent me) { cursorOnImage = true; }
@@ -1443,8 +1794,8 @@ public void mouseReleased (MouseEvent me) {
             if (zmbPressed || cmbPressed || rmbPressed) { return; }
             
             if (specifyRegion)
-                { if (regionNorm.width  <= regionMinSize ||
-                      regionNorm.height <= regionMinSize) { setRegion(); }
+                { if (regionNorm.width  <= regionMinimumSize ||
+                      regionNorm.height <= regionMinimumSize) { setRegion(); }
                   else { updateCursor();
                          setRegion(regionNorm); } }
             else
