@@ -37,6 +37,9 @@ public void CMBEnableChange (JImageViewEvent evt) {}
 public void RMBEnableChange (JImageViewEvent evt) {}
 
 @Override
+public void ZMBEnableChange (JImageViewEvent evt) {}
+
+@Override
 public void wheelEnableChange (JImageViewEvent evt) {}
 
 @Override

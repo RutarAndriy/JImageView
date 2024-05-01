@@ -11,6 +11,7 @@ import java.awt.image.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 
+import static java.awt.Cursor.*;
 import static java.awt.RenderingHints.*;
 
 // ............................................................................
@@ -42,16 +43,10 @@ public static final float ZOOM_SCALE_X5_00 = 5.00f;
 
 // ............................................................................
 
-private static final Cursor CURSOR_HAND
-    = new Cursor(Cursor.HAND_CURSOR);
-
-private static final Cursor CURSOR_MOVE
-    = new Cursor(Cursor.MOVE_CURSOR);
-
-private static final Cursor CURSOR_REGION
-    = new Cursor(Cursor.CROSSHAIR_CURSOR);
-
-private static Cursor CURSOR_DEFAULT = null;
+private static final Cursor CURSOR_HAND    = new Cursor(HAND_CURSOR);
+private static final Cursor CURSOR_MOVE    = new Cursor(MOVE_CURSOR);
+private static final Cursor CURSOR_REGION  = new Cursor(CROSSHAIR_CURSOR);
+private static       Cursor CURSOR_DEFAULT = null;
 
 // ............................................................................
 
@@ -68,55 +63,42 @@ private final int[] scales =
 private final float[] zoomLevels =
     { 1.25f, 1.50f, 1.75f, 2.00f, 2.25f, 2.50f, 3.00f, 4.00f, 5.00f };
 
-// ............................................................................
+///////////////////////////////////////////////////////////////////////////////
+// Змінні, які реалізують основний функціонал компонента //////////////////////
 
 private BufferedImage image;                           // Зображення для показу
 private BufferedImage errorImage;     // Зображення яке показується при помилці
-
-// ............................................................................
-
-private boolean gridVisible = true;                             // Фонова сітка
-private Color gridLightColor = Color.LIGHT_GRAY;       // I колір фонової сітки
-private Color gridDarkColor  = Color.DARK_GRAY;       // II колір фонової сітки
-private int gridSize = 25;                                      // Розмір сітки
-
+private int imageW;                          // Ширина оригінального зображення
+private int imageH;                          // Висота оригінального зображення
+private float imageScale;                                 // Масштаб зображення
+private int imageScaleW;                    // Ширина масштабованого зображення
+private int imageScaleH;                    // Висота масштабованого зображення
+private int globalScaleMin = scales[0];                  // Мінімальний масштаб
+private int globalScaleMax = scales[scales.length - 1]; // Максимальний масштаб
+private float imageScaleMax;                  // Мінімальний масштаб зображення
+private float imageScaleMin;                 // Максимальний масштаб зображення
+private float imageScaleInternalFit;     // Масштаб для внутрішнього заповнення
+private float imageScaleExternalFit;      // Масштаб для зовнішнього заповнення
+private int imageScaleType = SCALE_TYPE_FAST;              // Тип масштабування
+private int imageOpenSize = OPEN_SIZE_INTERNAL_FIT;        // Розмір зображення
 private boolean lmbEnable   = true;  // Переміщення зображення за допомогою ЛКМ
 private boolean cmbEnable   = true;           // Зміна вигляду за допопогою СКМ
 private boolean rmbEnable   = true;            // Масштабування за допоогою ПКМ
 private boolean zmbEnable   = true;     // Вибір регіону за допомогою ЛКМ + ПКМ
 private boolean wheelEnable = true;             // Масштабування колесиком миші
 private boolean wheelInvert = false;              // Інвертування колесика миші
-
-// ............................................................................
-
-private int imageW;                          // Ширина оригінального зображення
-private int imageH;                          // Висота оригінального зображення
-
-private float imageScale;                                 // Масштаб зображення
-
-private int imageScaleW;                    // Ширина масштабованого зображення
-private int imageScaleH;                    // Висота масштабованого зображення
-
-private int globalScaleMin = scales[0];                  // Мінімальний масштаб
-private int globalScaleMax = scales[scales.length - 1]; // Максимальний масштаб
-
-private float imageScaleMax;                  // Мінімальний масштаб зображення
-private float imageScaleMin;                 // Максимальний масштаб зображення
-private float imageScaleInternalFit;     // Масштаб для внутрішнього заповнення
-private float imageScaleExternalFit;      // Масштаб для зовнішнього заповнення
-
-private int imageScaleType = SCALE_TYPE_FAST;              // Тип масштабування
-private int imageOpenSize = OPEN_SIZE_INTERNAL_FIT;        // Розмір зображення
-
 private boolean drugImageOut = true;         // Переміщення за межею компонента
 
-private boolean lmbPressed;                                    // ЛКМ натиснута
-private boolean cmbPressed;                                    // СКМ натиснута
-private boolean rmbPressed;                                    // ПКМ натиснута
-private boolean zmbPressed;                              // ЛКМ і ПКМ натиснуті
+///////////////////////////////////////////////////////////////////////////////
+// Змінні, які мають відношення до фонової сітки //////////////////////////////
 
-private boolean cursorOnImage;      // Знаходження курсора всередині компонента
-private boolean scrollBarVisible;        // Видимість скролбарів, хоча б одного
+private boolean gridVisible = true;                             // Фонова сітка
+private Color gridLightColor = Color.LIGHT_GRAY;       // I колір фонової сітки
+private Color gridDarkColor  = Color.DARK_GRAY;       // II колір фонової сітки
+private int gridSize = 25;                                      // Розмір сітки
+
+///////////////////////////////////////////////////////////////////////////////
+// Змінні, які мають відношення до регіону масштабування //////////////////////
 
 private boolean specifyRegion;                 // Задання регіону масштабування
 private Rectangle regionOrig;                            // Оригінальний регіон
@@ -129,31 +111,39 @@ private BasicStroke regionStroke;           // Основний штрих ви�
 private BasicStroke regionStrokeAdditional;     // Доп. штрих виділення регіону
 private boolean regionAdditionalStroke = true;  // Малювання додаткового штриха
 
-private Point zoomOrigin;                          // Центр вікна масштабування
-private Dimension zoomArea = new Dimension(200, 200);          // Розміри вікна
-private Dimension zoomOffset = new Dimension(0, 0);            // Відступ вікна
-private float zoomLevel = ZOOM_SCALE_X2_50;       // Рівень масштабування вікна
-private int zoomShapeType = 1;                       // Тип вікна масштабування
-private boolean zoomFirstBorderVisible = true;             // Видимість I рамки
-private boolean zoomSecondBorderVisible = true;           // Видимість II рамки
-private int zoomFirstBorderWidth = 1;     // Ширина I рамки вікна масштабування
-private int zoomSecondBorderWidth = 3;   // Ширина II рамки вікна масштабування
-private int zoomFirstBorderGap = 1;      // Відступ I рамки вікна масштабування
-private int zoomSecondBorderGap = -1;    // Віступ II рамки вікна масштабування
-private Color zoomFirstBorderColor = Color.DARK_GRAY;          // Колір I рамки
-private Color zoomSecondBorderColor = Color.GRAY;             // Колір II рамки
+///////////////////////////////////////////////////////////////////////////////
+// Змінні, які мають відношення до області масштабування (лупи) ///////////////
+
+private Point zoomOrigin;                          // Центр лупи
+private Dimension zoomArea = new Dimension(200, 200);           // Розміри лупи
+private Dimension zoomOffset = new Dimension(0, 0);             // Відступ лупи
+private float zoomLevel = ZOOM_SCALE_X2_50;        // Рівень масштабування лупи
+private int zoomShapeType = 1;                                      // Тип лупи
+private boolean zoomFirstBorderVisible = true;        // Видимість I рамки лупи
+private boolean zoomSecondBorderVisible = true;      // Видимість II рамки лупи
+private int zoomFirstBorderWidth = 1;                    // Ширина I рамки лупи
+private int zoomSecondBorderWidth = 3;                  // Ширина II рамки лупи
+private int zoomFirstBorderGap = 1;                     // Відступ I рамки лупи
+private int zoomSecondBorderGap = -1;                   // Віступ II рамки лупи
+private Color zoomFirstBorderColor = Color.DARK_GRAY;     // Колір I рамки лупи
+private Color zoomSecondBorderColor = Color.GRAY;        // Колір II рамки лупи
 private boolean zoomShowCursor = true;      // Видимість курсора при збільшенні
 private boolean drugZoomOut = true;       // Видимість лупи за межею компонента
+private boolean invertZoomOut = false;  // Інвертувати лупу за межею компонента
 
-// ............................................................................
+///////////////////////////////////////////////////////////////////////////////
+// Допоміжні змінні /////////////////////////////////////////// ///////////////
 
-private Point origin;        // Точка, у якій відбулося натискання клавіші миші
+private boolean lmbPressed;                                    // ЛКМ натиснута
+private boolean cmbPressed;                                    // СКМ натиснута
+private boolean rmbPressed;                                    // ПКМ натиснута
+private boolean zmbPressed;                              // ЛКМ і ПКМ натиснуті
+private boolean cursorOnImage;      // Знаходження курсора всередині компонента
+private boolean scrollBarVisible;        // Видимість скролбарів, хоча б одного
+private Point pressOrigin;   // Точка, у якій відбулося натискання клавіші миші
 private JPanel panelRoot;                    // Панель для малювання зображення
 private JScrollBar hScrollBar, vScrollBar;           // Гор. та верт. скролбари
-
-// ............................................................................
-
-private static ArrayList <JImageViewListener> listeners = null;
+private ArrayList <JImageViewListener> listeners = null;      // Прослуховувачі
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -213,16 +203,20 @@ public void paintComponent (Graphics g) {
 
     if (zoomOrigin != null) {
         
-        if (!drugZoomOut) {
-        
         int vw = getViewport().getWidth() - 1;
         int vh = getViewport().getHeight() - 1;
         
+        // ....................................................................
+        
+        if (!drugZoomOut) {
+
         if      (zoomOrigin.x < 0)  { zoomOrigin.x = 0;  }
         else if (zoomOrigin.x > vw) { zoomOrigin.x = vw; }
         
         if      (zoomOrigin.y < 0)  { zoomOrigin.y = 0;  }
         else if (zoomOrigin.y > vh) { zoomOrigin.y = vh; } }
+        
+        // ....................................................................
         
         Area newClip;
         Shape oldClip = g2.getClip();
@@ -240,28 +234,49 @@ public void paintComponent (Graphics g) {
         int zX = zoomX - (int)(iX * zoomLevel);
         int zY = zoomY - (int)(iY * zoomLevel);
         
-        int s1 = zoomFirstBorderWidth + zoomFirstBorderGap +
+        int s1 = zoomFirstBorderWidth    + zoomFirstBorderGap +
                  zoomSecondBorderWidth*2 + zoomSecondBorderGap;
         int s2 = zoomSecondBorderWidth   + zoomSecondBorderGap;
+        int s3 = zoomFirstBorderWidth*2  + zoomFirstBorderGap +
+                 zoomSecondBorderWidth*2 + zoomSecondBorderGap;
+        
+        Dimension zOffset = new Dimension(zoomOffset);
+        
+        // ....................................................................
+        
+        if (invertZoomOut) {
+        
+        int a = zoomArea.width/2  + zoomArea.width/30  + s3;
+        int b = zoomArea.height/2 + zoomArea.height/30 + s3;
+        
+        if (zoomOrigin.x + a + zoomOffset.width > vw &&
+            zoomOffset.width > 0) { zOffset.width *= -1; }
+        if (zoomOrigin.x - a + zoomOffset.width < 0 &&
+            zoomOffset.width < 0) { zOffset.width *= -1; }
+
+        if (zoomOrigin.y + b - zoomOffset.height > vh &&
+            zoomOffset.height < 0) { zOffset.height *= -1; }
+        if (zoomOrigin.y - b - zoomOffset.height < 0 &&
+            zoomOffset.height > 0) { zOffset.height *= -1; } }
         
         // ....................................................................
         
         if (zoomShapeType == 0)
-            { newClip = new Area(new Rectangle2D.Float(x+zoomOffset.width,
-                                                       y-zoomOffset.height,
+            { newClip = new Area(new Rectangle2D.Float(x+zOffset.width,
+                                                       y-zOffset.height,
                                                        zoomArea.width + 1,
                                                        zoomArea.height + 1)); }
         else
-            { newClip = new Area(new Ellipse2D.Float(x+zoomOffset.width,
-                                                     y-zoomOffset.height,
+            { newClip = new Area(new Ellipse2D.Float(x+zOffset.width,
+                                                     y-zOffset.height,
                                                      zoomArea.width + 1,
                                                      zoomArea.height + 1)); }
 
         newClip.intersect(new Area(oldClip));
         g2.setClip(newClip);
         
-        drawGrid(g2, zoomLevel, zX+zoomOffset.width, zY-zoomOffset.height);
-        g2.drawImage(image, zoomX+zoomOffset.width, zoomY-zoomOffset.height,
+        drawGrid(g2, zoomLevel, zX+zOffset.width, zY-zOffset.height);
+        g2.drawImage(image, zoomX+zOffset.width, zoomY-zOffset.height,
                      zoomW, zoomH, null);
         g2.setClip(oldClip);
         
@@ -273,20 +288,20 @@ public void paintComponent (Graphics g) {
         g2.setColor(zoomFirstBorderColor);
         g2.setStroke(new BasicStroke(zoomFirstBorderWidth*2));
         if (zoomShapeType == 0)
-            { g2.drawRect(x-s1+zoomOffset.width, y-s1-zoomOffset.height,
+            { g2.drawRect(x-s1+zOffset.width, y-s1-zOffset.height,
                           zoomArea.width + s1*2, zoomArea.height + s1*2); }
         else
-            { g2.drawOval(x-s1+zoomOffset.width, y-s1-zoomOffset.height,
+            { g2.drawOval(x-s1+zOffset.width, y-s1-zOffset.height,
                           zoomArea.width + s1*2, zoomArea.height + s1*2); } }
 
         if (zoomSecondBorderVisible) {
         g2.setColor(zoomSecondBorderColor);
         g2.setStroke(new BasicStroke(zoomSecondBorderWidth*2));
         if (zoomShapeType == 0)
-            { g2.drawRect(x-s2+zoomOffset.width, y-s2-zoomOffset.height,
+            { g2.drawRect(x-s2+zOffset.width, y-s2-zOffset.height,
                           zoomArea.width + s2*2, zoomArea.height + s2*2); }
         else
-            { g2.drawOval(x-s2+zoomOffset.width, y-s2-zoomOffset.height,
+            { g2.drawOval(x-s2+zOffset.width, y-s2-zOffset.height,
                           zoomArea.width + s2*2, zoomArea.height + s2*2); } }
         
         setImageScaleType(g2, imageScaleType);
@@ -488,6 +503,7 @@ public void zoomToOriginal() { setImageScale(100); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/** Збільшення масштабу лупи */
 public void magnifierZoomIn() {
     
     int id = zoomLevels.length - 1;
@@ -495,12 +511,11 @@ public void magnifierZoomIn() {
     for (int z = 0; z < zoomLevels.length - 1; z++) {
         if (zoomLevels[z] == currentLevel) { id = z + 1; } }
     
-    setZoomLevel(zoomLevels[id]);
-    
-}
+    setZoomLevel(zoomLevels[id]); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/** Зменшення масштабу лупи */
 public void magnifierZoomOut() {
     
     int id = 0;
@@ -508,16 +523,22 @@ public void magnifierZoomOut() {
     for (int z = zoomLevels.length - 1; z > 0; z--) {
         if (zoomLevels[z] == currentLevel) { id = z - 1; } }
 
-    setZoomLevel(zoomLevels[id]);
-    
-}
+    setZoomLevel(zoomLevels[id]); }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Getter'и та Setter'и - повертають та задають властивості компонента ////////
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання основного зображення
+ * @return основне зображення
+ */
 public BufferedImage getImage() { return image; }
 
+/**
+ * Задання основного зображення
+ * @param image нове основне зображення
+ */
 public void setImage (BufferedImage image)
     { if (image == null) { image = getErrorImage(); }       
       Image oldValue = this.image;
@@ -534,8 +555,16 @@ public void setImage (BufferedImage image)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання резервного зображення
+ * @return резервне зображення
+ */
 public BufferedImage getErrorImage() { return errorImage; }
 
+/**
+ * Задання резервного зображення (яке відображається при помилці)
+ * @param errorImage нове резервне зображення
+ */
 public void setErrorImage (BufferedImage errorImage)
     { if (errorImage == null) { errorImage = getRandomImage(); }
       Image oldValue = this.errorImage;
@@ -544,8 +573,16 @@ public void setErrorImage (BufferedImage errorImage)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання масштабу зображення
+ * @return масштаб зображення
+ */
 public float getImageScale() { return imageScale; }
 
+/**
+ * Задання масштабу зображення
+ * @param imageScale новий масштаб зображення
+ */
 public void setImageScale (float imageScale)
     { calculateImageLimitScale();
       if      (imageScale > globalScaleMax) { imageScale = globalScaleMax; }
@@ -561,27 +598,60 @@ public void setImageScale (float imageScale)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання типу масштабування зображення
+ * @return SCALE_TYPE_FAST або SCALE_TYPE_SMOOTH
+ */
 public int getImageScaleType() { return imageScaleType; }
 
+/**
+ * Задання типу масштабування зображення
+ * @param imageScaleType SCALE_TYPE_FAST або SCALE_TYPE_SMOOTH
+ */
 public void setImageScaleType (int imageScaleType)
     { int oldValue = this.imageScaleType;
+      if (imageScaleType != SCALE_TYPE_FAST &&
+          imageScaleType != SCALE_TYPE_SMOOTH)
+        { imageScaleType = SCALE_TYPE_FAST; }
       this.imageScaleType = imageScaleType;
       panelRoot.repaint();
       fireAll("imageScaleType", oldValue, imageScaleType); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання розміру відкривання зображення
+ * @return OPEN_SIZE_ORIGINAL, OPEN_SIZE_INTERNAL_FIT
+ * або OPEN_SIZE_EXTERNAL_FIT
+ */
 public int getImageOpenSize() { return imageOpenSize; }
 
+/**
+ * Задання розміру відкривання зображення
+ * @param imageOpenSize OPEN_SIZE_ORIGINAL, OPEN_SIZE_INTERNAL_FIT
+ * або OPEN_SIZE_EXTERNAL_FIT
+ */
 public void setImageOpenSize (int imageOpenSize)
     { int oldValue = this.imageOpenSize;
+      if (imageOpenSize != OPEN_SIZE_ORIGINAL &&
+          imageOpenSize != OPEN_SIZE_INTERNAL_FIT &&
+          imageOpenSize != OPEN_SIZE_EXTERNAL_FIT)
+        { imageOpenSize = OPEN_SIZE_INTERNAL_FIT; }
       this.imageOpenSize = imageOpenSize;
       fireAll("imageOpenSize", oldValue, imageOpenSize); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання доступності ЛКМ (переміщення зображення)
+ * @return true, якщо доступно
+ */
 public boolean isLMBEnable() { return lmbEnable; }
 
+/**
+ * Задання доступності ЛКМ (переміщення зображення)
+ * @param lmbEnable true - доступно, false - недоступно
+ */
 public void setLMBEnable (boolean lmbEnable)
     { boolean oldValue = this.lmbEnable;
       this.lmbEnable = lmbEnable;
@@ -590,8 +660,16 @@ public void setLMBEnable (boolean lmbEnable)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання доступності СКМ (зміна вигляду зображення)
+ * @return true, якщо доступно
+ */
 public boolean isCMBEnable() { return cmbEnable; }
 
+/**
+ * Задання доступності СКМ (зміна вигляду зображення)
+ * @param cmbEnable true - доступно, false - недоступно
+ */
 public void setCMBEnable (boolean cmbEnable)
     { boolean oldValue = this.cmbEnable;
       this.cmbEnable = cmbEnable;
@@ -599,8 +677,16 @@ public void setCMBEnable (boolean cmbEnable)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання доступності ПКМ (масштабування зображення)
+ * @return true, якщо доступно
+ */
 public boolean isRMBEnable() { return rmbEnable; }
 
+/**
+ * Задання доступності ПКМ (масштабування зображення)
+ * @param rmbEnable true - доступно, false - недоступно
+ */
 public void setRMBEnable (boolean rmbEnable)
     { boolean oldValue = this.rmbEnable;
       this.rmbEnable = rmbEnable;
@@ -608,8 +694,33 @@ public void setRMBEnable (boolean rmbEnable)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання доступності комбінації ЛКМ + ПКМ (масштабування регіону)
+ * @return true, якщо доступно
+ */
+public boolean isZMBEnable() { return zmbEnable; }
+
+/**
+ * Задання доступності комбінації ЛКМ + ПКМ (масштабування регіону)
+ * @param zmbEnable true - доступно, false - недоступно
+ */
+public void setZMBEnable (boolean zmbEnable)
+    { boolean oldValue = this.zmbEnable;
+      this.zmbEnable = zmbEnable;
+      fireAll("zmbEnable", oldValue, zmbEnable); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Отримання доступності колесика миші (зміна масштабу зображення)
+ * @return true, якщо доступно
+ */
 public boolean isWheelEnable() { return wheelEnable; }
 
+/**
+ * Задання доступності колесика миші (зміна масштабу зображення)
+ * @param wheelEnable true - доступно, false - недоступно
+ */
 public void setWheelEnable (boolean wheelEnable)
     { boolean oldValue = this.wheelEnable;
       this.wheelEnable = wheelEnable;
@@ -617,8 +728,16 @@ public void setWheelEnable (boolean wheelEnable)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання інвертування колесика миші
+ * @return true, якщо інвертовано
+ */
 public boolean isWheelInvert() { return wheelInvert; }
 
+/**
+ * Задання інвертування колесика миші
+ * @param wheelInvert true - інвертовано, false - неінвертовано
+ */
 public void setWheelInvert (boolean wheelInvert)
     { boolean oldValue = this.wheelInvert;
       this.wheelInvert = wheelInvert;
@@ -626,8 +745,16 @@ public void setWheelInvert (boolean wheelInvert)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання доступності переміщення зображення за межами компонента
+ * @return true, якщо доступно
+ */
 public boolean isDrugImageOut() { return drugImageOut; }
 
+/**
+ * Задання доступності переміщення зображення за межами компонента
+ * @param drugImageOut true - доступно, false - недоступно
+ */
 public void setDrugImageOut (boolean drugImageOut)
     { boolean oldValue = this.drugImageOut;
       this.drugImageOut = drugImageOut;
@@ -635,8 +762,16 @@ public void setDrugImageOut (boolean drugImageOut)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання видимості фонової сітки
+ * @return true, якщо видима
+ */
 public boolean isGridVisible() { return gridVisible; }
 
+/**
+ * Задання видимості фонової сітки
+ * @param gridVisible true - видима, false - прихована
+ */
 public void setGridVisible (boolean gridVisible)
     { boolean oldValue = this.gridVisible;
       this.gridVisible = gridVisible;
@@ -645,8 +780,16 @@ public void setGridVisible (boolean gridVisible)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання світлого кольору фонової сітки
+ * @return світлий колір фонової сітки
+ */
 public Color getGridLightColor() { return gridLightColor; }
 
+/**
+ * Задання світлого кольору фонової сітки
+ * @param gridLightColor світлий колір фонової сітки
+ */
 public void setGridLightColor (Color gridLightColor)
     { if (gridLightColor == null) { gridLightColor = Color.LIGHT_GRAY; }
       Color oldValue = this.gridLightColor;
@@ -656,8 +799,16 @@ public void setGridLightColor (Color gridLightColor)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання темного кольору фонової сітки
+ * @return темний колір фонової сітки
+ */
 public Color getGridDarkColor() { return gridDarkColor; }
 
+/**
+ * Задання темного кольору фонової сітки
+ * @param gridDarkColor темний колір фонової сітки
+ */
 public void setGridDarkColor (Color gridDarkColor)
     { if (gridDarkColor == null) { gridDarkColor = Color.DARK_GRAY; }
       Color oldValue = this.gridDarkColor;
@@ -667,8 +818,16 @@ public void setGridDarkColor (Color gridDarkColor)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Отримання розміру фонової сітки
+ * @return розмір фонової сітки
+ */
 public int getGridSize() { return gridSize; }
 
+/**
+ * Задання розміру фонової сітки
+ * @param gridSize розмір фонової сітки
+ */
 public void setGridSize (int gridSize)
     { if      (gridSize > 99) { gridSize = 99; }
       else if (gridSize <  3) { gridSize = 3;  }
@@ -1231,7 +1390,7 @@ public void mousePressed (MouseEvent me) {
                 { zmbPressed = false;
                   regionOrig.setLocation(getPointOnImage(me)); }
             else
-                { origin = getPointOnImage(me);
+                { pressOrigin = getPointOnImage(me);
                   panelRoot.setCursor(isScrollBarVisible() ? CURSOR_HAND :
                                                              CURSOR_DEFAULT); }
         }
@@ -1289,7 +1448,7 @@ public void mouseReleased (MouseEvent me) {
                   else { updateCursor();
                          setRegion(regionNorm); } }
             else
-                { origin = null;
+                { pressOrigin = null;
                   panelRoot.setCursor(CURSOR_DEFAULT); }
         }
         
@@ -1368,8 +1527,8 @@ public void mouseDragged (MouseEvent me) {
         
         Point point = getPointOnImage(me);
 
-        int deltaX = origin.x - point.x;
-        int deltaY = origin.y - point.y;
+        int deltaX = pressOrigin.x - point.x;
+        int deltaY = pressOrigin.y - point.y;
 
         Rectangle view = getViewport().getViewRect();
         view.x += deltaX;

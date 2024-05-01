@@ -61,6 +61,12 @@ public void CMBEnableChange (JImageViewEvent evt);
 public void RMBEnableChange (JImageViewEvent evt);
 
 /**
+ * Зміна можливості використання комбінації ЛКМ + ПКМ
+ * @param evt Подія типу JImageViewEvent
+ */
+public void ZMBEnableChange (JImageViewEvent evt);
+
+/**
  * Зміна можливості використання колесика миші
  * @param evt Подія типу JImageViewEvent
  */
