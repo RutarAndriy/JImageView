@@ -278,7 +278,9 @@ public void paintComponent (Graphics g) {
         newClip.intersect(new Area(oldClip));
         g2.setClip(newClip);
         
-        drawGrid(g2, zoomLevel, zX+zOffset.width, zY-zOffset.height);
+        if (gridVisible) { drawGrid(g2, zoomLevel, zX+zOffset.width,
+                                                   zY-zOffset.height); }
+        
         g2.drawImage(image, zoomX+zOffset.width, zoomY-zOffset.height,
                      zoomW, zoomH, null);
         g2.setClip(oldClip);
@@ -1050,7 +1052,7 @@ public boolean isZoomSecondBorderVisible() { return zoomSecondBorderVisible; }
  * Задання видимості II рамки лупи
  * @param zoomSecondBorderVisible true - видима, false - невидима
  */
-public void setZoomsecondBorderVisible (boolean zoomSecondBorderVisible)
+public void setZoomSecondBorderVisible (boolean zoomSecondBorderVisible)
     { boolean oldValue = this.zoomSecondBorderVisible;
       this.zoomSecondBorderVisible = zoomSecondBorderVisible;
       fireAll("zoomSecondBorderVisible", oldValue, zoomSecondBorderVisible); }

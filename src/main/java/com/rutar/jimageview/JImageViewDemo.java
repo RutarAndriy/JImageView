@@ -8,8 +8,6 @@ import java.awt.image.*;
 
 import static com.rutar.jimageview.JImageViewUtils.*;
 
-public class JImageViewDemo extends JFrame {
-
 // ............................................................................
 
 /**
@@ -17,6 +15,10 @@ public class JImageViewDemo extends JFrame {
  * @author Rutar_Andriy
  * 07.03.2024
  */
+
+public class JImageViewDemo extends JFrame {
+
+///////////////////////////////////////////////////////////////////////////////
 
 public JImageViewDemo() { initComponents(); }
 
@@ -135,6 +137,8 @@ public JImageViewDemo() { initComponents(); }
         rb_sb_never = new JRadioButton();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        image_view.setGridVisible(false);
 
         btn_open.setText("Вибрати зображення");
         btn_open.setActionCommand("btn_open");

@@ -119,6 +119,12 @@ property = new PropertyDescriptor("rmbEnable", JImageView.class,
 property.setPreferred(true);
 properties.add(property);
 
+// ZMBEnable
+property = new PropertyDescriptor("zmbEnable", JImageView.class,
+                                  "isZMBEnable", "setZMBEnable");
+property.setPreferred(true);
+properties.add(property);
+
 // WheelEnable
 property = new PropertyDescriptor("wheelEnable", JImageView.class,
                                   "isWheelEnable", "setWheelEnable");
@@ -185,6 +191,142 @@ properties.add(property);
 property = new PropertyDescriptor("regionDarkColor", JImageView.class,
                                   "getRegionDarkColor",
                                   "setRegionDarkColor");
+property.setPreferred(true);
+properties.add(property);
+
+// RegionMinimumSize
+property = new PropertyDescriptor("regionMinimumSize", JImageView.class,
+                                  "getRegionMinimumSize",
+                                  "setRegionMinimumSize");
+property.setPreferred(true);
+properties.add(property);
+
+// ZoomArea
+property = new PropertyDescriptor("zoomArea", JImageView.class,
+                                  "getZoomArea",
+                                  "setZoomArea");
+property.setPreferred(true);
+properties.add(property);
+
+// ZoomOffset
+property = new PropertyDescriptor("zoomOffset", JImageView.class,
+                                  "getZoomOffset",
+                                  "setZoomOffset");
+property.setPreferred(true);
+properties.add(property);
+
+// ZoomLevel
+property = new PropertyDescriptor("zoomLevel", JImageView.class,
+                                  "getZoomLevel",
+                                  "setZoomLevel");
+property.setPreferred(true);
+addToValuesList("ZOOM_SCALE_X1_25", ZOOM_SCALE_X1_25,
+                "JImageView.ZOOM_SCALE_X1_25");
+addToValuesList("ZOOM_SCALE_X1_50", ZOOM_SCALE_X1_50,
+                "JImageView.ZOOM_SCALE_X1_50");
+addToValuesList("ZOOM_SCALE_X1_75", ZOOM_SCALE_X1_75,
+                "JImageView.ZOOM_SCALE_X1_75");
+addToValuesList("ZOOM_SCALE_X2_00", ZOOM_SCALE_X2_00,
+                "JImageView.ZOOM_SCALE_X2_00");
+addToValuesList("ZOOM_SCALE_X2_25", ZOOM_SCALE_X2_25,
+                "JImageView.ZOOM_SCALE_X2_25");
+addToValuesList("ZOOM_SCALE_X2_50", ZOOM_SCALE_X2_50,
+                "JImageView.ZOOM_SCALE_X2_50");
+addToValuesList("ZOOM_SCALE_X3_00", ZOOM_SCALE_X3_00,
+                "JImageView.ZOOM_SCALE_X3_00");
+addToValuesList("ZOOM_SCALE_X4_00", ZOOM_SCALE_X4_00,
+                "JImageView.ZOOM_SCALE_X4_00");
+addToValuesList("ZOOM_SCALE_X5_00", ZOOM_SCALE_X5_00,
+                "JImageView.ZOOM_SCALE_X5_00");
+property.setValue("enumerationValues", getValuesList());
+properties.add(property);
+
+// ZoomShapeType
+property = new PropertyDescriptor("zoomShapeType", JImageView.class,
+                                  "getZoomShapeType",
+                                  "setZoomShapeType");
+property.setPreferred(true);
+addToValuesList("ZOOM_SHAPE_RECTANGLE", ZOOM_SHAPE_RECTANGLE,
+                "JImageView.ZOOM_SHAPE_RECTANGLE");
+addToValuesList("ZOOM_SHAPE_ELLIPSE",   ZOOM_SHAPE_ELLIPSE,
+                "JImageView.ZOOM_SHAPE_ELLIPSE");
+property.setValue("enumerationValues", getValuesList());
+properties.add(property);
+
+// ZoomFirstBorderVisible
+property = new PropertyDescriptor("zoomFirstBorderVisible", JImageView.class,
+                                  "isZoomFirstBorderVisible",
+                                  "setZoomFirstBorderVisible");
+property.setPreferred(true);
+properties.add(property);
+
+// ZoomSecondBorderVisible
+property = new PropertyDescriptor("zoomSecondBorderVisible", JImageView.class,
+                                  "isZoomSecondBorderVisible",
+                                  "setZoomSecondBorderVisible");
+property.setPreferred(true);
+properties.add(property);
+
+// ZoomFirstBorderWidth
+property = new PropertyDescriptor("zoomFirstBorderWidth", JImageView.class,
+                                  "getZoomFirstBorderWidth",
+                                  "setZoomFirstBorderWidth");
+property.setPreferred(true);
+properties.add(property);
+
+// ZoomSecondBorderWidth
+property = new PropertyDescriptor("zoomSecondBorderWidth", JImageView.class,
+                                  "getZoomSecondBorderWidth",
+                                  "setZoomSecondBorderWidth");
+property.setPreferred(true);
+properties.add(property);
+
+// ZoomFirstBorderGap
+property = new PropertyDescriptor("zoomFirstBorderGap", JImageView.class,
+                                  "getZoomFirstBorderGap",
+                                  "setZoomFirstBorderGap");
+property.setPreferred(true);
+properties.add(property);
+
+// ZoomSecondBorderGap
+property = new PropertyDescriptor("zoomSecondBorderGap", JImageView.class,
+                                  "getZoomSecondBorderGap",
+                                  "setZoomSecondBorderGap");
+property.setPreferred(true);
+properties.add(property);
+
+// ZoomFirstBorderColor
+property = new PropertyDescriptor("zoomFirstBorderColor", JImageView.class,
+                                  "getZoomFirstBorderColor",
+                                  "setZoomFirstBorderColor");
+property.setPreferred(true);
+properties.add(property);
+
+// ZoomSecondBorderColor
+property = new PropertyDescriptor("zoomSecondBorderColor", JImageView.class,
+                                  "getZoomSecondBorderColor",
+                                  "setZoomSecondBorderColor");
+property.setPreferred(true);
+properties.add(property);
+
+// ZoomShowCursor
+property = new PropertyDescriptor("zoomShowCursor", JImageView.class,
+                                  "isZoomShowCursor",
+                                  "setZoomShowCursor");
+property.setPreferred(true);
+properties.add(property);
+
+// DrugZoomOut
+property = new PropertyDescriptor("drugZoomOut", JImageView.class,
+                                  "isDrugZoomOut",
+                                  "setDrugZoomOut");
+property.setPreferred(true);
+properties.add(property);
+
+// InvertZoomOut
+property = new PropertyDescriptor("invertZoomOut", JImageView.class,
+                                  "isInvertZoomOut",
+                                  "setInvertZoomOut");
 property.setPreferred(true);
 properties.add(property);
 
