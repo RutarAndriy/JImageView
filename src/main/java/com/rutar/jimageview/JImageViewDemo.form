@@ -32,7 +32,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-              <Component id="image_view" pref="605" max="32767" attributes="0"/>
+              <Component id="image_view" pref="660" max="32767" attributes="0"/>
               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                   <Component id="sp_03" alignment="0" max="32767" attributes="0"/>
@@ -88,6 +88,14 @@
   </Layout>
   <SubComponents>
     <Component class="com.rutar.jimageview.JImageView" name="image_view">
+      <Properties>
+        <Property name="zoomOffset" type="java.awt.Point" editor="org.netbeans.beaninfo.editors.PointEditor">
+          <Point value="[-50, 50]"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="imageViewPropertyChange"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
         <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="pack();&#xa;setLocationRelativeTo(null);&#xa;&#xa;addWindowListener(new WindowAdapter() {&#xa;    boolean minimumSizeSet = false;&#xa;    @Override&#xa;    public void windowOpened (WindowEvent e) {&#xa;        if (!minimumSizeSet) {&#xa;            setMinimumSize(getSize());&#xa;            minimumSizeSet = true; } } });&#xa;"/>
@@ -243,6 +251,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_scale.setText(getRoundedValue(image_view.getImageScale()) + &quot;%&quot;);"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JButton" name="btn_set_scale">
           <Properties>
@@ -342,7 +353,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="image_view.isCMBEnable();"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_cmb.setSelected(image_view.isCMBEnable());"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="cb_rmb">
@@ -354,7 +365,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="image_view.isRMBEnable();"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_rmb.setSelected(image_view.isRMBEnable());"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="cb_wheel">
@@ -366,7 +377,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
               </Events>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="image_view.isWheelEnable();"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_wheel.setSelected(image_view.isWheelEnable());"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="cb_zmb">
@@ -377,6 +388,9 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_zmb.setSelected(image_view.isZMBEnable());"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JSeparator" name="sp_04">
             </Component>
@@ -385,13 +399,15 @@
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                   <ComponentRef name="bg_1"/>
                 </Property>
-                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="&#x428;&#x432;&#x438;&#x434;&#x43a;&#x435; &#x43c;&#x430;&#x441;&#x448;&#x442;&#x430;&#x431;&#x443;&#x432;&#x430;&#x43d;&#x43d;&#x44f;"/>
                 <Property name="actionCommand" type="java.lang.String" value="rb_zoom_fast"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="rb_zoom_fast.setSelected(image_view.getImageScaleType() == SCALE_TYPE_FAST);"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JRadioButton" name="rb_zoom_smooth">
               <Properties>
@@ -404,6 +420,9 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="rb_zoom_smooth.setSelected(image_view.getImageScaleType() == SCALE_TYPE_SMOOTH);"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
@@ -459,6 +478,9 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_grid.setSelected(image_view.isGridVisible());"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JSeparator" name="sp_05">
             </Component>
@@ -478,6 +500,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_grid_light.setText(getColorValue(image_view.getGridLightColor()));&#xa;"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="btn_grid_light">
                   <Properties>
@@ -506,6 +531,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_grid_dark.setText(getColorValue(image_view.getGridDarkColor()));&#xa;"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="btn_grid_dark">
                   <Properties>
@@ -534,6 +562,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_grid_size.setText(image_view.getGridSize() + &quot;px&quot;);"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="btn_grid_size">
                   <Properties>
@@ -561,7 +592,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="rb_magn_oval" max="32767" attributes="0"/>
                           <Component id="rb_magn_rect" max="32767" attributes="0"/>
@@ -575,7 +606,7 @@
                           <Component id="sp_09" max="32767" attributes="0"/>
                           <Component id="tab_pnl_02" alignment="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -603,7 +634,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="sp_09" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="tab_pnl_02" min="-2" max="-2" attributes="0"/>
+                      <Component id="tab_pnl_02" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -615,13 +646,15 @@
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                   <ComponentRef name="bg_2"/>
                 </Property>
-                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="&#x41e;&#x432;&#x430;&#x43b;&#x44c;&#x43d;&#x430; &#x43b;&#x443;&#x43f;&#x430;"/>
                 <Property name="actionCommand" type="java.lang.String" value="rb_magn_oval"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="rb_magn_oval.setSelected(image_view.getZoomShapeType() == ZOOM_SHAPE_ELLIPSE);"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JRadioButton" name="rb_magn_rect">
               <Properties>
@@ -634,6 +667,9 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="rb_magn_rect.setSelected(image_view.getZoomShapeType() == ZOOM_SHAPE_RECTANGLE);"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JSeparator" name="sp_06">
             </Component>
@@ -653,6 +689,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_magn_w.setText(image_view.getZoomArea().width + &quot;px&quot;);"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="btn_magn_w">
                   <Properties>
@@ -681,6 +720,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_magn_h.setText(image_view.getZoomArea().height + &quot;px&quot;);"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="btn_magn_h">
                   <Properties>
@@ -730,6 +772,9 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_hide_cursor.setSelected(!image_view.isZoomShowCursor());"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JSeparator" name="sp_09">
             </Component>
@@ -749,11 +794,12 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="pnl_21" max="32767" attributes="0"/>
                                   <Component id="cb_f_zoom_border" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="pnl_19" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="pnl_19" alignment="0" pref="341" max="32767" attributes="0"/>
                                   <Component id="pnl_20" alignment="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
@@ -769,6 +815,8 @@
                               <Component id="pnl_19" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="pnl_20" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="pnl_21" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -783,6 +831,9 @@
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
                       </Events>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_f_zoom_border.setSelected(image_view.isZoomFirstBorderVisible());"/>
+                      </AuxValues>
                     </Component>
                     <Container class="javax.swing.JPanel" name="pnl_19">
 
@@ -800,6 +851,9 @@
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
                           </Events>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_f_zoom_border_w.setText(image_view.getZoomFirstBorderWidth() + &quot;px&quot;);"/>
+                          </AuxValues>
                         </Component>
                         <Component class="javax.swing.JButton" name="btn_f_zoom_border_w">
                           <Properties>
@@ -828,11 +882,45 @@
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
                           </Events>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_f_zoom_border_gap.setText(image_view.getZoomFirstBorderGap() + &quot;px&quot;);"/>
+                          </AuxValues>
                         </Component>
                         <Component class="javax.swing.JButton" name="btn_f_zoom_border_gap">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="&#x412;&#x456;&#x434;&#x441;&#x442;&#x443;&#x43f; I &#x440;&#x430;&#x43c;&#x43a;&#x438; &#x43b;&#x443;&#x43f;&#x438;"/>
                             <Property name="actionCommand" type="java.lang.String" value="btn_f_zoom_border_gap"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
+                          </Events>
+                        </Component>
+                      </SubComponents>
+                    </Container>
+                    <Container class="javax.swing.JPanel" name="pnl_21">
+
+                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                        <Property name="columns" type="int" value="0"/>
+                        <Property name="horizontalGap" type="int" value="5"/>
+                        <Property name="rows" type="int" value="1"/>
+                      </Layout>
+                      <SubComponents>
+                        <Component class="javax.swing.JTextField" name="fld_f_zoom_border_color">
+                          <Properties>
+                            <Property name="horizontalAlignment" type="int" value="0"/>
+                            <Property name="actionCommand" type="java.lang.String" value="fld_f_zoom_border_color"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
+                          </Events>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_f_zoom_border_color.setText(getColorValue(image_view.getZoomFirstBorderColor()));&#xa;"/>
+                          </AuxValues>
+                        </Component>
+                        <Component class="javax.swing.JButton" name="btn_f_zoom_border_color">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="&#x41a;&#x43e;&#x43b;&#x456;&#x440; I &#x440;&#x430;&#x43c;&#x43a;&#x438; &#x43b;&#x443;&#x43f;&#x438;"/>
+                            <Property name="actionCommand" type="java.lang.String" value="btn_f_zoom_border_color"/>
                           </Properties>
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
@@ -854,14 +942,15 @@
                   <Layout>
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="cb_s_zoom_border" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="pnl_21" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="pnl_22" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="pnl_22" alignment="0" pref="341" max="32767" attributes="0"/>
+                                  <Component id="pnl_23" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="pnl_24" alignment="0" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                              <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -871,9 +960,11 @@
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                               <Component id="cb_s_zoom_border" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="pnl_21" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
                               <Component id="pnl_22" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="pnl_23" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="pnl_24" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -888,8 +979,11 @@
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
                       </Events>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_s_zoom_border.setSelected(image_view.isZoomSecondBorderVisible());"/>
+                      </AuxValues>
                     </Component>
-                    <Container class="javax.swing.JPanel" name="pnl_21">
+                    <Container class="javax.swing.JPanel" name="pnl_22">
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                         <Property name="columns" type="int" value="0"/>
@@ -905,6 +999,9 @@
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
                           </Events>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_s_zoom_border_w.setText(image_view.getZoomSecondBorderWidth() + &quot;px&quot;);"/>
+                          </AuxValues>
                         </Component>
                         <Component class="javax.swing.JButton" name="btn_s_zoom_border_w">
                           <Properties>
@@ -917,7 +1014,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Container class="javax.swing.JPanel" name="pnl_22">
+                    <Container class="javax.swing.JPanel" name="pnl_23">
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                         <Property name="columns" type="int" value="0"/>
@@ -933,11 +1030,45 @@
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
                           </Events>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_s_zoom_border_gap.setText(image_view.getZoomSecondBorderGap() + &quot;px&quot;);"/>
+                          </AuxValues>
                         </Component>
                         <Component class="javax.swing.JButton" name="btn_s_zoom_border_gap">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="&#x412;&#x456;&#x434;&#x441;&#x442;&#x443;&#x43f; II &#x440;&#x430;&#x43c;&#x43a;&#x438; &#x43b;&#x443;&#x43f;&#x438;"/>
                             <Property name="actionCommand" type="java.lang.String" value="btn_s_zoom_border_gap"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
+                          </Events>
+                        </Component>
+                      </SubComponents>
+                    </Container>
+                    <Container class="javax.swing.JPanel" name="pnl_24">
+
+                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                        <Property name="columns" type="int" value="0"/>
+                        <Property name="horizontalGap" type="int" value="5"/>
+                        <Property name="rows" type="int" value="1"/>
+                      </Layout>
+                      <SubComponents>
+                        <Component class="javax.swing.JTextField" name="fld_s_zoom_border_color">
+                          <Properties>
+                            <Property name="horizontalAlignment" type="int" value="0"/>
+                            <Property name="actionCommand" type="java.lang.String" value="fld_s_zoom_border_color"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
+                          </Events>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_s_zoom_border_color.setText(getColorValue(image_view.getZoomSecondBorderColor()));"/>
+                          </AuxValues>
+                        </Component>
+                        <Component class="javax.swing.JButton" name="btn_s_zoom_border_color">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="&#x41a;&#x43e;&#x43b;&#x456;&#x440; II &#x440;&#x430;&#x43c;&#x43a;&#x438; &#x43b;&#x443;&#x43f;&#x438;"/>
+                            <Property name="actionCommand" type="java.lang.String" value="btn_s_zoom_border_color"/>
                           </Properties>
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
@@ -963,8 +1094,8 @@
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="cb_flip_zoom" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="pnl_23" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="pnl_24" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="pnl_25" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="pnl_26" alignment="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                           </Group>
@@ -976,9 +1107,9 @@
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                               <Component id="cb_flip_zoom" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="pnl_23" min="-2" max="-2" attributes="0"/>
+                              <Component id="pnl_25" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="pnl_24" min="-2" max="-2" attributes="0"/>
+                              <Component id="pnl_26" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -993,8 +1124,11 @@
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
                       </Events>
+                      <AuxValues>
+                        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_flip_zoom.setSelected(image_view.isInvertZoomOut());"/>
+                      </AuxValues>
                     </Component>
-                    <Container class="javax.swing.JPanel" name="pnl_23">
+                    <Container class="javax.swing.JPanel" name="pnl_25">
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                         <Property name="columns" type="int" value="0"/>
@@ -1010,6 +1144,9 @@
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
                           </Events>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_zoom_gap_w.setText(image_view.getZoomOffset().x + &quot;px&quot;);"/>
+                          </AuxValues>
                         </Component>
                         <Component class="javax.swing.JButton" name="btn_zoom_gap_w">
                           <Properties>
@@ -1022,7 +1159,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Container class="javax.swing.JPanel" name="pnl_24">
+                    <Container class="javax.swing.JPanel" name="pnl_26">
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                         <Property name="columns" type="int" value="0"/>
@@ -1038,6 +1175,9 @@
                           <Events>
                             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
                           </Events>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_zoom_gap_h.setText(image_view.getZoomOffset().y + &quot;px&quot;);"/>
+                          </AuxValues>
                         </Component>
                         <Component class="javax.swing.JButton" name="btn_zoom_gap_h">
                           <Properties>
@@ -1072,11 +1212,11 @@
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="cb_additional_stroke" alignment="0" max="32767" attributes="0"/>
-                          <Component id="pnl_26" alignment="0" max="32767" attributes="0"/>
+                          <Component id="pnl_28" alignment="0" max="32767" attributes="0"/>
                           <Component id="sp_10" alignment="0" max="32767" attributes="0"/>
-                          <Component id="pnl_25" alignment="0" max="32767" attributes="0"/>
-                          <Component id="sp_11" alignment="0" max="32767" attributes="0"/>
                           <Component id="pnl_27" alignment="0" max="32767" attributes="0"/>
+                          <Component id="sp_11" alignment="0" max="32767" attributes="0"/>
+                          <Component id="pnl_29" alignment="0" max="32767" attributes="0"/>
                           <Component id="btn_random_stroke" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
@@ -1091,13 +1231,13 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="sp_10" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="pnl_25" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnl_27" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="pnl_26" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnl_28" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="sp_11" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="pnl_27" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnl_29" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btn_random_stroke" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
@@ -1114,10 +1254,13 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_additional_stroke.setSelected(image_view.isRegionAdditionalStroke());"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JSeparator" name="sp_10">
             </Component>
-            <Container class="javax.swing.JPanel" name="pnl_25">
+            <Container class="javax.swing.JPanel" name="pnl_27">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                 <Property name="columns" type="int" value="0"/>
@@ -1133,6 +1276,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_f_stroke_color.setText(getColorValue(image_view.getRegionLightColor()));&#xa;"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="btn_f_stroke_color">
                   <Properties>
@@ -1145,7 +1291,7 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Container class="javax.swing.JPanel" name="pnl_26">
+            <Container class="javax.swing.JPanel" name="pnl_28">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                 <Property name="columns" type="int" value="0"/>
@@ -1161,6 +1307,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_s_stroke_color.setText(getColorValue(image_view.getRegionDarkColor()));&#xa;"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="btn_s_stroke_color">
                   <Properties>
@@ -1175,7 +1324,7 @@
             </Container>
             <Component class="javax.swing.JSeparator" name="sp_11">
             </Component>
-            <Container class="javax.swing.JPanel" name="pnl_27">
+            <Container class="javax.swing.JPanel" name="pnl_29">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                 <Property name="columns" type="int" value="0"/>
@@ -1191,6 +1340,9 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_stroke_w.setText(String.format(&quot;%.0fpx&quot;, image_view.getRegionStroke().getLineWidth()));&#xa;"/>
+                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="btn_stroke_w">
                   <Properties>
@@ -1272,6 +1424,9 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_move_out.setSelected(image_view.isDrugImageOut());"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="cb_zoom_out">
               <Properties>
@@ -1281,6 +1436,9 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_zoom_out.setSelected(image_view.isDrugZoomOut());"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JCheckBox" name="cb_invert">
               <Properties>
@@ -1290,6 +1448,9 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_invert.setSelected(image_view.isWheelInvert());"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JSeparator" name="sp_12">
             </Component>
@@ -1304,19 +1465,24 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="rb_sb_always.setSelected(image_view.getVerticalScrollBarPolicy() == VERTICAL_SCROLLBAR_AS_NEEDED &amp;&amp; image_view.getHorizontalScrollBarPolicy() == HORIZONTAL_SCROLLBAR_AS_NEEDED);&#xa;"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JRadioButton" name="rb_sb_as_needed">
               <Properties>
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                   <ComponentRef name="bg_3"/>
                 </Property>
-                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="&#x412;&#x456;&#x434;&#x43e;&#x431;&#x440;&#x430;&#x436;&#x430;&#x442;&#x438; &#x441;&#x43c;&#x443;&#x433;&#x438; &#x43f;&#x440;&#x43e;&#x43a;&#x440;&#x443;&#x442;&#x43a;&#x438; &#x437;&#x430; &#x43f;&#x43e;&#x442;&#x440;&#x435;&#x431;&#x438;"/>
                 <Property name="actionCommand" type="java.lang.String" value="rb_sb_as_needed"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="rb_sb_as_needed.setSelected(image_view.getVerticalScrollBarPolicy() == VERTICAL_SCROLLBAR_AS_NEEDED &amp;&amp; image_view.getHorizontalScrollBarPolicy() == HORIZONTAL_SCROLLBAR_AS_NEEDED);&#xa;"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JRadioButton" name="rb_sb_never">
               <Properties>
@@ -1329,6 +1495,9 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="rb_sb_never.setSelected(image_view.getVerticalScrollBarPolicy() == VERTICAL_SCROLLBAR_NEVER &amp;&amp; image_view.getHorizontalScrollBarPolicy() == HORIZONTAL_SCROLLBAR_NEVER);&#xa;"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
