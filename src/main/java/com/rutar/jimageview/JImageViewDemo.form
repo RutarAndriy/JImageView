@@ -88,9 +88,6 @@
   </Layout>
   <SubComponents>
     <Component class="com.rutar.jimageview.JImageView" name="image_view">
-      <Properties>
-        <Property name="gridVisible" type="boolean" value="false"/>
-      </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
         <AuxValue name="JavaCodeGenerator_allCodePost" type="java.lang.String" value="pack();&#xa;setLocationRelativeTo(null);&#xa;&#xa;addWindowListener(new WindowAdapter() {&#xa;    boolean minimumSizeSet = false;&#xa;    @Override&#xa;    public void windowOpened (WindowEvent e) {&#xa;        if (!minimumSizeSet) {&#xa;            setMinimumSize(getSize());&#xa;            minimumSizeSet = true; } } });&#xa;"/>

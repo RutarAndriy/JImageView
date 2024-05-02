@@ -118,8 +118,8 @@ private boolean regionAdditionalStroke = true;  // Малювання додат
 // Змінні, які мають відношення до області масштабування (лупи) ///////////////
 
 private Point zoomOrigin;                                         // Центр лупи
-private Dimension zoomArea = new Dimension(200, 200);           // Розміри лупи
-private Dimension zoomOffset = new Dimension(0, 0);             // Відступ лупи
+private Dimension zoomArea = new Dimension(180, 180);           // Розміри лупи
+private Point zoomOffset = new Point(0, 0);                     // Відступ лупи
 private float zoomLevel = ZOOM_SCALE_X2_50;        // Рівень масштабування лупи
 private int zoomShapeType = ZOOM_SHAPE_ELLIPSE;              // Тип фігури лупи
 private boolean zoomFirstBorderVisible = true;        // Видимість I рамки лупи
@@ -131,7 +131,7 @@ private int zoomSecondBorderGap = -1;                   // Віступ II ра�
 private Color zoomFirstBorderColor = Color.DARK_GRAY;     // Колір I рамки лупи
 private Color zoomSecondBorderColor = Color.GRAY;        // Колір II рамки лупи
 private boolean zoomShowCursor = true;      // Видимість курсора при збільшенні
-private boolean drugZoomOut = true;       // Видимість лупи за межею компонента
+private boolean drugZoomOut = false;      // Видимість лупи за межею компонента
 private boolean invertZoomOut = false;  // Інвертувати лупу за межею компонента
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -213,11 +213,20 @@ public void paintComponent (Graphics g) {
         
         if (!drugZoomOut) {
 
-        if      (zoomOrigin.x < 0)  { zoomOrigin.x = 0;  }
-        else if (zoomOrigin.x > vw) { zoomOrigin.x = vw; }
-        
-        if      (zoomOrigin.y < 0)  { zoomOrigin.y = 0;  }
-        else if (zoomOrigin.y > vh) { zoomOrigin.y = vh; } }
+            int ow = zoomOffset.x;
+            int oh = zoomOffset.y;
+
+            int rX1 = (ow > 0) ?  ow : (invertZoomOut ? -ow :  ow);
+            int rX2 = (ow < 0) ? -ow : (invertZoomOut ?  ow : -ow);
+
+            int rY1 = (oh < 0) ? -oh : (invertZoomOut ?  oh : -oh);
+            int rY2 = (oh > 0) ?  oh : (invertZoomOut ? -oh :  oh);
+
+            if      (zoomOrigin.x + rX1 < 0)  { zoomOrigin.x = -rX1;     }
+            else if (zoomOrigin.x - rX2 > vw) { zoomOrigin.x = vw + rX2; }
+
+            if      (zoomOrigin.y + rY1 < 0)  { zoomOrigin.y = -rY1; }
+            else if (zoomOrigin.y - rY2 > vh) { zoomOrigin.y = vh + rY2; } }
         
         // ....................................................................
         
@@ -243,7 +252,7 @@ public void paintComponent (Graphics g) {
         int s3 = zoomFirstBorderWidth*2  + zoomFirstBorderGap +
                  zoomSecondBorderWidth*2 + zoomSecondBorderGap;
         
-        Dimension zOffset = new Dimension(zoomOffset);
+        Point zOffset = new Point(zoomOffset);
         
         // ....................................................................
         
@@ -252,36 +261,38 @@ public void paintComponent (Graphics g) {
         int a = zoomArea.width/2  + zoomArea.width/30  + s3;
         int b = zoomArea.height/2 + zoomArea.height/30 + s3;
         
-        if (zoomOrigin.x + a + zoomOffset.width > vw &&
-            zoomOffset.width > 0) { zOffset.width *= -1; }
-        if (zoomOrigin.x - a + zoomOffset.width < 0 &&
-            zoomOffset.width < 0) { zOffset.width *= -1; }
+        if (zoomOrigin.x + a + zoomOffset.x > vw &&
+            zoomOffset.x > 0) { zOffset.x *= -1; }
+        if (zoomOrigin.x - a + zoomOffset.x < 0 &&
+            zoomOffset.x < 0) { zOffset.x *= -1; }
 
-        if (zoomOrigin.y + b - zoomOffset.height > vh &&
-            zoomOffset.height < 0) { zOffset.height *= -1; }
-        if (zoomOrigin.y - b - zoomOffset.height < 0 &&
-            zoomOffset.height > 0) { zOffset.height *= -1; } }
+        if (zoomOrigin.y + b - zoomOffset.y > vh &&
+            zoomOffset.y < 0) { zOffset.y *= -1; }
+        if (zoomOrigin.y - b - zoomOffset.y < 0 &&
+            zoomOffset.y > 0) { zOffset.y *= -1; } }
         
         // ....................................................................
         
         if (zoomShapeType == 0)
-            { newClip = new Area(new Rectangle2D.Float(x+zOffset.width,
-                                                       y-zOffset.height,
+            { newClip = new Area(new Rectangle2D.Float(x+zOffset.x,
+                                                       y-zOffset.y,
                                                        zoomArea.width + 1,
                                                        zoomArea.height + 1)); }
         else
-            { newClip = new Area(new Ellipse2D.Float(x+zOffset.width,
-                                                     y-zOffset.height,
+            { newClip = new Area(new Ellipse2D.Float(x+zOffset.x,
+                                                     y-zOffset.y,
                                                      zoomArea.width + 1,
                                                      zoomArea.height + 1)); }
 
         newClip.intersect(new Area(oldClip));
         g2.setClip(newClip);
         
-        if (gridVisible) { drawGrid(g2, zoomLevel, zX+zOffset.width,
-                                                   zY-zOffset.height); }
+        if (gridVisible) { drawGrid(g2, zoomLevel, zX+zOffset.x,
+                                                   zY-zOffset.y); }
+        else { g2.setColor(getBackground());
+               g2.fillRect(0, 0, vw, vh); }
         
-        g2.drawImage(image, zoomX+zOffset.width, zoomY-zOffset.height,
+        g2.drawImage(image, zoomX+zOffset.x, zoomY-zOffset.y,
                      zoomW, zoomH, null);
         g2.setClip(oldClip);
         
@@ -293,20 +304,20 @@ public void paintComponent (Graphics g) {
         g2.setColor(zoomFirstBorderColor);
         g2.setStroke(new BasicStroke(zoomFirstBorderWidth*2));
         if (zoomShapeType == 0)
-            { g2.drawRect(x-s1+zOffset.width, y-s1-zOffset.height,
+            { g2.drawRect(x-s1+zOffset.x, y-s1-zOffset.y,
                           zoomArea.width + s1*2, zoomArea.height + s1*2); }
         else
-            { g2.drawOval(x-s1+zOffset.width, y-s1-zOffset.height,
+            { g2.drawOval(x-s1+zOffset.x, y-s1-zOffset.y,
                           zoomArea.width + s1*2, zoomArea.height + s1*2); } }
 
         if (zoomSecondBorderVisible) {
         g2.setColor(zoomSecondBorderColor);
         g2.setStroke(new BasicStroke(zoomSecondBorderWidth*2));
         if (zoomShapeType == 0)
-            { g2.drawRect(x-s2+zOffset.width, y-s2-zOffset.height,
+            { g2.drawRect(x-s2+zOffset.x, y-s2-zOffset.y,
                           zoomArea.width + s2*2, zoomArea.height + s2*2); }
         else
-            { g2.drawOval(x-s2+zOffset.width, y-s2-zOffset.height,
+            { g2.drawOval(x-s2+zOffset.x, y-s2-zOffset.y,
                           zoomArea.width + s2*2, zoomArea.height + s2*2); } }
         
         setImageScaleType(g2, imageScaleType);
@@ -951,7 +962,7 @@ public Dimension getZoomArea() { return zoomArea; }
  * @param zoomArea нові розміри області масштабування
  */
 public void setZoomArea (Dimension zoomArea)
-    { if (zoomArea == null) { zoomArea = new Dimension(200, 200); }
+    { if (zoomArea == null) { zoomArea = new Dimension(180, 180); }
       Dimension oldValue = this.zoomArea;
       this.zoomArea = zoomArea;
       fireAll("zoomArea", oldValue, zoomArea); }
@@ -962,15 +973,15 @@ public void setZoomArea (Dimension zoomArea)
  * Отримання відступів області масштабування
  * @return відступи області масштабування
  */
-public Dimension getZoomOffset() { return zoomOffset; }
+public Point getZoomOffset() { return zoomOffset; }
 
 /**
  * Задання відступів області масштабування
  * @param zoomOffset нові відступи області масштабування
  */
-public void setZoomOffset (Dimension zoomOffset)
-    { if (zoomOffset == null) { zoomOffset = new Dimension(0, 0); }
-      Dimension oldValue = this.zoomOffset;
+public void setZoomOffset (Point zoomOffset)
+    { if (zoomOffset == null) { zoomOffset = new Point(0, 0); }
+      Point oldValue = this.zoomOffset;
       this.zoomOffset = zoomOffset;
       fireAll("zoomOffset", oldValue, zoomOffset); }
 

@@ -25,7 +25,8 @@ public JImageViewDemo() { initComponents(); }
 ///////////////////////////////////////////////////////////////////////////////
 
 @SuppressWarnings("unchecked")
-    private void initComponents() {//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
 
         bg_1 = new ButtonGroup();
         bg_2 = new ButtonGroup();
@@ -137,8 +138,6 @@ public JImageViewDemo() { initComponents(); }
         rb_sb_never = new JRadioButton();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        image_view.setGridVisible(false);
 
         btn_open.setText("Вибрати зображення");
         btn_open.setActionCommand("btn_open");
@@ -1059,7 +1058,7 @@ public JImageViewDemo() { initComponents(); }
                 if (!minimumSizeSet) {
                     setMinimumSize(getSize());
                     minimumSizeSet = true; } } });
-    }//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
 ///////////////////////////////////////////////////////////////////////////////
 
