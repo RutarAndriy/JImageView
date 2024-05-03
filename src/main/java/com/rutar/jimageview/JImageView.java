@@ -209,6 +209,8 @@ public void paintComponent (Graphics g) {
         int vw = getViewport().getWidth() - 1;
         int vh = getViewport().getHeight() - 1;
         
+        Point zOffset = new Point(zoomOffset);
+
         // ....................................................................
         
         if (!drugZoomOut) {
@@ -251,8 +253,6 @@ public void paintComponent (Graphics g) {
         int s2 = zoomSecondBorderWidth   + zoomSecondBorderGap;
         int s3 = zoomFirstBorderWidth*2  + zoomFirstBorderGap +
                  zoomSecondBorderWidth*2 + zoomSecondBorderGap;
-        
-        Point zOffset = new Point(zoomOffset);
         
         // ....................................................................
         
@@ -845,9 +845,8 @@ public int getGridSize() { return gridSize; }
  * @param gridSize новий розмір фонової сітки
  */
 public void setGridSize (int gridSize)
-    { if      (gridSize > 99) { gridSize = 99; }
-      else if (gridSize <  3) { gridSize = 3;  }
-      int oldValue = this.gridSize;
+    { int oldValue = this.gridSize;
+      if (gridSize < 3) { gridSize = 3; }
       this.gridSize = gridSize;
       panelRoot.repaint();
       fireAll("gridSize", oldValue, gridSize); }
@@ -1082,6 +1081,7 @@ public int getZoomFirstBorderWidth() { return zoomFirstBorderWidth; }
  */
 public void setZoomFirstBorderWidth (int zoomFirstBorderWidth)
     { int oldValue = this.zoomFirstBorderWidth;
+      if (zoomFirstBorderWidth < 0) { zoomFirstBorderWidth = 0; }
       this.zoomFirstBorderWidth = zoomFirstBorderWidth;
       fireAll("zoomFirstBorderWidth", oldValue, zoomFirstBorderWidth); }
 
@@ -1099,6 +1099,7 @@ public int getZoomSecondBorderWidth() { return zoomSecondBorderWidth; }
  */
 public void setZoomSecondBorderWidth (int zoomSecondBorderWidth)
     { int oldValue = this.zoomSecondBorderWidth;
+      if (zoomSecondBorderWidth < 0) { zoomSecondBorderWidth = 0; }
       this.zoomSecondBorderWidth = zoomSecondBorderWidth;
       fireAll("zoomSecondBorderWidth", oldValue, zoomSecondBorderWidth); }
 

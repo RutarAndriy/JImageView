@@ -22,7 +22,7 @@
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
-    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="3"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
   </AuxValues>
@@ -88,11 +88,6 @@
   </Layout>
   <SubComponents>
     <Component class="com.rutar.jimageview.JImageView" name="image_view">
-      <Properties>
-        <Property name="zoomOffset" type="java.awt.Point" editor="org.netbeans.beaninfo.editors.PointEditor">
-          <Point value="[-50, 50]"/>
-        </Property>
-      </Properties>
       <Events>
         <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="imageViewPropertyChange"/>
       </Events>
@@ -753,6 +748,7 @@
                     <StringItem index="8" value="&#x41c;&#x430;&#x441;&#x448;&#x442;&#x430;&#x431; &#x43b;&#x443;&#x43f;&#x438; x5.00"/>
                   </StringArray>
                 </Property>
+                <Property name="selectedIndex" type="int" value="5"/>
                 <Property name="actionCommand" type="java.lang.String" value="cb_magn_scale"/>
               </Properties>
               <Events>
