@@ -4,7 +4,10 @@ import java.io.*;
 import java.awt.*;
 import javax.swing.*;
 import javax.imageio.*;
+import java.awt.geom.*;
 import java.awt.image.*;
+
+import static java.awt.image.AffineTransformOp.*;
 
 // ............................................................................
 
@@ -15,6 +18,13 @@ import java.awt.image.*;
  */
 
 public class JImageViewUtils {
+
+public static final int FLIP_HORIZONTAL = 0;
+public static final int FLIP_VERTICAL   = 1;
+
+public static final int ROTATE_90_DEG  = 90;
+public static final int ROTATE_180_DEG = 180;
+public static final int ROTATE_270_DEG = 270;
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -74,6 +84,67 @@ catch (IOException e) { return null;               }
 
 }
 
-// Кінець класу JImageViewAdapter /////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Метод дозволяє отримати зображення, обернуте на заданий кут
+ * @param src зображення для обертання
+ * @param angle ROTATE_90_DEG, ROTATE_180_DEG або ROTATE_270_DEG
+ * @return обернуте зображення
+ */
+public static BufferedImage getRotatedImage (BufferedImage src, int angle) {
+    
+    double a, p, q;
+    int w = src.getWidth();
+    int h = src.getHeight();
+    AffineTransform at = new AffineTransform();
+    
+    switch (angle) {
+        
+        case ROTATE_90_DEG  -> { a = -Math.PI/2; p = h;   q = h-w; }
+        case ROTATE_180_DEG -> { a =  Math.PI;   p = w;   q = h;   }
+        case ROTATE_270_DEG -> { a =  Math.PI/2; p = w-h; q = w;   }
+
+        default -> { return src; } }
+    
+    at.rotate(a, w, h);
+    at.translate(p, q);
+              
+    return new AffineTransformOp(at, TYPE_NEAREST_NEIGHBOR)
+                        .filter(src, null);
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Метод дозволяє отримати відзеркалене зображення
+ * @param src зображення для відзеркалення
+ * @param type FLIP_HORIZONTAL або FLIP_VERTICAL
+ * @return відзеркалене зображення
+ */
+public static BufferedImage getFlippedImage (BufferedImage src, int type) {
+
+if (type == FLIP_VERTICAL) {                       // Вертикальне відзеркалення
+
+    AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
+    tx.translate(0, -src.getHeight());
+    AffineTransformOp op = new AffineTransformOp(tx, TYPE_NEAREST_NEIGHBOR);
+    
+    return op.filter(src, null); }
+
+else {                                           // Горизонтальне відзеркалення
+
+    AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+    tx.translate(-src.getWidth(), 0);
+    AffineTransformOp op = new AffineTransformOp(tx, TYPE_NEAREST_NEIGHBOR);
+    
+    return op.filter(src, null); }
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+// Кінець класу JImageViewUtils ///////////////////////////////////////////////
 
 }

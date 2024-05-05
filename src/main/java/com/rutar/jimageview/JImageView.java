@@ -6,13 +6,13 @@ import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 import java.awt.geom.*;
-import javax.imageio.*;
 import java.awt.image.*;
 import java.awt.event.*;
 import javax.swing.event.*;
 
 import static java.awt.Cursor.*;
 import static java.awt.RenderingHints.*;
+import static com.rutar.jimageview.JImageViewUtils.*;
 
 // ............................................................................
 
@@ -540,6 +540,36 @@ public void magnifierZoomOut() {
         if (zoomLevels[z] == currentLevel) { id = z - 1; } }
 
     setZoomLevel(zoomLevels[id]); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/** Обертає зображення на 90° за годинниковою стрілкою */
+public void turnСlockwise()
+    { setRotatedImage(getRotatedImage(image, ROTATE_90_DEG)); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/** Обертає зображення на 90° проти годинникової стрілки */
+public void turnСounterclockwise()
+    { setRotatedImage(getRotatedImage(image, ROTATE_270_DEG)); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/** Обертає зображення на 180° */
+public void rollOver()
+    { setRotatedImage(getRotatedImage(image, ROTATE_180_DEG)); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/** Відзеркалює зображення горизонтально */
+public void mirrorHorizontally()
+    { setRotatedImage(getFlippedImage(image, FLIP_HORIZONTAL)); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/** Відзеркалює зображення вертикально */
+public void mirrorVertically()
+    { setRotatedImage(getFlippedImage(image, FLIP_VERTICAL)); }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Getter'и та Setter'и - повертають та задають властивості компонента ////////
@@ -1353,6 +1383,15 @@ for (JImageViewListener listener : getListeners()) {
 // Допоміжні методи ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+private void setRotatedImage (BufferedImage image)
+    { this.image = image;
+      this.imageW = image.getWidth();
+      this.imageH = image.getHeight();
+      this.changeListener.stateChanged(null);
+      setImageScale(imageScale); }
+
+///////////////////////////////////////////////////////////////////////////////
+
 private void calculateImageLimitScale() {
     
     int w = imageW;
@@ -1591,10 +1630,12 @@ private BufferedImage getRandomImage() {
     String[] names = { "tree", "fire", "wave" };
 
     int index = (int)(Math.random() * 3);
-    URL resource = getClass().getResource(String.format(path, names[index]));
 
-    try { return ImageIO.read(resource); }
-    catch (IOException e) { return null;}
+    try { File file = new File(getClass().getResource
+                              (String.format(path, names[index])).toURI());
+          return JImageViewUtils.getImageQuickly(file); }
+    
+    catch (URISyntaxException e) { return null; }
 
 }
 

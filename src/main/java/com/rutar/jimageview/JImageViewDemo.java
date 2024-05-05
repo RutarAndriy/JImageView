@@ -2,10 +2,13 @@ package com.rutar.jimageview;
 
 import java.io.*;
 import java.awt.*;
+import java.util.*;
 import java.beans.*;
 import javax.swing.*;
+import javax.imageio.*;
 import java.awt.event.*;
 import java.awt.image.*;
+import javax.swing.filechooser.*;
 
 import static com.rutar.jimageview.JImageView.*;
 import static com.rutar.jimageview.JImageViewUtils.*;
@@ -22,13 +25,13 @@ public class JImageViewDemo extends JFrame {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-public JImageViewDemo() { initComponents(); }
+public JImageViewDemo() { initComponents();
+                          initAppIcons(); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents() {//GEN-BEGIN:initComponents
 
         bg_1 = new ButtonGroup();
         bg_2 = new ButtonGroup();
@@ -54,6 +57,13 @@ public JImageViewDemo() { initComponents(); }
         fld_scale = new JTextField();
         btn_set_scale = new JButton();
         sp_03 = new JSeparator();
+        jPanel1 = new JPanel();
+        btn_rotate_90 = new JButton();
+        btn_rotate_270 = new JButton();
+        btn_rotate_180 = new JButton();
+        btn_flip_h = new JButton();
+        btn_flip_v = new JButton();
+        jSeparator1 = new JSeparator();
         tab_pnl_01 = new JTabbedPane();
         pnl_06 = new JPanel();
         cb_lmb = new JCheckBox();
@@ -64,6 +74,10 @@ public JImageViewDemo() { initComponents(); }
         sp_04 = new JSeparator();
         rb_zoom_fast = new JRadioButton();
         rb_zoom_smooth = new JRadioButton();
+        jSeparator3 = new JSeparator();
+        jRadioButton1 = new JRadioButton();
+        jRadioButton2 = new JRadioButton();
+        jRadioButton3 = new JRadioButton();
         pnl_07 = new JPanel();
         cb_grid = new JCheckBox();
         sp_05 = new JSeparator();
@@ -136,6 +150,10 @@ public JImageViewDemo() { initComponents(); }
         fld_stroke_w = new JTextField();
         btn_stroke_w = new JButton();
         btn_random_stroke = new JButton();
+        jSeparator2 = new JSeparator();
+        pnl_30 = new JPanel();
+        fld_region_min = new JTextField();
+        btn_region_min = new JButton();
         pnl_10 = new JPanel();
         cb_move_out = new JCheckBox();
         cb_zoom_out = new JCheckBox();
@@ -146,6 +164,7 @@ public JImageViewDemo() { initComponents(); }
         rb_sb_never = new JRadioButton();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setTitle("JImageView Demo");
 
         image_view.addPropertyChangeListener(this::imageViewPropertyChange);
 
@@ -218,6 +237,45 @@ public JImageViewDemo() { initComponents(); }
         btn_set_scale.addActionListener(this::onAction);
         pnl_05.add(btn_set_scale);
 
+        jPanel1.setLayout(new GridLayout(1, 0, 5, 0));
+
+        btn_rotate_90.setText("↶");
+        btn_rotate_90.setToolTipText("Повернути на 90° проти годинникової стрілки");
+        btn_rotate_90.setActionCommand("btn_rotate_90");
+        btn_rotate_90.setMargin(new Insets(0, 0, 0, 0));
+        btn_rotate_90.addActionListener(this::onAction);
+        jPanel1.add(btn_rotate_90);
+
+        btn_rotate_270.setText("↷");
+        btn_rotate_270.setToolTipText("Повернути на 90° за годинниковою стрілкою");
+        btn_rotate_270.setActionCommand("btn_rotate_270");
+        btn_rotate_270.setMargin(new Insets(0, 0, 0, 0));
+        btn_rotate_270.addActionListener(this::onAction);
+        jPanel1.add(btn_rotate_270);
+
+        btn_rotate_180.setText("↺");
+        btn_rotate_180.setToolTipText("Повернути на 180°");
+        btn_rotate_180.setActionCommand("btn_rotate_180");
+        btn_rotate_180.setMargin(new Insets(0, 0, 0, 0));
+        btn_rotate_180.addActionListener(this::onAction);
+        jPanel1.add(btn_rotate_180);
+
+        btn_flip_h.setText("⇆");
+        btn_flip_h.setToolTipText("Відзеркалити горизонтально");
+        btn_flip_h.setActionCommand("btn_flip_h");
+        btn_flip_h.setMargin(new Insets(0, 0, 0, 0));
+        btn_flip_h.addActionListener(this::onAction);
+        jPanel1.add(btn_flip_h);
+
+        btn_flip_v.setText("⇅");
+        btn_flip_v.setToolTipText("Відзеркалити вертикально");
+        btn_flip_v.setActionCommand("btn_flip_v");
+        btn_flip_v.setMargin(new Insets(0, 0, 0, 0));
+        btn_flip_v.addActionListener(this::onAction);
+        jPanel1.add(btn_flip_v);
+
+        increaseTextSize(6, btn_rotate_90, btn_rotate_270, btn_rotate_180, btn_flip_h, btn_flip_v);
+
         tab_pnl_01.setBorder(BorderFactory.createEmptyBorder(0, 0, 1, 0));
 
         cb_lmb.setText("Переміщувати зображення лівою клавішею миші");
@@ -257,20 +315,38 @@ public JImageViewDemo() { initComponents(); }
         rb_zoom_smooth.setSelected(image_view.getImageScaleType() == SCALE_TYPE_SMOOTH);
         rb_zoom_smooth.addActionListener(this::onAction);
 
+        jRadioButton1.setText("jRadioButton1");
+
+        jRadioButton2.setText("jRadioButton2");
+
+        jRadioButton3.setText("jRadioButton3");
+
         GroupLayout pnl_06Layout = new GroupLayout(pnl_06);
         pnl_06.setLayout(pnl_06Layout);
         pnl_06Layout.setHorizontalGroup(pnl_06Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(pnl_06Layout.createSequentialGroup()
+                .addGroup(pnl_06Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(pnl_06Layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addGroup(pnl_06Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(cb_lmb, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cb_cmb, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cb_rmb, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cb_wheel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(sp_04)
+                            .addComponent(cb_zmb, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(rb_zoom_fast, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(rb_zoom_smooth, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(GroupLayout.Alignment.TRAILING, pnl_06Layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(jSeparator3)))
+                .addGap(3, 3, 3))
+            .addGroup(pnl_06Layout.createSequentialGroup()
                 .addGap(3, 3, 3)
                 .addGroup(pnl_06Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(cb_lmb, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cb_cmb, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cb_rmb, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cb_wheel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sp_04)
-                    .addComponent(cb_zmb, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(rb_zoom_fast, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(rb_zoom_smooth, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jRadioButton1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jRadioButton2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jRadioButton3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(3, 3, 3))
         );
         pnl_06Layout.setVerticalGroup(pnl_06Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -291,6 +367,14 @@ public JImageViewDemo() { initComponents(); }
                 .addComponent(rb_zoom_fast)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rb_zoom_smooth)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jRadioButton1)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jRadioButton2)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jRadioButton3)
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -471,7 +555,7 @@ public JImageViewDemo() { initComponents(); }
                 .addGroup(pnl_16Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                     .addComponent(pnl_21, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cb_f_zoom_border, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnl_19, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
+                    .addComponent(pnl_19, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnl_20, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(3, 3, 3))
         );
@@ -541,7 +625,7 @@ public JImageViewDemo() { initComponents(); }
                 .addGap(3, 3, 3)
                 .addGroup(pnl_17Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(cb_s_zoom_border, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnl_22, GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
+                    .addComponent(pnl_22, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnl_23, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnl_24, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(3, 3, 3))
@@ -712,19 +796,41 @@ public JImageViewDemo() { initComponents(); }
         btn_random_stroke.setActionCommand("btn_random_stroke");
         btn_random_stroke.addActionListener(this::onAction);
 
+        pnl_30.setLayout(new GridLayout(1, 0, 5, 0));
+
+        fld_region_min.setHorizontalAlignment(JTextField.CENTER);
+        fld_region_min.setActionCommand("fld_region_min");
+        fld_stroke_w.setText(String.format("%.0fpx", image_view.getRegionStroke().getLineWidth()));
+        fld_region_min.addActionListener(this::onAction);
+        pnl_30.add(fld_region_min);
+
+        btn_region_min.setText("Мін. розмір регіону");
+        btn_region_min.setActionCommand("btn_region_min");
+        btn_region_min.addActionListener(this::onAction);
+        pnl_30.add(btn_region_min);
+
         GroupLayout pnl_09Layout = new GroupLayout(pnl_09);
         pnl_09.setLayout(pnl_09Layout);
         pnl_09Layout.setHorizontalGroup(pnl_09Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(pnl_09Layout.createSequentialGroup()
-                .addGap(3, 3, 3)
                 .addGroup(pnl_09Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(cb_additional_stroke, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnl_28, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sp_10)
-                    .addComponent(pnl_27, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sp_11)
-                    .addComponent(pnl_29, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_random_stroke, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(pnl_09Layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addGroup(pnl_09Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(cb_additional_stroke, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pnl_28, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(sp_10)
+                            .addComponent(pnl_27, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(sp_11)
+                            .addComponent(pnl_29, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btn_random_stroke, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(pnl_09Layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(jSeparator2)))
+                .addGap(3, 3, 3))
+            .addGroup(pnl_09Layout.createSequentialGroup()
+                .addGap(3, 3, 3)
+                .addComponent(pnl_30, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(3, 3, 3))
         );
         pnl_09Layout.setVerticalGroup(pnl_09Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -743,6 +849,10 @@ public JImageViewDemo() { initComponents(); }
                 .addComponent(pnl_29, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btn_random_stroke)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnl_30, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -822,8 +932,8 @@ public JImageViewDemo() { initComponents(); }
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addComponent(image_view, GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
-                .addGap(4, 4, 4)
+                .addComponent(image_view, GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
                     .addComponent(sp_03, GroupLayout.Alignment.LEADING)
                     .addComponent(pnl_05, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -835,7 +945,9 @@ public JImageViewDemo() { initComponents(); }
                     .addComponent(pnl_02, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnl_03, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnl_04, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tab_pnl_01))
+                    .addComponent(tab_pnl_01)
+                    .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator1))
                 .addGap(5, 5, 5))
         );
         layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -864,6 +976,10 @@ public JImageViewDemo() { initComponents(); }
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sp_03, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tab_pnl_01)))
                 .addGap(5, 5, 5))
         );
@@ -878,19 +994,36 @@ public JImageViewDemo() { initComponents(); }
                 if (!minimumSizeSet) {
                     setMinimumSize(getSize());
                     minimumSizeSet = true; } } });
-    }// </editor-fold>//GEN-END:initComponents
+    }//GEN-END:initComponents
 
 ///////////////////////////////////////////////////////////////////////////////
 
     private void onAction(ActionEvent evt) {//GEN-FIRST:event_onAction
  
     switch (evt.getActionCommand()) {
+            
+        case "btn_open" -> {
+            JFileChooser chooser = new JFileChooser();
+            chooser.getActionMap().get("viewTypeDetails")
+                                  .actionPerformed(null);
+            ImagePreviewComponent preview = new ImagePreviewComponent(chooser);
+            chooser.setAccessory(preview);
+            chooser.setFileFilter(new FileNameExtensionFilter("Image files",
+                                      ImageIO.getReaderFileSuffixes()));
+            int result = chooser.showOpenDialog(this);
+            preview.deletePreview();
+            if (result != JFileChooser.APPROVE_OPTION) { return; }
+            File file = chooser.getSelectedFile();
+            image_view.setImage(getImageQuickly(file)); }
 
-        case "btn_open" ->
-            { File file = new File("/home/rutar/test_2.jpg");
-              BufferedImage image = getImageQuickly(file);
-              image_view.setImage(image); }
-
+        // ....................................................................
+        
+        case "btn_rotate_90"  -> { image_view.turnСlockwise();        }
+        case "btn_rotate_180" -> { image_view.rollOver();             }
+        case "btn_rotate_270" -> { image_view.turnСounterclockwise(); }
+        case "btn_flip_h"     -> { image_view.mirrorHorizontally();   }
+        case "btn_flip_v"     -> { image_view.mirrorVertically();     }
+        
         case "btn_zoom_in"      -> { image_view.zoomIn(null);     }
         case "btn_zoom_out"     -> { image_view.zoomOut(null);    }
         case "btn_minimize"     -> { image_view.minimize();       }
@@ -1271,6 +1404,30 @@ private BasicStroke getRandomStroke() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+private void increaseTextSize (int delta, JButton ... buttons) {
+    
+    for (JButton button : buttons) {
+        Font font = button.getFont();
+        button.setFont(new Font(font.getName(),
+                                font.getStyle(),
+                                font.getSize() + delta)); } }
+
+///////////////////////////////////////////////////////////////////////////////
+
+private void initAppIcons() {
+
+ArrayList<Image> icons = new ArrayList<>();
+JImageViewBeanInfo bean = new JImageViewBeanInfo();
+
+icons.add(bean.getIcon(BeanInfo.ICON_COLOR_16x16));
+icons.add(bean.getIcon(BeanInfo.ICON_COLOR_32x32));
+
+setIconImages(icons);
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 public static void main (String args[]) {
 
     EventQueue.invokeLater(() -> {
@@ -1295,6 +1452,8 @@ private final Color bgError  = new Color(255, 200, 200);
     private JButton btn_f_zoom_border_color;
     private JButton btn_f_zoom_border_gap;
     private JButton btn_f_zoom_border_w;
+    private JButton btn_flip_h;
+    private JButton btn_flip_v;
     private JButton btn_grid_dark;
     private JButton btn_grid_light;
     private JButton btn_grid_size;
@@ -1307,6 +1466,10 @@ private final Color bgError  = new Color(255, 200, 200);
     private JButton btn_original;
     private JButton btn_random_stroke;
     private JButton btn_region_fit;
+    private JButton btn_region_min;
+    private JButton btn_rotate_180;
+    private JButton btn_rotate_270;
+    private JButton btn_rotate_90;
     private JButton btn_s_stroke_color;
     private JButton btn_s_zoom_border_color;
     private JButton btn_s_zoom_border_gap;
@@ -1341,6 +1504,7 @@ private final Color bgError  = new Color(255, 200, 200);
     private JTextField fld_grid_size;
     private JTextField fld_magn_h;
     private JTextField fld_magn_w;
+    private JTextField fld_region_min;
     private JTextField fld_s_stroke_color;
     private JTextField fld_s_zoom_border_color;
     private JTextField fld_s_zoom_border_gap;
@@ -1350,6 +1514,13 @@ private final Color bgError  = new Color(255, 200, 200);
     private JTextField fld_zoom_gap_h;
     private JTextField fld_zoom_gap_w;
     private JImageView image_view;
+    private JPanel jPanel1;
+    private JRadioButton jRadioButton1;
+    private JRadioButton jRadioButton2;
+    private JRadioButton jRadioButton3;
+    private JSeparator jSeparator1;
+    private JSeparator jSeparator2;
+    private JSeparator jSeparator3;
     private JPanel pnl_01;
     private JPanel pnl_02;
     private JPanel pnl_03;
@@ -1379,6 +1550,7 @@ private final Color bgError  = new Color(255, 200, 200);
     private JPanel pnl_27;
     private JPanel pnl_28;
     private JPanel pnl_29;
+    private JPanel pnl_30;
     private JRadioButton rb_magn_oval;
     private JRadioButton rb_magn_rect;
     private JRadioButton rb_sb_always;
@@ -1401,6 +1573,79 @@ private final Color bgError  = new Color(255, 200, 200);
     private JTabbedPane tab_pnl_01;
     private JTabbedPane tab_pnl_02;
     // End of variables declaration//GEN-END:variables
+
+///////////////////////////////////////////////////////////////////////////////
+
+private class ImagePreviewComponent extends JComponent
+                                    implements PropertyChangeListener {
+
+private BufferedImage image;
+private final int gridSize = 15;
+
+// ............................................................................
+
+public ImagePreviewComponent (JFileChooser chooser)
+    { chooser.addPropertyChangeListener(this);
+      setPreferredSize(new Dimension(300, 300)); }
+
+// ............................................................................
+
+@Override
+protected void paintComponent (Graphics g) {
+
+    g.setColor(Color.LIGHT_GRAY);
+    g.fillRect(0, 0, getWidth(), getHeight());
+    g.setColor(Color.DARK_GRAY);
+
+    for (int col = 0; col < getWidth();  col += gridSize) {
+    for (int row = 0; row < getHeight(); row += gridSize*2) {
+        g.fillRect(col, row + (col/gridSize%2 == 0 ? gridSize : 0),
+                   gridSize, gridSize); } }
+    
+    if (image == null) { return; }
+
+    int w = image.getWidth();
+    int h = image.getHeight();
+    
+    float p = getWidth()  * 1f / w;
+    float q = getHeight() * 1f / h;
+    float z = (p < q) ? p : q;
+    
+    int x = getWidth()/2  - (int)(w * z / 2);
+    int y = getHeight()/2 - (int)(h * z / 2);
+    
+    g.drawImage(image, x, y, (int)(w * z), (int)(h * z), null);
+
+}
+
+// ............................................................................
+
+@Override
+public void propertyChange (PropertyChangeEvent e) {
+
+    switch (e.getPropertyName()) {
+        
+        case JFileChooser.DIRECTORY_CHANGED_PROPERTY -> { image = null;
+                                                          repaint(); }
+        
+        case JFileChooser.SELECTED_FILE_CHANGED_PROPERTY -> {
+                
+            File file = (File) e.getNewValue();
+            
+                image = JImageViewUtils.getImageQuickly(file);
+            if (image == null) {
+                image = JImageViewUtils.getImageSlowly(file); }
+            
+            repaint();
+        }
+    }
+}
+
+// ............................................................................
+
+private void deletePreview() { image = null; }
+
+}
 
 // Кінець класу JImageViewDemo ////////////////////////////////////////////////
 

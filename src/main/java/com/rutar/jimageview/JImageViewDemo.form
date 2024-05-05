@@ -11,6 +11,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="title" type="java.lang.String" value="JImageView Demo"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="2"/>
@@ -32,8 +33,8 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-              <Component id="image_view" pref="660" max="32767" attributes="0"/>
-              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+              <Component id="image_view" pref="586" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                   <Component id="sp_03" alignment="0" max="32767" attributes="0"/>
                   <Component id="pnl_05" alignment="0" max="32767" attributes="0"/>
@@ -46,6 +47,8 @@
                   <Component id="pnl_03" alignment="0" max="32767" attributes="0"/>
                   <Component id="pnl_04" alignment="0" max="32767" attributes="0"/>
                   <Component id="tab_pnl_01" max="32767" attributes="0"/>
+                  <Component id="jPanel1" max="32767" attributes="0"/>
+                  <Component id="jSeparator1" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
           </Group>
@@ -75,8 +78,12 @@
                       <Component id="sp_02" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="pnl_05" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="sp_03" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="tab_pnl_01" max="32767" attributes="0"/>
                   </Group>
@@ -263,6 +270,86 @@
     </Container>
     <Component class="javax.swing.JSeparator" name="sp_03">
     </Component>
+    <Container class="javax.swing.JPanel" name="jPanel1">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="increaseTextSize(6, btn_rotate_90, btn_rotate_270, btn_rotate_180, btn_flip_h, btn_flip_v);&#xa;"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+        <Property name="columns" type="int" value="0"/>
+        <Property name="horizontalGap" type="int" value="5"/>
+        <Property name="rows" type="int" value="1"/>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JButton" name="btn_rotate_90">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x21b6;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x41f;&#x43e;&#x432;&#x435;&#x440;&#x43d;&#x443;&#x442;&#x438; &#x43d;&#x430; 90&#xb0; &#x43f;&#x440;&#x43e;&#x442;&#x438; &#x433;&#x43e;&#x434;&#x438;&#x43d;&#x43d;&#x438;&#x43a;&#x43e;&#x432;&#x43e;&#x457; &#x441;&#x442;&#x440;&#x456;&#x43b;&#x43a;&#x438;"/>
+            <Property name="actionCommand" type="java.lang.String" value="btn_rotate_90"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[0, 0, 0, 0]"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btn_rotate_270">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x21b7;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x41f;&#x43e;&#x432;&#x435;&#x440;&#x43d;&#x443;&#x442;&#x438; &#x43d;&#x430; 90&#xb0; &#x437;&#x430; &#x433;&#x43e;&#x434;&#x438;&#x43d;&#x43d;&#x438;&#x43a;&#x43e;&#x432;&#x43e;&#x44e; &#x441;&#x442;&#x440;&#x456;&#x43b;&#x43a;&#x43e;&#x44e;"/>
+            <Property name="actionCommand" type="java.lang.String" value="btn_rotate_270"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[0, 0, 0, 0]"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btn_rotate_180">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x21ba;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x41f;&#x43e;&#x432;&#x435;&#x440;&#x43d;&#x443;&#x442;&#x438; &#x43d;&#x430; 180&#xb0;"/>
+            <Property name="actionCommand" type="java.lang.String" value="btn_rotate_180"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[0, 0, 0, 0]"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btn_flip_h">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x21c6;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x412;&#x456;&#x434;&#x437;&#x435;&#x440;&#x43a;&#x430;&#x43b;&#x438;&#x442;&#x438; &#x433;&#x43e;&#x440;&#x438;&#x437;&#x43e;&#x43d;&#x442;&#x430;&#x43b;&#x44c;&#x43d;&#x43e;"/>
+            <Property name="actionCommand" type="java.lang.String" value="btn_flip_h"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[0, 0, 0, 0]"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btn_flip_v">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x21c5;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x412;&#x456;&#x434;&#x437;&#x435;&#x440;&#x43a;&#x430;&#x43b;&#x438;&#x442;&#x438; &#x432;&#x435;&#x440;&#x442;&#x438;&#x43a;&#x430;&#x43b;&#x44c;&#x43d;&#x43e;"/>
+            <Property name="actionCommand" type="java.lang.String" value="btn_flip_v"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[0, 0, 0, 0]"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
+          </Events>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="javax.swing.JSeparator" name="jSeparator1">
+    </Component>
     <Container class="javax.swing.JTabbedPane" name="tab_pnl_01">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -287,16 +374,33 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="cb_lmb" max="32767" attributes="0"/>
+                                  <Component id="cb_cmb" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="cb_rmb" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="cb_wheel" max="32767" attributes="0"/>
+                                  <Component id="sp_04" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="cb_zmb" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="rb_zoom_fast" max="32767" attributes="0"/>
+                                  <Component id="rb_zoom_smooth" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                              <Component id="jSeparator3" max="32767" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="cb_lmb" max="32767" attributes="0"/>
-                          <Component id="cb_cmb" alignment="0" max="32767" attributes="0"/>
-                          <Component id="cb_rmb" alignment="0" max="32767" attributes="0"/>
-                          <Component id="cb_wheel" max="32767" attributes="0"/>
-                          <Component id="sp_04" alignment="0" max="32767" attributes="0"/>
-                          <Component id="cb_zmb" alignment="0" max="32767" attributes="0"/>
-                          <Component id="rb_zoom_fast" max="32767" attributes="0"/>
-                          <Component id="rb_zoom_smooth" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jRadioButton1" max="32767" attributes="0"/>
+                          <Component id="jRadioButton2" max="32767" attributes="0"/>
+                          <Component id="jRadioButton3" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                   </Group>
@@ -321,6 +425,14 @@
                       <Component id="rb_zoom_fast" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="rb_zoom_smooth" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator3" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jRadioButton1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jRadioButton2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jRadioButton3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -418,6 +530,23 @@
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="rb_zoom_smooth.setSelected(image_view.getImageScaleType() == SCALE_TYPE_SMOOTH);"/>
               </AuxValues>
+            </Component>
+            <Component class="javax.swing.JSeparator" name="jSeparator3">
+            </Component>
+            <Component class="javax.swing.JRadioButton" name="jRadioButton1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="jRadioButton1"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JRadioButton" name="jRadioButton2">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="jRadioButton2"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JRadioButton" name="jRadioButton3">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="jRadioButton3"/>
+              </Properties>
             </Component>
           </SubComponents>
         </Container>
@@ -795,7 +924,7 @@
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Component id="pnl_21" max="32767" attributes="0"/>
                                   <Component id="cb_f_zoom_border" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="pnl_19" alignment="0" pref="341" max="32767" attributes="0"/>
+                                  <Component id="pnl_19" alignment="0" max="32767" attributes="0"/>
                                   <Component id="pnl_20" alignment="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
@@ -942,7 +1071,7 @@
                               <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="cb_s_zoom_border" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="pnl_22" alignment="0" pref="341" max="32767" attributes="0"/>
+                                  <Component id="pnl_22" alignment="0" max="32767" attributes="0"/>
                                   <Component id="pnl_23" alignment="0" max="32767" attributes="0"/>
                                   <Component id="pnl_24" alignment="0" max="32767" attributes="0"/>
                               </Group>
@@ -1205,16 +1334,29 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="cb_additional_stroke" alignment="0" max="32767" attributes="0"/>
-                          <Component id="pnl_28" alignment="0" max="32767" attributes="0"/>
-                          <Component id="sp_10" alignment="0" max="32767" attributes="0"/>
-                          <Component id="pnl_27" alignment="0" max="32767" attributes="0"/>
-                          <Component id="sp_11" alignment="0" max="32767" attributes="0"/>
-                          <Component id="pnl_29" alignment="0" max="32767" attributes="0"/>
-                          <Component id="btn_random_stroke" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="cb_additional_stroke" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="pnl_28" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="sp_10" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="pnl_27" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="sp_11" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="pnl_29" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="btn_random_stroke" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                              <Component id="jSeparator2" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
+                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                      <Component id="pnl_30" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -1236,6 +1378,10 @@
                       <Component id="pnl_29" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btn_random_stroke" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jSeparator2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="pnl_30" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -1360,6 +1506,39 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
               </Events>
             </Component>
+            <Component class="javax.swing.JSeparator" name="jSeparator2">
+            </Component>
+            <Container class="javax.swing.JPanel" name="pnl_30">
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                <Property name="columns" type="int" value="0"/>
+                <Property name="horizontalGap" type="int" value="5"/>
+                <Property name="rows" type="int" value="1"/>
+              </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JTextField" name="fld_region_min">
+                  <Properties>
+                    <Property name="horizontalAlignment" type="int" value="0"/>
+                    <Property name="actionCommand" type="java.lang.String" value="fld_region_min"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
+                  </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_stroke_w.setText(String.format(&quot;%.0fpx&quot;, image_view.getRegionStroke().getLineWidth()));&#xa;"/>
+                  </AuxValues>
+                </Component>
+                <Component class="javax.swing.JButton" name="btn_region_min">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="&#x41c;&#x456;&#x43d;. &#x440;&#x43e;&#x437;&#x43c;&#x456;&#x440; &#x440;&#x435;&#x433;&#x456;&#x43e;&#x43d;&#x443;"/>
+                    <Property name="actionCommand" type="java.lang.String" value="btn_region_min"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
+                  </Events>
+                </Component>
+              </SubComponents>
+            </Container>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="pnl_10">
