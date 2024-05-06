@@ -83,7 +83,7 @@ private float imageScaleMin;                 // Максимальний мас�
 private float imageScaleInternalFit;     // Масштаб для внутрішнього заповнення
 private float imageScaleExternalFit;      // Масштаб для зовнішнього заповнення
 private int imageScaleType = SCALE_TYPE_FAST;              // Тип масштабування
-private int imageOpenSize = OPEN_SIZE_INTERNAL_FIT;        // Розмір зображення
+private int imageOpenSize = OPEN_SIZE_INTERNAL_FIT; // Розмір нового зображення
 private boolean lmbEnable    = true; // Переміщення зображення за допомогою ЛКМ
 private boolean cmbEnable    = true;          // Зміна вигляду за допопогою СКМ
 private boolean rmbEnable    = true;           // Масштабування за допоогою ПКМ
@@ -543,31 +543,73 @@ public void magnifierZoomOut() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-/** Обертає зображення на 90° за годинниковою стрілкою */
+/** Перехід в режим ручного задання регіону масштабування */
+public void setRegion() {
+    
+    panelRoot.setCursor(CURSOR_REGION);
+    regionOrig = new Rectangle();
+    specifyRegion = true;
+    panelRoot.repaint();
+    
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Масштабування зображення в межах визначеного регіону
+ * @param region регіон масштабування
+ */
+public void setRegion (Rectangle region) {
+    
+    specifyRegion = false;
+    panelRoot.repaint();
+    
+    int x = regionImage.x;
+    int y = regionImage.y;
+    
+    int w = regionImage.width;
+    int h = regionImage.height;
+    
+    int fitType = 0;
+    float fitScale = calculateFitScale(w, h)[fitType];
+    
+    Point center = new Point(x + w/2, y + h/2);
+    Point2D.Float percent = getLocalPercentagePoint(center, imageW, imageH);
+    
+    setImageScale(fitScale);
+
+    Point location = getLocationPoint(percent, imageScaleW, imageScaleH);
+    centerOnPoint(location);
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+/** Обертання зображення на 90° за годинниковою стрілкою */
 public void turnСlockwise()
     { setRotatedImage(getRotatedImage(image, ROTATE_90_DEG)); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-/** Обертає зображення на 90° проти годинникової стрілки */
+/** Обертання зображення на 90° проти годинникової стрілки */
 public void turnСounterclockwise()
     { setRotatedImage(getRotatedImage(image, ROTATE_270_DEG)); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-/** Обертає зображення на 180° */
+/** Обертання зображення на 180° */
 public void rollOver()
     { setRotatedImage(getRotatedImage(image, ROTATE_180_DEG)); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-/** Відзеркалює зображення горизонтально */
+/** Відзеркалення зображення горизонтально */
 public void mirrorHorizontally()
     { setRotatedImage(getFlippedImage(image, FLIP_HORIZONTAL)); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-/** Відзеркалює зображення вертикально */
+/** Відзеркалення зображення вертикально */
 public void mirrorVertically()
     { setRotatedImage(getFlippedImage(image, FLIP_VERTICAL)); }
 
@@ -1528,43 +1570,6 @@ private Rectangle calculateScrollParams (Point2D.Float oldPosition,
     params.y += Dy;
 
     return params;
-
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-public void setRegion() {
-    
-    panelRoot.setCursor(CURSOR_REGION);
-    regionOrig = new Rectangle();
-    specifyRegion = true;
-    panelRoot.repaint();
-    
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-public void setRegion (Rectangle region) {
-    
-    specifyRegion = false;
-    panelRoot.repaint();
-    
-    int x = regionImage.x;
-    int y = regionImage.y;
-    
-    int w = regionImage.width;
-    int h = regionImage.height;
-    
-    int fitType = 0;
-    float fitScale = calculateFitScale(w, h)[fitType];
-    
-    Point center = new Point(x + w/2, y + h/2);
-    Point2D.Float percent = getLocalPercentagePoint(center, imageW, imageH);
-    
-    setImageScale(fitScale);
-
-    Point location = getLocationPoint(percent, imageScaleW, imageScaleH);
-    centerOnPoint(location);
 
 }
 

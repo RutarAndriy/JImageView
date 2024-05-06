@@ -31,134 +31,136 @@ public JImageViewDemo() { initComponents();
 ///////////////////////////////////////////////////////////////////////////////
 
 @SuppressWarnings("unchecked")
-    private void initComponents() {//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
 
-        bg_1 = new ButtonGroup();
-        bg_2 = new ButtonGroup();
-        bg_3 = new ButtonGroup();
+        bg_scale_type = new ButtonGroup();
+        bg_magnifier_shape = new ButtonGroup();
+        bg_scrollbars_visibility = new ButtonGroup();
+        bg_open_size = new ButtonGroup();
         image_view = new JImageView();
         btn_open = new JButton();
-        sp_01 = new JSeparator();
-        pnl_01 = new JPanel();
+        sp_open = new JSeparator();
+        pnl_zoom = new JPanel();
         btn_zoom_out = new JButton();
         btn_zoom_in = new JButton();
-        pnl_02 = new JPanel();
-        btn_minimize = new JButton();
-        btn_maximize = new JButton();
-        pnl_03 = new JPanel();
+        pnl_fit = new JPanel();
         btn_internal_fit = new JButton();
         btn_external_fit = new JButton();
-        pnl_04 = new JPanel();
+        pnl_min_max = new JPanel();
+        btn_minimize = new JButton();
+        btn_maximize = new JButton();
+        pnl_center_region = new JPanel();
         btn_center = new JButton();
         btn_region_fit = new JButton();
         btn_original = new JButton();
-        sp_02 = new JSeparator();
-        pnl_05 = new JPanel();
+        sp_original = new JSeparator();
+        pnl_scale = new JPanel();
         fld_scale = new JTextField();
         btn_set_scale = new JButton();
-        sp_03 = new JSeparator();
-        jPanel1 = new JPanel();
+        sp_scale = new JSeparator();
+        pnl_rotate_mirror = new JPanel();
         btn_rotate_90 = new JButton();
         btn_rotate_270 = new JButton();
         btn_rotate_180 = new JButton();
         btn_flip_h = new JButton();
         btn_flip_v = new JButton();
-        jSeparator1 = new JSeparator();
-        tab_pnl_01 = new JTabbedPane();
-        pnl_06 = new JPanel();
+        sep_rotate_mirror = new JSeparator();
+        tab_pnl_settings = new JTabbedPane();
+        pnl_global = new JPanel();
         cb_lmb = new JCheckBox();
         cb_cmb = new JCheckBox();
         cb_rmb = new JCheckBox();
         cb_wheel = new JCheckBox();
         cb_zmb = new JCheckBox();
-        sp_04 = new JSeparator();
+        sp_zmb = new JSeparator();
         rb_zoom_fast = new JRadioButton();
         rb_zoom_smooth = new JRadioButton();
-        jSeparator3 = new JSeparator();
-        jRadioButton1 = new JRadioButton();
-        jRadioButton2 = new JRadioButton();
-        jRadioButton3 = new JRadioButton();
-        pnl_07 = new JPanel();
+        sep_zoom_smooth = new JSeparator();
+        rb_open_original = new JRadioButton();
+        rb_open_internal_fit = new JRadioButton();
+        rb_open_external_fit = new JRadioButton();
+        pnl_grid = new JPanel();
         cb_grid = new JCheckBox();
-        sp_05 = new JSeparator();
-        pnl_11 = new JPanel();
+        sp_grid = new JSeparator();
+        pnl_grid_light = new JPanel();
         fld_grid_light = new JTextField();
         btn_grid_light = new JButton();
-        pnl_12 = new JPanel();
+        pnl_grid_dark = new JPanel();
         fld_grid_dark = new JTextField();
         btn_grid_dark = new JButton();
-        pnl_13 = new JPanel();
+        pnl_grid_size = new JPanel();
         fld_grid_size = new JTextField();
         btn_grid_size = new JButton();
-        pnl_08 = new JPanel();
+        pnl_magnifier = new JPanel();
         rb_magn_oval = new JRadioButton();
         rb_magn_rect = new JRadioButton();
-        sp_06 = new JSeparator();
-        pnl_14 = new JPanel();
+        sp_magn_rect = new JSeparator();
+        pnl_magn_w = new JPanel();
         fld_magn_w = new JTextField();
         btn_magn_w = new JButton();
-        pnl_15 = new JPanel();
+        pnl_magn_h = new JPanel();
         fld_magn_h = new JTextField();
         btn_magn_h = new JButton();
-        sp_07 = new JSeparator();
+        sp_magn_h = new JSeparator();
         cb_magn_scale = new JComboBox<>();
-        sp_08 = new JSeparator();
+        sp_magn_scale = new JSeparator();
         cb_hide_cursor = new JCheckBox();
-        sp_09 = new JSeparator();
-        tab_pnl_02 = new JTabbedPane();
-        pnl_16 = new JPanel();
+        sp_hide_cursor = new JSeparator();
+        tab_pnl_zoom_borders = new JTabbedPane();
+        pnl_f_zoom_border = new JPanel();
         cb_f_zoom_border = new JCheckBox();
-        pnl_19 = new JPanel();
+        pnl_f_zoom_border_w = new JPanel();
         fld_f_zoom_border_w = new JTextField();
         btn_f_zoom_border_w = new JButton();
-        pnl_20 = new JPanel();
+        pnl_f_zoom_border_h = new JPanel();
         fld_f_zoom_border_gap = new JTextField();
         btn_f_zoom_border_gap = new JButton();
-        pnl_21 = new JPanel();
+        pnl_f_zoom_border_color = new JPanel();
         fld_f_zoom_border_color = new JTextField();
         btn_f_zoom_border_color = new JButton();
-        pnl_17 = new JPanel();
+        pnl_s_zoom_border = new JPanel();
         cb_s_zoom_border = new JCheckBox();
-        pnl_22 = new JPanel();
+        pnl_s_zoom_border_w = new JPanel();
         fld_s_zoom_border_w = new JTextField();
         btn_s_zoom_border_w = new JButton();
-        pnl_23 = new JPanel();
+        pnl_s_zoom_border_h = new JPanel();
         fld_s_zoom_border_gap = new JTextField();
         btn_s_zoom_border_gap = new JButton();
-        pnl_24 = new JPanel();
+        pnl_s_zoom_border_color = new JPanel();
         fld_s_zoom_border_color = new JTextField();
         btn_s_zoom_border_color = new JButton();
-        pnl_18 = new JPanel();
+        pnl_zoom_gap = new JPanel();
         cb_flip_zoom = new JCheckBox();
-        pnl_25 = new JPanel();
+        pnl_zoom_gap_w = new JPanel();
         fld_zoom_gap_w = new JTextField();
         btn_zoom_gap_w = new JButton();
-        pnl_26 = new JPanel();
+        pnl_zoom_gap_h = new JPanel();
         fld_zoom_gap_h = new JTextField();
         btn_zoom_gap_h = new JButton();
-        pnl_09 = new JPanel();
+        pnl_region = new JPanel();
         cb_additional_stroke = new JCheckBox();
-        sp_10 = new JSeparator();
-        pnl_27 = new JPanel();
+        sp_additional_stroke = new JSeparator();
+        pnl_f_stroke_color = new JPanel();
         fld_f_stroke_color = new JTextField();
         btn_f_stroke_color = new JButton();
-        pnl_28 = new JPanel();
+        pnl_s_stroke_color = new JPanel();
         fld_s_stroke_color = new JTextField();
         btn_s_stroke_color = new JButton();
-        sp_11 = new JSeparator();
-        pnl_29 = new JPanel();
+        sp_s_stroke_color = new JSeparator();
+        pnl_stroke_w = new JPanel();
         fld_stroke_w = new JTextField();
         btn_stroke_w = new JButton();
         btn_random_stroke = new JButton();
-        jSeparator2 = new JSeparator();
-        pnl_30 = new JPanel();
+        sep_random_stroke = new JSeparator();
+        pnl_region_min = new JPanel();
         fld_region_min = new JTextField();
         btn_region_min = new JButton();
-        pnl_10 = new JPanel();
+        pnl_additionally = new JPanel();
         cb_move_out = new JCheckBox();
         cb_zoom_out = new JCheckBox();
         cb_invert = new JCheckBox();
-        sp_12 = new JSeparator();
+        sp_invert = new JSeparator();
         rb_sb_always = new JRadioButton();
         rb_sb_as_needed = new JRadioButton();
         rb_sb_never = new JRadioButton();
@@ -172,111 +174,111 @@ public JImageViewDemo() { initComponents();
         btn_open.setActionCommand("btn_open");
         btn_open.addActionListener(this::onAction);
 
-        pnl_01.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_zoom.setLayout(new GridLayout(1, 0, 5, 0));
 
         btn_zoom_out.setText("Зменшити");
         btn_zoom_out.setActionCommand("btn_zoom_out");
         btn_zoom_out.addActionListener(this::onAction);
-        pnl_01.add(btn_zoom_out);
+        pnl_zoom.add(btn_zoom_out);
 
         btn_zoom_in.setText("Збільшити");
         btn_zoom_in.setActionCommand("btn_zoom_in");
         btn_zoom_in.addActionListener(this::onAction);
-        pnl_01.add(btn_zoom_in);
+        pnl_zoom.add(btn_zoom_in);
 
-        pnl_02.setLayout(new GridLayout(1, 0, 5, 0));
-
-        btn_minimize.setText("Мінімізувати");
-        btn_minimize.setActionCommand("btn_minimize");
-        btn_minimize.addActionListener(this::onAction);
-        pnl_02.add(btn_minimize);
-
-        btn_maximize.setText("Максимізувати");
-        btn_maximize.setActionCommand("btn_maximize");
-        btn_maximize.addActionListener(this::onAction);
-        pnl_02.add(btn_maximize);
-
-        pnl_03.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_fit.setLayout(new GridLayout(1, 0, 5, 0));
 
         btn_internal_fit.setText("Вписати");
         btn_internal_fit.setActionCommand("btn_internal_fit");
         btn_internal_fit.addActionListener(this::onAction);
-        pnl_03.add(btn_internal_fit);
+        pnl_fit.add(btn_internal_fit);
 
-        btn_external_fit.setText("За розміром вікна");
+        btn_external_fit.setText("Описати");
         btn_external_fit.setActionCommand("btn_external_fit");
         btn_external_fit.addActionListener(this::onAction);
-        pnl_03.add(btn_external_fit);
+        pnl_fit.add(btn_external_fit);
 
-        pnl_04.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_min_max.setLayout(new GridLayout(1, 0, 5, 0));
+
+        btn_minimize.setText("Мінімізувати");
+        btn_minimize.setActionCommand("btn_minimize");
+        btn_minimize.addActionListener(this::onAction);
+        pnl_min_max.add(btn_minimize);
+
+        btn_maximize.setText("Максимізувати");
+        btn_maximize.setActionCommand("btn_maximize");
+        btn_maximize.addActionListener(this::onAction);
+        pnl_min_max.add(btn_maximize);
+
+        pnl_center_region.setLayout(new GridLayout(1, 0, 5, 0));
 
         btn_center.setText("Центрувати");
         btn_center.setActionCommand("btn_center");
         btn_center.addActionListener(this::onAction);
-        pnl_04.add(btn_center);
+        pnl_center_region.add(btn_center);
 
         btn_region_fit.setText("Масштабувати регіон");
         btn_region_fit.setActionCommand("btn_region_fit");
         btn_region_fit.addActionListener(this::onAction);
-        pnl_04.add(btn_region_fit);
+        pnl_center_region.add(btn_region_fit);
 
         btn_original.setText("Оригінальний розмір зображення");
         btn_original.setActionCommand("btn_original");
         btn_original.addActionListener(this::onAction);
 
-        pnl_05.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_scale.setLayout(new GridLayout(1, 0, 5, 0));
 
         fld_scale.setHorizontalAlignment(JTextField.CENTER);
         fld_scale.setActionCommand("fld_scale");
         fld_scale.setText(getRoundedValue(image_view.getImageScale()) + "%");
         fld_scale.addActionListener(this::onAction);
-        pnl_05.add(fld_scale);
+        pnl_scale.add(fld_scale);
 
         btn_set_scale.setText("Задати масштаб");
         btn_set_scale.setActionCommand("btn_set_scale");
         btn_set_scale.addActionListener(this::onAction);
-        pnl_05.add(btn_set_scale);
+        pnl_scale.add(btn_set_scale);
 
-        jPanel1.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_rotate_mirror.setLayout(new GridLayout(1, 0, 5, 0));
 
         btn_rotate_90.setText("↶");
-        btn_rotate_90.setToolTipText("Повернути на 90° проти годинникової стрілки");
         btn_rotate_90.setActionCommand("btn_rotate_90");
         btn_rotate_90.setMargin(new Insets(0, 0, 0, 0));
+        btn_rotate_90.setToolTipText("Повернути на 90° проти годинникової стрілки");
         btn_rotate_90.addActionListener(this::onAction);
-        jPanel1.add(btn_rotate_90);
+        pnl_rotate_mirror.add(btn_rotate_90);
 
         btn_rotate_270.setText("↷");
-        btn_rotate_270.setToolTipText("Повернути на 90° за годинниковою стрілкою");
         btn_rotate_270.setActionCommand("btn_rotate_270");
         btn_rotate_270.setMargin(new Insets(0, 0, 0, 0));
+        btn_rotate_270.setToolTipText("Повернути на 90° за годинниковою стрілкою");
         btn_rotate_270.addActionListener(this::onAction);
-        jPanel1.add(btn_rotate_270);
+        pnl_rotate_mirror.add(btn_rotate_270);
 
         btn_rotate_180.setText("↺");
-        btn_rotate_180.setToolTipText("Повернути на 180°");
         btn_rotate_180.setActionCommand("btn_rotate_180");
         btn_rotate_180.setMargin(new Insets(0, 0, 0, 0));
+        btn_rotate_180.setToolTipText("Повернути на 180°");
         btn_rotate_180.addActionListener(this::onAction);
-        jPanel1.add(btn_rotate_180);
+        pnl_rotate_mirror.add(btn_rotate_180);
 
         btn_flip_h.setText("⇆");
-        btn_flip_h.setToolTipText("Відзеркалити горизонтально");
         btn_flip_h.setActionCommand("btn_flip_h");
         btn_flip_h.setMargin(new Insets(0, 0, 0, 0));
+        btn_flip_h.setToolTipText("Відзеркалити горизонтально");
         btn_flip_h.addActionListener(this::onAction);
-        jPanel1.add(btn_flip_h);
+        pnl_rotate_mirror.add(btn_flip_h);
 
         btn_flip_v.setText("⇅");
-        btn_flip_v.setToolTipText("Відзеркалити вертикально");
         btn_flip_v.setActionCommand("btn_flip_v");
         btn_flip_v.setMargin(new Insets(0, 0, 0, 0));
+        btn_flip_v.setToolTipText("Відзеркалити вертикально");
         btn_flip_v.addActionListener(this::onAction);
-        jPanel1.add(btn_flip_v);
+        pnl_rotate_mirror.add(btn_flip_v);
 
         increaseTextSize(6, btn_rotate_90, btn_rotate_270, btn_rotate_180, btn_flip_h, btn_flip_v);
 
-        tab_pnl_01.setBorder(BorderFactory.createEmptyBorder(0, 0, 1, 0));
+        tab_pnl_settings.setBorder(BorderFactory.createEmptyBorder(0, 0, 1, 0));
 
         cb_lmb.setText("Переміщувати зображення лівою клавішею миші");
         cb_lmb.setActionCommand("cb_lmb");
@@ -303,54 +305,58 @@ public JImageViewDemo() { initComponents();
         cb_zmb.setSelected(image_view.isZMBEnable());
         cb_zmb.addActionListener(this::onAction);
 
-        bg_1.add(rb_zoom_fast);
+        bg_scale_type.add(rb_zoom_fast);
         rb_zoom_fast.setText("Швидке масштабування");
         rb_zoom_fast.setActionCommand("rb_zoom_fast");
         rb_zoom_fast.setSelected(image_view.getImageScaleType() == SCALE_TYPE_FAST);
         rb_zoom_fast.addActionListener(this::onAction);
 
-        bg_1.add(rb_zoom_smooth);
+        bg_scale_type.add(rb_zoom_smooth);
         rb_zoom_smooth.setText("Згладжене масштабування");
         rb_zoom_smooth.setActionCommand("rb_zoom_smooth");
         rb_zoom_smooth.setSelected(image_view.getImageScaleType() == SCALE_TYPE_SMOOTH);
         rb_zoom_smooth.addActionListener(this::onAction);
 
-        jRadioButton1.setText("jRadioButton1");
+        bg_open_size.add(rb_open_original);
+        rb_open_original.setText("Відкривати зображення оригінального розміру");
+        rb_open_original.setActionCommand("rb_open_original");
+        rb_open_original.setSelected(image_view.getImageOpenSize() == OPEN_SIZE_ORIGINAL);
+        rb_open_original.addActionListener(this::onAction);
 
-        jRadioButton2.setText("jRadioButton2");
+        bg_open_size.add(rb_open_internal_fit);
+        rb_open_internal_fit.setText("Відкривати зображення вписаним");
+        rb_open_internal_fit.setActionCommand("rb_open_internal_fit");
+        rb_open_internal_fit.setSelected(image_view.getImageOpenSize() == OPEN_SIZE_INTERNAL_FIT);
+        rb_open_internal_fit.addActionListener(this::onAction);
 
-        jRadioButton3.setText("jRadioButton3");
+        bg_open_size.add(rb_open_external_fit);
+        rb_open_external_fit.setText("Відкривати зображення описаним");
+        rb_open_external_fit.setActionCommand("rb_open_external_fit");
+        rb_open_external_fit.setSelected(image_view.getImageOpenSize() == OPEN_SIZE_EXTERNAL_FIT);
+        rb_open_external_fit.addActionListener(this::onAction);
 
-        GroupLayout pnl_06Layout = new GroupLayout(pnl_06);
-        pnl_06.setLayout(pnl_06Layout);
-        pnl_06Layout.setHorizontalGroup(pnl_06Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_06Layout.createSequentialGroup()
-                .addGroup(pnl_06Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGroup(pnl_06Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addGroup(pnl_06Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(cb_lmb, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cb_cmb, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cb_rmb, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cb_wheel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(sp_04)
-                            .addComponent(cb_zmb, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(rb_zoom_fast, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(rb_zoom_smooth, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(GroupLayout.Alignment.TRAILING, pnl_06Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(jSeparator3)))
-                .addGap(3, 3, 3))
-            .addGroup(pnl_06Layout.createSequentialGroup()
+        GroupLayout pnl_globalLayout = new GroupLayout(pnl_global);
+        pnl_global.setLayout(pnl_globalLayout);
+        pnl_globalLayout.setHorizontalGroup(pnl_globalLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_globalLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
-                .addGroup(pnl_06Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(jRadioButton1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jRadioButton2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jRadioButton3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(pnl_globalLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(cb_lmb, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cb_cmb, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cb_rmb, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cb_wheel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(sp_zmb)
+                    .addComponent(cb_zmb, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(rb_zoom_fast, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(rb_zoom_smooth, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(sep_zoom_smooth, GroupLayout.Alignment.TRAILING)
+                    .addComponent(rb_open_original, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(rb_open_internal_fit, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(rb_open_external_fit, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(3, 3, 3))
         );
-        pnl_06Layout.setVerticalGroup(pnl_06Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_06Layout.createSequentialGroup()
+        pnl_globalLayout.setVerticalGroup(pnl_globalLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_globalLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
                 .addComponent(cb_lmb)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -362,135 +368,135 @@ public JImageViewDemo() { initComponents();
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cb_zmb)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sp_04, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(sp_zmb, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rb_zoom_fast)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rb_zoom_smooth)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(sep_zoom_smooth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton1)
+                .addComponent(rb_open_original)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton2)
+                .addComponent(rb_open_internal_fit)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton3)
+                .addComponent(rb_open_external_fit)
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tab_pnl_01.addTab("Загальне", pnl_06);
+        tab_pnl_settings.addTab("Загальне", pnl_global);
 
         cb_grid.setText("Відображати сітку");
         cb_grid.setActionCommand("cb_grid");
         cb_grid.setSelected(image_view.isGridVisible());
         cb_grid.addActionListener(this::onAction);
 
-        pnl_11.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_grid_light.setLayout(new GridLayout(1, 0, 5, 0));
 
         fld_grid_light.setHorizontalAlignment(JTextField.CENTER);
         fld_grid_light.setActionCommand("fld_grid_light");
         fld_grid_light.setText(getColorValue(image_view.getGridLightColor()));
         fld_grid_light.addActionListener(this::onAction);
-        pnl_11.add(fld_grid_light);
+        pnl_grid_light.add(fld_grid_light);
 
         btn_grid_light.setText("Задати світлий колір");
         btn_grid_light.setActionCommand("btn_grid_light");
         btn_grid_light.addActionListener(this::onAction);
-        pnl_11.add(btn_grid_light);
+        pnl_grid_light.add(btn_grid_light);
 
-        pnl_12.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_grid_dark.setLayout(new GridLayout(1, 0, 5, 0));
 
         fld_grid_dark.setHorizontalAlignment(JTextField.CENTER);
         fld_grid_dark.setActionCommand("fld_grid_dark");
         fld_grid_dark.setText(getColorValue(image_view.getGridDarkColor()));
         fld_grid_dark.addActionListener(this::onAction);
-        pnl_12.add(fld_grid_dark);
+        pnl_grid_dark.add(fld_grid_dark);
 
         btn_grid_dark.setText("Задати темний колір");
         btn_grid_dark.setActionCommand("btn_grid_dark");
         btn_grid_dark.addActionListener(this::onAction);
-        pnl_12.add(btn_grid_dark);
+        pnl_grid_dark.add(btn_grid_dark);
 
-        pnl_13.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_grid_size.setLayout(new GridLayout(1, 0, 5, 0));
 
         fld_grid_size.setHorizontalAlignment(JTextField.CENTER);
         fld_grid_size.setActionCommand("fld_grid_size");
         fld_grid_size.setText(image_view.getGridSize() + "px");
         fld_grid_size.addActionListener(this::onAction);
-        pnl_13.add(fld_grid_size);
+        pnl_grid_size.add(fld_grid_size);
 
         btn_grid_size.setText("Задати розмір сітки");
         btn_grid_size.setActionCommand("btn_grid_size");
         btn_grid_size.addActionListener(this::onAction);
-        pnl_13.add(btn_grid_size);
+        pnl_grid_size.add(btn_grid_size);
 
-        GroupLayout pnl_07Layout = new GroupLayout(pnl_07);
-        pnl_07.setLayout(pnl_07Layout);
-        pnl_07Layout.setHorizontalGroup(pnl_07Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_07Layout.createSequentialGroup()
+        GroupLayout pnl_gridLayout = new GroupLayout(pnl_grid);
+        pnl_grid.setLayout(pnl_gridLayout);
+        pnl_gridLayout.setHorizontalGroup(pnl_gridLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_gridLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
-                .addGroup(pnl_07Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(pnl_gridLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(cb_grid, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnl_11, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnl_13, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sp_05)
-                    .addComponent(pnl_12, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pnl_grid_light, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnl_grid_size, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(sp_grid)
+                    .addComponent(pnl_grid_dark, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(3, 3, 3))
         );
-        pnl_07Layout.setVerticalGroup(pnl_07Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_07Layout.createSequentialGroup()
+        pnl_gridLayout.setVerticalGroup(pnl_gridLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_gridLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
                 .addComponent(cb_grid)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sp_05, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(sp_grid, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnl_11, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnl_grid_light, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnl_12, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnl_grid_dark, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnl_13, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnl_grid_size, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tab_pnl_01.addTab("Сітка", pnl_07);
+        tab_pnl_settings.addTab("Сітка", pnl_grid);
 
-        bg_2.add(rb_magn_oval);
+        bg_magnifier_shape.add(rb_magn_oval);
         rb_magn_oval.setText("Овальна лупа");
         rb_magn_oval.setActionCommand("rb_magn_oval");
         rb_magn_oval.setSelected(image_view.getZoomShapeType() == ZOOM_SHAPE_ELLIPSE);
         rb_magn_oval.addActionListener(this::onAction);
 
-        bg_2.add(rb_magn_rect);
+        bg_magnifier_shape.add(rb_magn_rect);
         rb_magn_rect.setText("Прямокутна лупа");
         rb_magn_rect.setActionCommand("rb_magn_rect");
         rb_magn_rect.setSelected(image_view.getZoomShapeType() == ZOOM_SHAPE_RECTANGLE);
         rb_magn_rect.addActionListener(this::onAction);
 
-        pnl_14.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_magn_w.setLayout(new GridLayout(1, 0, 5, 0));
 
         fld_magn_w.setHorizontalAlignment(JTextField.CENTER);
         fld_magn_w.setActionCommand("fld_magn_w");
         fld_magn_w.setText(image_view.getZoomArea().width + "px");
         fld_magn_w.addActionListener(this::onAction);
-        pnl_14.add(fld_magn_w);
+        pnl_magn_w.add(fld_magn_w);
 
         btn_magn_w.setText("Задати ширину лупи");
         btn_magn_w.setActionCommand("btn_magn_w");
         btn_magn_w.addActionListener(this::onAction);
-        pnl_14.add(btn_magn_w);
+        pnl_magn_w.add(btn_magn_w);
 
-        pnl_15.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_magn_h.setLayout(new GridLayout(1, 0, 5, 0));
 
         fld_magn_h.setHorizontalAlignment(JTextField.CENTER);
         fld_magn_h.setActionCommand("fld_magn_h");
         fld_magn_h.setText(image_view.getZoomArea().height + "px");
         fld_magn_h.addActionListener(this::onAction);
-        pnl_15.add(fld_magn_h);
+        pnl_magn_h.add(fld_magn_h);
 
         btn_magn_h.setText("Задати висоту лупи");
         btn_magn_h.setActionCommand("btn_magn_h");
         btn_magn_h.addActionListener(this::onAction);
-        pnl_15.add(btn_magn_h);
+        pnl_magn_h.add(btn_magn_h);
 
         cb_magn_scale.setMaximumRowCount(9);
         cb_magn_scale.setModel(new DefaultComboBoxModel<>(new String[] { "Масштаб лупи x1.25", "Масштаб лупи x1.50", "Масштаб лупи x1.75", "Масштаб лупи x2.00", "Масштаб лупи x2.25", "Масштаб лупи x2.50", "Масштаб лупи x3.00", "Масштаб лупи x4.00", "Масштаб лупи x5.00" }));
@@ -508,355 +514,348 @@ public JImageViewDemo() { initComponents();
         cb_f_zoom_border.setSelected(image_view.isZoomFirstBorderVisible());
         cb_f_zoom_border.addActionListener(this::onAction);
 
-        pnl_19.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_f_zoom_border_w.setLayout(new GridLayout(1, 0, 5, 0));
 
         fld_f_zoom_border_w.setHorizontalAlignment(JTextField.CENTER);
         fld_f_zoom_border_w.setActionCommand("fld_f_zoom_border_w");
         fld_f_zoom_border_w.setText(image_view.getZoomFirstBorderWidth() + "px");
         fld_f_zoom_border_w.addActionListener(this::onAction);
-        pnl_19.add(fld_f_zoom_border_w);
+        pnl_f_zoom_border_w.add(fld_f_zoom_border_w);
 
         btn_f_zoom_border_w.setText("Ширина I рамки лупи");
         btn_f_zoom_border_w.setActionCommand("btn_f_zoom_border_w");
         btn_f_zoom_border_w.addActionListener(this::onAction);
-        pnl_19.add(btn_f_zoom_border_w);
+        pnl_f_zoom_border_w.add(btn_f_zoom_border_w);
 
-        pnl_20.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_f_zoom_border_h.setLayout(new GridLayout(1, 0, 5, 0));
 
         fld_f_zoom_border_gap.setHorizontalAlignment(JTextField.CENTER);
         fld_f_zoom_border_gap.setActionCommand("fld_f_zoom_border_gap");
         fld_f_zoom_border_gap.setText(image_view.getZoomFirstBorderGap() + "px");
         fld_f_zoom_border_gap.addActionListener(this::onAction);
-        pnl_20.add(fld_f_zoom_border_gap);
+        pnl_f_zoom_border_h.add(fld_f_zoom_border_gap);
 
         btn_f_zoom_border_gap.setText("Відступ I рамки лупи");
         btn_f_zoom_border_gap.setActionCommand("btn_f_zoom_border_gap");
         btn_f_zoom_border_gap.addActionListener(this::onAction);
-        pnl_20.add(btn_f_zoom_border_gap);
+        pnl_f_zoom_border_h.add(btn_f_zoom_border_gap);
 
-        pnl_21.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_f_zoom_border_color.setLayout(new GridLayout(1, 0, 5, 0));
 
         fld_f_zoom_border_color.setHorizontalAlignment(JTextField.CENTER);
         fld_f_zoom_border_color.setActionCommand("fld_f_zoom_border_color");
         fld_f_zoom_border_color.setText(getColorValue(image_view.getZoomFirstBorderColor()));
         fld_f_zoom_border_color.addActionListener(this::onAction);
-        pnl_21.add(fld_f_zoom_border_color);
+        pnl_f_zoom_border_color.add(fld_f_zoom_border_color);
 
         btn_f_zoom_border_color.setText("Колір I рамки лупи");
         btn_f_zoom_border_color.setActionCommand("btn_f_zoom_border_color");
         btn_f_zoom_border_color.addActionListener(this::onAction);
-        pnl_21.add(btn_f_zoom_border_color);
+        pnl_f_zoom_border_color.add(btn_f_zoom_border_color);
 
-        GroupLayout pnl_16Layout = new GroupLayout(pnl_16);
-        pnl_16.setLayout(pnl_16Layout);
-        pnl_16Layout.setHorizontalGroup(pnl_16Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(GroupLayout.Alignment.TRAILING, pnl_16Layout.createSequentialGroup()
+        GroupLayout pnl_f_zoom_borderLayout = new GroupLayout(pnl_f_zoom_border);
+        pnl_f_zoom_border.setLayout(pnl_f_zoom_borderLayout);
+        pnl_f_zoom_borderLayout.setHorizontalGroup(pnl_f_zoom_borderLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(GroupLayout.Alignment.TRAILING, pnl_f_zoom_borderLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
-                .addGroup(pnl_16Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                    .addComponent(pnl_21, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(pnl_f_zoom_borderLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                    .addComponent(pnl_f_zoom_border_color, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cb_f_zoom_border, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnl_19, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnl_20, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pnl_f_zoom_border_w, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnl_f_zoom_border_h, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(3, 3, 3))
         );
-        pnl_16Layout.setVerticalGroup(pnl_16Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_16Layout.createSequentialGroup()
+        pnl_f_zoom_borderLayout.setVerticalGroup(pnl_f_zoom_borderLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_f_zoom_borderLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
                 .addComponent(cb_f_zoom_border)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnl_19, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnl_f_zoom_border_w, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnl_20, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnl_f_zoom_border_h, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnl_21, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnl_f_zoom_border_color, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addGap(3, 3, 3))
         );
 
-        tab_pnl_02.addTab("I рамка лупи", pnl_16);
+        tab_pnl_zoom_borders.addTab("I рамка лупи", pnl_f_zoom_border);
 
         cb_s_zoom_border.setText("Відображати II рамку лупи");
         cb_s_zoom_border.setActionCommand("cb_s_zoom_border");
         cb_s_zoom_border.setSelected(image_view.isZoomSecondBorderVisible());
         cb_s_zoom_border.addActionListener(this::onAction);
 
-        pnl_22.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_s_zoom_border_w.setLayout(new GridLayout(1, 0, 5, 0));
 
         fld_s_zoom_border_w.setHorizontalAlignment(JTextField.CENTER);
         fld_s_zoom_border_w.setActionCommand("fld_s_zoom_border_w");
         fld_s_zoom_border_w.setText(image_view.getZoomSecondBorderWidth() + "px");
         fld_s_zoom_border_w.addActionListener(this::onAction);
-        pnl_22.add(fld_s_zoom_border_w);
+        pnl_s_zoom_border_w.add(fld_s_zoom_border_w);
 
         btn_s_zoom_border_w.setText("Ширина II рамки лупи");
         btn_s_zoom_border_w.setActionCommand("btn_s_zoom_border_w");
         btn_s_zoom_border_w.addActionListener(this::onAction);
-        pnl_22.add(btn_s_zoom_border_w);
+        pnl_s_zoom_border_w.add(btn_s_zoom_border_w);
 
-        pnl_23.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_s_zoom_border_h.setLayout(new GridLayout(1, 0, 5, 0));
 
         fld_s_zoom_border_gap.setHorizontalAlignment(JTextField.CENTER);
         fld_s_zoom_border_gap.setActionCommand("fld_s_zoom_border_gap");
         fld_s_zoom_border_gap.setText(image_view.getZoomSecondBorderGap() + "px");
         fld_s_zoom_border_gap.addActionListener(this::onAction);
-        pnl_23.add(fld_s_zoom_border_gap);
+        pnl_s_zoom_border_h.add(fld_s_zoom_border_gap);
 
         btn_s_zoom_border_gap.setText("Відступ II рамки лупи");
         btn_s_zoom_border_gap.setActionCommand("btn_s_zoom_border_gap");
         btn_s_zoom_border_gap.addActionListener(this::onAction);
-        pnl_23.add(btn_s_zoom_border_gap);
+        pnl_s_zoom_border_h.add(btn_s_zoom_border_gap);
 
-        pnl_24.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_s_zoom_border_color.setLayout(new GridLayout(1, 0, 5, 0));
 
         fld_s_zoom_border_color.setHorizontalAlignment(JTextField.CENTER);
         fld_s_zoom_border_color.setActionCommand("fld_s_zoom_border_color");
         fld_s_zoom_border_color.setText(getColorValue(image_view.getZoomSecondBorderColor()));
         fld_s_zoom_border_color.addActionListener(this::onAction);
-        pnl_24.add(fld_s_zoom_border_color);
+        pnl_s_zoom_border_color.add(fld_s_zoom_border_color);
 
         btn_s_zoom_border_color.setText("Колір II рамки лупи");
         btn_s_zoom_border_color.setActionCommand("btn_s_zoom_border_color");
         btn_s_zoom_border_color.addActionListener(this::onAction);
-        pnl_24.add(btn_s_zoom_border_color);
+        pnl_s_zoom_border_color.add(btn_s_zoom_border_color);
 
-        GroupLayout pnl_17Layout = new GroupLayout(pnl_17);
-        pnl_17.setLayout(pnl_17Layout);
-        pnl_17Layout.setHorizontalGroup(pnl_17Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_17Layout.createSequentialGroup()
+        GroupLayout pnl_s_zoom_borderLayout = new GroupLayout(pnl_s_zoom_border);
+        pnl_s_zoom_border.setLayout(pnl_s_zoom_borderLayout);
+        pnl_s_zoom_borderLayout.setHorizontalGroup(pnl_s_zoom_borderLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_s_zoom_borderLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
-                .addGroup(pnl_17Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(pnl_s_zoom_borderLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(cb_s_zoom_border, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnl_22, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnl_23, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnl_24, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pnl_s_zoom_border_w, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnl_s_zoom_border_h, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnl_s_zoom_border_color, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(3, 3, 3))
         );
-        pnl_17Layout.setVerticalGroup(pnl_17Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_17Layout.createSequentialGroup()
+        pnl_s_zoom_borderLayout.setVerticalGroup(pnl_s_zoom_borderLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_s_zoom_borderLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
                 .addComponent(cb_s_zoom_border)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnl_22, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnl_s_zoom_border_w, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnl_23, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnl_s_zoom_border_h, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnl_24, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnl_s_zoom_border_color, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addGap(3, 3, 3))
         );
 
-        tab_pnl_02.addTab("II рамка лупи", pnl_17);
+        tab_pnl_zoom_borders.addTab("II рамка лупи", pnl_s_zoom_border);
 
         cb_flip_zoom.setText("Перешкоджати виходу лупи за межі компонента");
         cb_flip_zoom.setActionCommand("cb_flip_zoom");
         cb_flip_zoom.setSelected(image_view.isInvertZoomOut());
         cb_flip_zoom.addActionListener(this::onAction);
 
-        pnl_25.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_zoom_gap_w.setLayout(new GridLayout(1, 0, 5, 0));
 
         fld_zoom_gap_w.setHorizontalAlignment(JTextField.CENTER);
         fld_zoom_gap_w.setActionCommand("fld_zoom_gap_w");
         fld_zoom_gap_w.setText(image_view.getZoomOffset().x + "px");
         fld_zoom_gap_w.addActionListener(this::onAction);
-        pnl_25.add(fld_zoom_gap_w);
+        pnl_zoom_gap_w.add(fld_zoom_gap_w);
 
         btn_zoom_gap_w.setText("Зміщення по гор.");
         btn_zoom_gap_w.setActionCommand("btn_zoom_gap_w");
         btn_zoom_gap_w.addActionListener(this::onAction);
-        pnl_25.add(btn_zoom_gap_w);
+        pnl_zoom_gap_w.add(btn_zoom_gap_w);
 
-        pnl_26.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_zoom_gap_h.setLayout(new GridLayout(1, 0, 5, 0));
 
         fld_zoom_gap_h.setHorizontalAlignment(JTextField.CENTER);
         fld_zoom_gap_h.setActionCommand("fld_zoom_gap_h");
         fld_zoom_gap_h.setText(image_view.getZoomOffset().y + "px");
         fld_zoom_gap_h.addActionListener(this::onAction);
-        pnl_26.add(fld_zoom_gap_h);
+        pnl_zoom_gap_h.add(fld_zoom_gap_h);
 
         btn_zoom_gap_h.setText("Зміщення по верт.");
         btn_zoom_gap_h.setActionCommand("btn_zoom_gap_h");
         btn_zoom_gap_h.addActionListener(this::onAction);
-        pnl_26.add(btn_zoom_gap_h);
+        pnl_zoom_gap_h.add(btn_zoom_gap_h);
 
-        GroupLayout pnl_18Layout = new GroupLayout(pnl_18);
-        pnl_18.setLayout(pnl_18Layout);
-        pnl_18Layout.setHorizontalGroup(pnl_18Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_18Layout.createSequentialGroup()
+        GroupLayout pnl_zoom_gapLayout = new GroupLayout(pnl_zoom_gap);
+        pnl_zoom_gap.setLayout(pnl_zoom_gapLayout);
+        pnl_zoom_gapLayout.setHorizontalGroup(pnl_zoom_gapLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_zoom_gapLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
-                .addGroup(pnl_18Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(pnl_zoom_gapLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(cb_flip_zoom, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnl_25, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnl_26, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pnl_zoom_gap_w, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnl_zoom_gap_h, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(3, 3, 3))
         );
-        pnl_18Layout.setVerticalGroup(pnl_18Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_18Layout.createSequentialGroup()
+        pnl_zoom_gapLayout.setVerticalGroup(pnl_zoom_gapLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_zoom_gapLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
                 .addComponent(cb_flip_zoom)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnl_25, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnl_zoom_gap_w, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnl_26, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnl_zoom_gap_h, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addGap(3, 3, 3))
         );
 
-        tab_pnl_02.addTab("Зміщення лупи", pnl_18);
+        tab_pnl_zoom_borders.addTab("Зміщення лупи", pnl_zoom_gap);
 
-        GroupLayout pnl_08Layout = new GroupLayout(pnl_08);
-        pnl_08.setLayout(pnl_08Layout);
-        pnl_08Layout.setHorizontalGroup(pnl_08Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_08Layout.createSequentialGroup()
+        GroupLayout pnl_magnifierLayout = new GroupLayout(pnl_magnifier);
+        pnl_magnifier.setLayout(pnl_magnifierLayout);
+        pnl_magnifierLayout.setHorizontalGroup(pnl_magnifierLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_magnifierLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
-                .addGroup(pnl_08Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(pnl_magnifierLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(rb_magn_oval, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(rb_magn_rect, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sp_06)
-                    .addComponent(pnl_14, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnl_15, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sp_07)
+                    .addComponent(sp_magn_rect)
+                    .addComponent(pnl_magn_w, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnl_magn_h, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(sp_magn_h)
                     .addComponent(cb_magn_scale, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sp_08)
+                    .addComponent(sp_magn_scale)
                     .addComponent(cb_hide_cursor, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sp_09)
-                    .addComponent(tab_pnl_02))
+                    .addComponent(sp_hide_cursor)
+                    .addComponent(tab_pnl_zoom_borders))
                 .addGap(3, 3, 3))
         );
-        pnl_08Layout.setVerticalGroup(pnl_08Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_08Layout.createSequentialGroup()
+        pnl_magnifierLayout.setVerticalGroup(pnl_magnifierLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_magnifierLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
                 .addComponent(rb_magn_oval)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rb_magn_rect)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sp_06, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(sp_magn_rect, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnl_14, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnl_magn_w, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnl_15, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnl_magn_h, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sp_07, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(sp_magn_h, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cb_magn_scale, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sp_08, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(sp_magn_scale, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cb_hide_cursor)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sp_09, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(sp_hide_cursor, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tab_pnl_02)
+                .addComponent(tab_pnl_zoom_borders)
                 .addGap(3, 3, 3))
         );
 
-        tab_pnl_01.addTab("Лупа", pnl_08);
+        tab_pnl_settings.addTab("Лупа", pnl_magnifier);
 
         cb_additional_stroke.setText("Відображати додатковий штрих");
         cb_additional_stroke.setActionCommand("cb_additional_stroke");
         cb_additional_stroke.setSelected(image_view.isRegionAdditionalStroke());
         cb_additional_stroke.addActionListener(this::onAction);
 
-        pnl_27.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_f_stroke_color.setLayout(new GridLayout(1, 0, 5, 0));
 
         fld_f_stroke_color.setHorizontalAlignment(JTextField.CENTER);
         fld_f_stroke_color.setActionCommand("fld_f_stroke_color");
         fld_f_stroke_color.setText(getColorValue(image_view.getRegionLightColor()));
         fld_f_stroke_color.addActionListener(this::onAction);
-        pnl_27.add(fld_f_stroke_color);
+        pnl_f_stroke_color.add(fld_f_stroke_color);
 
         btn_f_stroke_color.setText("Колір осн. штриха");
         btn_f_stroke_color.setActionCommand("btn_f_stroke_color");
         btn_f_stroke_color.addActionListener(this::onAction);
-        pnl_27.add(btn_f_stroke_color);
+        pnl_f_stroke_color.add(btn_f_stroke_color);
 
-        pnl_28.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_s_stroke_color.setLayout(new GridLayout(1, 0, 5, 0));
 
         fld_s_stroke_color.setHorizontalAlignment(JTextField.CENTER);
         fld_s_stroke_color.setActionCommand("fld_s_stroke_color");
         fld_s_stroke_color.setText(getColorValue(image_view.getRegionDarkColor()));
         fld_s_stroke_color.addActionListener(this::onAction);
-        pnl_28.add(fld_s_stroke_color);
+        pnl_s_stroke_color.add(fld_s_stroke_color);
 
         btn_s_stroke_color.setText("Колір дод. штриха");
         btn_s_stroke_color.setActionCommand("btn_s_stroke_color");
         btn_s_stroke_color.addActionListener(this::onAction);
-        pnl_28.add(btn_s_stroke_color);
+        pnl_s_stroke_color.add(btn_s_stroke_color);
 
-        pnl_29.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_stroke_w.setLayout(new GridLayout(1, 0, 5, 0));
 
         fld_stroke_w.setHorizontalAlignment(JTextField.CENTER);
         fld_stroke_w.setActionCommand("fld_stroke_w");
         fld_stroke_w.setText(String.format("%.0fpx", image_view.getRegionStroke().getLineWidth()));
         fld_stroke_w.addActionListener(this::onAction);
-        pnl_29.add(fld_stroke_w);
+        pnl_stroke_w.add(fld_stroke_w);
 
         btn_stroke_w.setText("Задати шир. штриха");
         btn_stroke_w.setActionCommand("btn_stroke_w");
         btn_stroke_w.addActionListener(this::onAction);
-        pnl_29.add(btn_stroke_w);
+        pnl_stroke_w.add(btn_stroke_w);
 
         btn_random_stroke.setText("Згенерувати новий варіант штриха");
         btn_random_stroke.setActionCommand("btn_random_stroke");
         btn_random_stroke.addActionListener(this::onAction);
 
-        pnl_30.setLayout(new GridLayout(1, 0, 5, 0));
+        pnl_region_min.setLayout(new GridLayout(1, 0, 5, 0));
 
         fld_region_min.setHorizontalAlignment(JTextField.CENTER);
         fld_region_min.setActionCommand("fld_region_min");
-        fld_stroke_w.setText(String.format("%.0fpx", image_view.getRegionStroke().getLineWidth()));
+        fld_region_min.setText(image_view.getRegionMinimumSize() + "px");
         fld_region_min.addActionListener(this::onAction);
-        pnl_30.add(fld_region_min);
+        pnl_region_min.add(fld_region_min);
 
         btn_region_min.setText("Мін. розмір регіону");
         btn_region_min.setActionCommand("btn_region_min");
         btn_region_min.addActionListener(this::onAction);
-        pnl_30.add(btn_region_min);
+        pnl_region_min.add(btn_region_min);
 
-        GroupLayout pnl_09Layout = new GroupLayout(pnl_09);
-        pnl_09.setLayout(pnl_09Layout);
-        pnl_09Layout.setHorizontalGroup(pnl_09Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_09Layout.createSequentialGroup()
-                .addGroup(pnl_09Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGroup(pnl_09Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addGroup(pnl_09Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(cb_additional_stroke, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(pnl_28, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(sp_10)
-                            .addComponent(pnl_27, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(sp_11)
-                            .addComponent(pnl_29, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btn_random_stroke, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(pnl_09Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(jSeparator2)))
-                .addGap(3, 3, 3))
-            .addGroup(pnl_09Layout.createSequentialGroup()
+        GroupLayout pnl_regionLayout = new GroupLayout(pnl_region);
+        pnl_region.setLayout(pnl_regionLayout);
+        pnl_regionLayout.setHorizontalGroup(pnl_regionLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_regionLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
-                .addComponent(pnl_30, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(pnl_regionLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(cb_additional_stroke, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnl_s_stroke_color, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(sp_additional_stroke)
+                    .addComponent(pnl_f_stroke_color, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(sp_s_stroke_color)
+                    .addComponent(pnl_stroke_w, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_random_stroke, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(sep_random_stroke)
+                    .addComponent(pnl_region_min, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(3, 3, 3))
         );
-        pnl_09Layout.setVerticalGroup(pnl_09Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_09Layout.createSequentialGroup()
+        pnl_regionLayout.setVerticalGroup(pnl_regionLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_regionLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
                 .addComponent(cb_additional_stroke)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sp_10, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(sp_additional_stroke, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnl_27, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnl_f_stroke_color, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnl_28, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnl_s_stroke_color, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sp_11, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(sp_s_stroke_color, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnl_29, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnl_stroke_w, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btn_random_stroke)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(sep_random_stroke, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnl_30, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnl_region_min, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tab_pnl_01.addTab("Регіон", pnl_09);
+        tab_pnl_settings.addTab("Регіон", pnl_region);
 
         cb_move_out.setText("Переміщувати зображення за межею видимості");
         cb_move_out.setActionCommand("cb_move_out");
@@ -873,41 +872,41 @@ public JImageViewDemo() { initComponents();
         cb_invert.setSelected(image_view.isWheelInvert());
         cb_invert.addActionListener(this::onAction);
 
-        bg_3.add(rb_sb_always);
+        bg_scrollbars_visibility.add(rb_sb_always);
         rb_sb_always.setText("Постійно відображат смуги прокрутки");
         rb_sb_always.setActionCommand("rb_sb_always");
         rb_sb_always.setSelected(image_view.getVerticalScrollBarPolicy() == ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED && image_view.getHorizontalScrollBarPolicy() == ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         rb_sb_always.addActionListener(this::onAction);
 
-        bg_3.add(rb_sb_as_needed);
+        bg_scrollbars_visibility.add(rb_sb_as_needed);
         rb_sb_as_needed.setText("Відображати смуги прокрутки за потреби");
         rb_sb_as_needed.setActionCommand("rb_sb_as_needed");
         rb_sb_as_needed.setSelected(image_view.getVerticalScrollBarPolicy() == ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED && image_view.getHorizontalScrollBarPolicy() == ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         rb_sb_as_needed.addActionListener(this::onAction);
 
-        bg_3.add(rb_sb_never);
+        bg_scrollbars_visibility.add(rb_sb_never);
         rb_sb_never.setText("Ніколи не відображати смуги прокрутки");
         rb_sb_never.setActionCommand("rb_sb_never");
         rb_sb_never.setSelected(image_view.getVerticalScrollBarPolicy() == ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER && image_view.getHorizontalScrollBarPolicy() == ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         rb_sb_never.addActionListener(this::onAction);
 
-        GroupLayout pnl_10Layout = new GroupLayout(pnl_10);
-        pnl_10.setLayout(pnl_10Layout);
-        pnl_10Layout.setHorizontalGroup(pnl_10Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_10Layout.createSequentialGroup()
+        GroupLayout pnl_additionallyLayout = new GroupLayout(pnl_additionally);
+        pnl_additionally.setLayout(pnl_additionallyLayout);
+        pnl_additionallyLayout.setHorizontalGroup(pnl_additionallyLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_additionallyLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
-                .addGroup(pnl_10Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(pnl_additionallyLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(cb_move_out, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cb_invert, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sp_12)
+                    .addComponent(sp_invert)
                     .addComponent(rb_sb_as_needed, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(rb_sb_always, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(rb_sb_never, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cb_zoom_out, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(3, 3, 3))
         );
-        pnl_10Layout.setVerticalGroup(pnl_10Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(pnl_10Layout.createSequentialGroup()
+        pnl_additionallyLayout.setVerticalGroup(pnl_additionallyLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(pnl_additionallyLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
                 .addComponent(cb_move_out)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -915,7 +914,7 @@ public JImageViewDemo() { initComponents();
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cb_invert)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sp_12, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                .addComponent(sp_invert, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rb_sb_always)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -925,7 +924,7 @@ public JImageViewDemo() { initComponents();
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        tab_pnl_01.addTab("Додатково", pnl_10);
+        tab_pnl_settings.addTab("Додатково", pnl_additionally);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -933,21 +932,21 @@ public JImageViewDemo() { initComponents();
             .addGroup(layout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addComponent(image_view, GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
-                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(sp_03, GroupLayout.Alignment.LEADING)
-                    .addComponent(pnl_05, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sp_02, GroupLayout.Alignment.LEADING)
+                    .addComponent(sp_scale, GroupLayout.Alignment.LEADING)
+                    .addComponent(pnl_scale, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(sp_original, GroupLayout.Alignment.LEADING)
                     .addComponent(btn_original, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btn_open, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(sp_01, GroupLayout.Alignment.LEADING)
-                    .addComponent(pnl_01, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnl_02, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnl_03, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnl_04, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tab_pnl_01)
-                    .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSeparator1))
+                    .addComponent(sp_open, GroupLayout.Alignment.LEADING)
+                    .addComponent(pnl_zoom, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnl_min_max, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnl_fit, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnl_center_region, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tab_pnl_settings)
+                    .addComponent(pnl_rotate_mirror, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(sep_rotate_mirror))
                 .addGap(5, 5, 5))
         );
         layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -958,29 +957,29 @@ public JImageViewDemo() { initComponents();
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btn_open)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sp_01, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(sp_open, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnl_01, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnl_zoom, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnl_02, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnl_fit, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnl_03, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnl_min_max, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnl_04, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnl_center_region, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_original)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sp_02, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(sp_original, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnl_05, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnl_scale, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sp_03, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(sp_scale, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnl_rotate_mirror, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(sep_rotate_mirror, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tab_pnl_01)))
+                        .addComponent(tab_pnl_settings)))
                 .addGap(5, 5, 5))
         );
 
@@ -994,7 +993,7 @@ public JImageViewDemo() { initComponents();
                 if (!minimumSizeSet) {
                     setMinimumSize(getSize());
                     minimumSizeSet = true; } } });
-    }//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1056,6 +1055,13 @@ public JImageViewDemo() { initComponents();
         case "rb_zoom_smooth" ->
             { image_view.setImageScaleType(SCALE_TYPE_SMOOTH); }
 
+        case "rb_open_original" ->
+            { image_view.setImageOpenSize(OPEN_SIZE_ORIGINAL); }
+        case "rb_open_internal_fit" ->
+            { image_view.setImageOpenSize(OPEN_SIZE_INTERNAL_FIT); }
+        case "rb_open_external_fit" ->
+            { image_view.setImageOpenSize(OPEN_SIZE_EXTERNAL_FIT); }
+        
         // ................................................................
 
         case "cb_grid" ->
@@ -1237,6 +1243,13 @@ public JImageViewDemo() { initComponents();
 
         case "btn_random_stroke" ->
             { image_view.setRegionStroke(getRandomStroke()); }
+            
+        case "btn_region_min", "fld_region_min" ->
+            { Float value = getNumericValue(fld_region_min);
+              if (value != null)
+              { image_view.setRegionMinimumSize(value.intValue());
+                fld_region_min.setText(image_view
+               .getRegionMinimumSize() + "px"); } }
 
         // ................................................................
 
@@ -1443,9 +1456,10 @@ private final Color bgError  = new Color(255, 200, 200);
 // ............................................................................
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private ButtonGroup bg_1;
-    private ButtonGroup bg_2;
-    private ButtonGroup bg_3;
+    private ButtonGroup bg_magnifier_shape;
+    private ButtonGroup bg_open_size;
+    private ButtonGroup bg_scale_type;
+    private ButtonGroup bg_scrollbars_visibility;
     private JButton btn_center;
     private JButton btn_external_fit;
     private JButton btn_f_stroke_color;
@@ -1514,64 +1528,64 @@ private final Color bgError  = new Color(255, 200, 200);
     private JTextField fld_zoom_gap_h;
     private JTextField fld_zoom_gap_w;
     private JImageView image_view;
-    private JPanel jPanel1;
-    private JRadioButton jRadioButton1;
-    private JRadioButton jRadioButton2;
-    private JRadioButton jRadioButton3;
-    private JSeparator jSeparator1;
-    private JSeparator jSeparator2;
-    private JSeparator jSeparator3;
-    private JPanel pnl_01;
-    private JPanel pnl_02;
-    private JPanel pnl_03;
-    private JPanel pnl_04;
-    private JPanel pnl_05;
-    private JPanel pnl_06;
-    private JPanel pnl_07;
-    private JPanel pnl_08;
-    private JPanel pnl_09;
-    private JPanel pnl_10;
-    private JPanel pnl_11;
-    private JPanel pnl_12;
-    private JPanel pnl_13;
-    private JPanel pnl_14;
-    private JPanel pnl_15;
-    private JPanel pnl_16;
-    private JPanel pnl_17;
-    private JPanel pnl_18;
-    private JPanel pnl_19;
-    private JPanel pnl_20;
-    private JPanel pnl_21;
-    private JPanel pnl_22;
-    private JPanel pnl_23;
-    private JPanel pnl_24;
-    private JPanel pnl_25;
-    private JPanel pnl_26;
-    private JPanel pnl_27;
-    private JPanel pnl_28;
-    private JPanel pnl_29;
-    private JPanel pnl_30;
+    private JPanel pnl_additionally;
+    private JPanel pnl_center_region;
+    private JPanel pnl_f_stroke_color;
+    private JPanel pnl_f_zoom_border;
+    private JPanel pnl_f_zoom_border_color;
+    private JPanel pnl_f_zoom_border_h;
+    private JPanel pnl_f_zoom_border_w;
+    private JPanel pnl_fit;
+    private JPanel pnl_global;
+    private JPanel pnl_grid;
+    private JPanel pnl_grid_dark;
+    private JPanel pnl_grid_light;
+    private JPanel pnl_grid_size;
+    private JPanel pnl_magn_h;
+    private JPanel pnl_magn_w;
+    private JPanel pnl_magnifier;
+    private JPanel pnl_min_max;
+    private JPanel pnl_region;
+    private JPanel pnl_region_min;
+    private JPanel pnl_rotate_mirror;
+    private JPanel pnl_s_stroke_color;
+    private JPanel pnl_s_zoom_border;
+    private JPanel pnl_s_zoom_border_color;
+    private JPanel pnl_s_zoom_border_h;
+    private JPanel pnl_s_zoom_border_w;
+    private JPanel pnl_scale;
+    private JPanel pnl_stroke_w;
+    private JPanel pnl_zoom;
+    private JPanel pnl_zoom_gap;
+    private JPanel pnl_zoom_gap_h;
+    private JPanel pnl_zoom_gap_w;
     private JRadioButton rb_magn_oval;
     private JRadioButton rb_magn_rect;
+    private JRadioButton rb_open_external_fit;
+    private JRadioButton rb_open_internal_fit;
+    private JRadioButton rb_open_original;
     private JRadioButton rb_sb_always;
     private JRadioButton rb_sb_as_needed;
     private JRadioButton rb_sb_never;
     private JRadioButton rb_zoom_fast;
     private JRadioButton rb_zoom_smooth;
-    private JSeparator sp_01;
-    private JSeparator sp_02;
-    private JSeparator sp_03;
-    private JSeparator sp_04;
-    private JSeparator sp_05;
-    private JSeparator sp_06;
-    private JSeparator sp_07;
-    private JSeparator sp_08;
-    private JSeparator sp_09;
-    private JSeparator sp_10;
-    private JSeparator sp_11;
-    private JSeparator sp_12;
-    private JTabbedPane tab_pnl_01;
-    private JTabbedPane tab_pnl_02;
+    private JSeparator sep_random_stroke;
+    private JSeparator sep_rotate_mirror;
+    private JSeparator sep_zoom_smooth;
+    private JSeparator sp_additional_stroke;
+    private JSeparator sp_grid;
+    private JSeparator sp_hide_cursor;
+    private JSeparator sp_invert;
+    private JSeparator sp_magn_h;
+    private JSeparator sp_magn_rect;
+    private JSeparator sp_magn_scale;
+    private JSeparator sp_open;
+    private JSeparator sp_original;
+    private JSeparator sp_s_stroke_color;
+    private JSeparator sp_scale;
+    private JSeparator sp_zmb;
+    private JTabbedPane tab_pnl_settings;
+    private JTabbedPane tab_pnl_zoom_borders;
     // End of variables declaration//GEN-END:variables
 
 ///////////////////////////////////////////////////////////////////////////////

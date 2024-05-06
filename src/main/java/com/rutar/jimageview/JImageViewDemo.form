@@ -2,11 +2,13 @@
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
-    <Component class="javax.swing.ButtonGroup" name="bg_1">
+    <Component class="javax.swing.ButtonGroup" name="bg_scale_type">
     </Component>
-    <Component class="javax.swing.ButtonGroup" name="bg_2">
+    <Component class="javax.swing.ButtonGroup" name="bg_magnifier_shape">
     </Component>
-    <Component class="javax.swing.ButtonGroup" name="bg_3">
+    <Component class="javax.swing.ButtonGroup" name="bg_scrollbars_visibility">
+    </Component>
+    <Component class="javax.swing.ButtonGroup" name="bg_open_size">
     </Component>
   </NonVisualComponents>
   <Properties>
@@ -34,21 +36,21 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
               <Component id="image_view" pref="586" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                  <Component id="sp_03" alignment="0" max="32767" attributes="0"/>
-                  <Component id="pnl_05" alignment="0" max="32767" attributes="0"/>
-                  <Component id="sp_02" alignment="0" max="32767" attributes="0"/>
+                  <Component id="sp_scale" alignment="0" max="32767" attributes="0"/>
+                  <Component id="pnl_scale" alignment="0" max="32767" attributes="0"/>
+                  <Component id="sp_original" alignment="0" max="32767" attributes="0"/>
                   <Component id="btn_original" alignment="0" max="32767" attributes="0"/>
                   <Component id="btn_open" alignment="0" max="32767" attributes="0"/>
-                  <Component id="sp_01" alignment="0" max="32767" attributes="0"/>
-                  <Component id="pnl_01" alignment="0" max="32767" attributes="0"/>
-                  <Component id="pnl_02" alignment="0" max="32767" attributes="0"/>
-                  <Component id="pnl_03" alignment="0" max="32767" attributes="0"/>
-                  <Component id="pnl_04" alignment="0" max="32767" attributes="0"/>
-                  <Component id="tab_pnl_01" max="32767" attributes="0"/>
-                  <Component id="jPanel1" max="32767" attributes="0"/>
-                  <Component id="jSeparator1" max="32767" attributes="0"/>
+                  <Component id="sp_open" alignment="0" max="32767" attributes="0"/>
+                  <Component id="pnl_zoom" alignment="0" max="32767" attributes="0"/>
+                  <Component id="pnl_min_max" alignment="0" max="32767" attributes="0"/>
+                  <Component id="pnl_fit" alignment="0" max="32767" attributes="0"/>
+                  <Component id="pnl_center_region" alignment="0" max="32767" attributes="0"/>
+                  <Component id="tab_pnl_settings" max="32767" attributes="0"/>
+                  <Component id="pnl_rotate_mirror" max="32767" attributes="0"/>
+                  <Component id="sep_rotate_mirror" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
           </Group>
@@ -63,29 +65,29 @@
                   <Group type="102" attributes="0">
                       <Component id="btn_open" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="sp_01" min="-2" max="-2" attributes="0"/>
+                      <Component id="sp_open" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="pnl_01" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="pnl_02" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="pnl_03" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="pnl_04" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnl_zoom" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="pnl_fit" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="pnl_min_max" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="pnl_center_region" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="btn_original" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="sp_02" min="-2" max="-2" attributes="0"/>
+                      <Component id="sp_original" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="pnl_05" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnl_scale" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="sp_03" min="-2" max="-2" attributes="0"/>
+                      <Component id="sp_scale" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnl_rotate_mirror" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jSeparator1" min="-2" max="-2" attributes="0"/>
+                      <Component id="sep_rotate_mirror" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="tab_pnl_01" max="32767" attributes="0"/>
+                      <Component id="tab_pnl_settings" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -112,9 +114,9 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JSeparator" name="sp_01">
+    <Component class="javax.swing.JSeparator" name="sp_open">
     </Component>
-    <Container class="javax.swing.JPanel" name="pnl_01">
+    <Container class="javax.swing.JPanel" name="pnl_zoom">
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
         <Property name="columns" type="int" value="0"/>
@@ -142,7 +144,35 @@
         </Component>
       </SubComponents>
     </Container>
-    <Container class="javax.swing.JPanel" name="pnl_02">
+    <Container class="javax.swing.JPanel" name="pnl_fit">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+        <Property name="columns" type="int" value="0"/>
+        <Property name="horizontalGap" type="int" value="5"/>
+        <Property name="rows" type="int" value="1"/>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JButton" name="btn_internal_fit">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x412;&#x43f;&#x438;&#x441;&#x430;&#x442;&#x438;"/>
+            <Property name="actionCommand" type="java.lang.String" value="btn_internal_fit"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btn_external_fit">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41e;&#x43f;&#x438;&#x441;&#x430;&#x442;&#x438;"/>
+            <Property name="actionCommand" type="java.lang.String" value="btn_external_fit"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
+          </Events>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="pnl_min_max">
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
         <Property name="columns" type="int" value="0"/>
@@ -170,35 +200,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Container class="javax.swing.JPanel" name="pnl_03">
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-        <Property name="columns" type="int" value="0"/>
-        <Property name="horizontalGap" type="int" value="5"/>
-        <Property name="rows" type="int" value="1"/>
-      </Layout>
-      <SubComponents>
-        <Component class="javax.swing.JButton" name="btn_internal_fit">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="&#x412;&#x43f;&#x438;&#x441;&#x430;&#x442;&#x438;"/>
-            <Property name="actionCommand" type="java.lang.String" value="btn_internal_fit"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
-          </Events>
-        </Component>
-        <Component class="javax.swing.JButton" name="btn_external_fit">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="&#x417;&#x430; &#x440;&#x43e;&#x437;&#x43c;&#x456;&#x440;&#x43e;&#x43c; &#x432;&#x456;&#x43a;&#x43d;&#x430;"/>
-            <Property name="actionCommand" type="java.lang.String" value="btn_external_fit"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
-          </Events>
-        </Component>
-      </SubComponents>
-    </Container>
-    <Container class="javax.swing.JPanel" name="pnl_04">
+    <Container class="javax.swing.JPanel" name="pnl_center_region">
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
         <Property name="columns" type="int" value="0"/>
@@ -235,9 +237,9 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JSeparator" name="sp_02">
+    <Component class="javax.swing.JSeparator" name="sp_original">
     </Component>
-    <Container class="javax.swing.JPanel" name="pnl_05">
+    <Container class="javax.swing.JPanel" name="pnl_scale">
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
         <Property name="columns" type="int" value="0"/>
@@ -268,9 +270,9 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JSeparator" name="sp_03">
+    <Component class="javax.swing.JSeparator" name="sp_scale">
     </Component>
-    <Container class="javax.swing.JPanel" name="jPanel1">
+    <Container class="javax.swing.JPanel" name="pnl_rotate_mirror">
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="increaseTextSize(6, btn_rotate_90, btn_rotate_270, btn_rotate_180, btn_flip_h, btn_flip_v);&#xa;"/>
       </AuxValues>
@@ -284,11 +286,11 @@
         <Component class="javax.swing.JButton" name="btn_rotate_90">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x21b6;"/>
-            <Property name="toolTipText" type="java.lang.String" value="&#x41f;&#x43e;&#x432;&#x435;&#x440;&#x43d;&#x443;&#x442;&#x438; &#x43d;&#x430; 90&#xb0; &#x43f;&#x440;&#x43e;&#x442;&#x438; &#x433;&#x43e;&#x434;&#x438;&#x43d;&#x43d;&#x438;&#x43a;&#x43e;&#x432;&#x43e;&#x457; &#x441;&#x442;&#x440;&#x456;&#x43b;&#x43a;&#x438;"/>
             <Property name="actionCommand" type="java.lang.String" value="btn_rotate_90"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&#x41f;&#x43e;&#x432;&#x435;&#x440;&#x43d;&#x443;&#x442;&#x438; &#x43d;&#x430; 90&#xb0; &#x43f;&#x440;&#x43e;&#x442;&#x438; &#x433;&#x43e;&#x434;&#x438;&#x43d;&#x43d;&#x438;&#x43a;&#x43e;&#x432;&#x43e;&#x457; &#x441;&#x442;&#x440;&#x456;&#x43b;&#x43a;&#x438;"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
@@ -297,11 +299,11 @@
         <Component class="javax.swing.JButton" name="btn_rotate_270">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x21b7;"/>
-            <Property name="toolTipText" type="java.lang.String" value="&#x41f;&#x43e;&#x432;&#x435;&#x440;&#x43d;&#x443;&#x442;&#x438; &#x43d;&#x430; 90&#xb0; &#x437;&#x430; &#x433;&#x43e;&#x434;&#x438;&#x43d;&#x43d;&#x438;&#x43a;&#x43e;&#x432;&#x43e;&#x44e; &#x441;&#x442;&#x440;&#x456;&#x43b;&#x43a;&#x43e;&#x44e;"/>
             <Property name="actionCommand" type="java.lang.String" value="btn_rotate_270"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&#x41f;&#x43e;&#x432;&#x435;&#x440;&#x43d;&#x443;&#x442;&#x438; &#x43d;&#x430; 90&#xb0; &#x437;&#x430; &#x433;&#x43e;&#x434;&#x438;&#x43d;&#x43d;&#x438;&#x43a;&#x43e;&#x432;&#x43e;&#x44e; &#x441;&#x442;&#x440;&#x456;&#x43b;&#x43a;&#x43e;&#x44e;"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
@@ -310,11 +312,11 @@
         <Component class="javax.swing.JButton" name="btn_rotate_180">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x21ba;"/>
-            <Property name="toolTipText" type="java.lang.String" value="&#x41f;&#x43e;&#x432;&#x435;&#x440;&#x43d;&#x443;&#x442;&#x438; &#x43d;&#x430; 180&#xb0;"/>
             <Property name="actionCommand" type="java.lang.String" value="btn_rotate_180"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&#x41f;&#x43e;&#x432;&#x435;&#x440;&#x43d;&#x443;&#x442;&#x438; &#x43d;&#x430; 180&#xb0;"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
@@ -323,11 +325,11 @@
         <Component class="javax.swing.JButton" name="btn_flip_h">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x21c6;"/>
-            <Property name="toolTipText" type="java.lang.String" value="&#x412;&#x456;&#x434;&#x437;&#x435;&#x440;&#x43a;&#x430;&#x43b;&#x438;&#x442;&#x438; &#x433;&#x43e;&#x440;&#x438;&#x437;&#x43e;&#x43d;&#x442;&#x430;&#x43b;&#x44c;&#x43d;&#x43e;"/>
             <Property name="actionCommand" type="java.lang.String" value="btn_flip_h"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&#x412;&#x456;&#x434;&#x437;&#x435;&#x440;&#x43a;&#x430;&#x43b;&#x438;&#x442;&#x438; &#x433;&#x43e;&#x440;&#x438;&#x437;&#x43e;&#x43d;&#x442;&#x430;&#x43b;&#x44c;&#x43d;&#x43e;"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
@@ -336,11 +338,11 @@
         <Component class="javax.swing.JButton" name="btn_flip_v">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x21c5;"/>
-            <Property name="toolTipText" type="java.lang.String" value="&#x412;&#x456;&#x434;&#x437;&#x435;&#x440;&#x43a;&#x430;&#x43b;&#x438;&#x442;&#x438; &#x432;&#x435;&#x440;&#x442;&#x438;&#x43a;&#x430;&#x43b;&#x44c;&#x43d;&#x43e;"/>
             <Property name="actionCommand" type="java.lang.String" value="btn_flip_v"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&#x412;&#x456;&#x434;&#x437;&#x435;&#x440;&#x43a;&#x430;&#x43b;&#x438;&#x442;&#x438; &#x432;&#x435;&#x440;&#x442;&#x438;&#x43a;&#x430;&#x43b;&#x44c;&#x43d;&#x43e;"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
@@ -348,9 +350,9 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JSeparator" name="jSeparator1">
+    <Component class="javax.swing.JSeparator" name="sep_rotate_mirror">
     </Component>
-    <Container class="javax.swing.JTabbedPane" name="tab_pnl_01">
+    <Container class="javax.swing.JTabbedPane" name="tab_pnl_settings">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
@@ -361,7 +363,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
-        <Container class="javax.swing.JPanel" name="pnl_06">
+        <Container class="javax.swing.JPanel" name="pnl_global">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="&#x417;&#x430;&#x433;&#x430;&#x43b;&#x44c;&#x43d;&#x435;">
@@ -374,35 +376,22 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
+                      <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="cb_lmb" max="32767" attributes="0"/>
-                                  <Component id="cb_cmb" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="cb_rmb" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="cb_wheel" max="32767" attributes="0"/>
-                                  <Component id="sp_04" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="cb_zmb" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="rb_zoom_fast" max="32767" attributes="0"/>
-                                  <Component id="rb_zoom_smooth" alignment="0" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                              <Component id="jSeparator3" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="cb_lmb" max="32767" attributes="0"/>
+                          <Component id="cb_cmb" alignment="0" max="32767" attributes="0"/>
+                          <Component id="cb_rmb" alignment="0" max="32767" attributes="0"/>
+                          <Component id="cb_wheel" max="32767" attributes="0"/>
+                          <Component id="sp_zmb" alignment="0" max="32767" attributes="0"/>
+                          <Component id="cb_zmb" alignment="0" max="32767" attributes="0"/>
+                          <Component id="rb_zoom_fast" max="32767" attributes="0"/>
+                          <Component id="rb_zoom_smooth" alignment="0" max="32767" attributes="0"/>
+                          <Component id="sep_zoom_smooth" alignment="1" max="32767" attributes="0"/>
+                          <Component id="rb_open_original" max="32767" attributes="0"/>
+                          <Component id="rb_open_internal_fit" max="32767" attributes="0"/>
+                          <Component id="rb_open_external_fit" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jRadioButton1" max="32767" attributes="0"/>
-                          <Component id="jRadioButton2" max="32767" attributes="0"/>
-                          <Component id="jRadioButton3" alignment="0" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -420,19 +409,19 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="cb_zmb" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="sp_04" min="-2" max="-2" attributes="0"/>
+                      <Component id="sp_zmb" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="rb_zoom_fast" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="rb_zoom_smooth" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jSeparator3" min="-2" max="-2" attributes="0"/>
+                      <Component id="sep_zoom_smooth" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jRadioButton1" min="-2" max="-2" attributes="0"/>
+                      <Component id="rb_open_original" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jRadioButton2" min="-2" max="-2" attributes="0"/>
+                      <Component id="rb_open_internal_fit" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jRadioButton3" min="-2" max="-2" attributes="0"/>
+                      <Component id="rb_open_external_fit" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -499,12 +488,12 @@
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_zmb.setSelected(image_view.isZMBEnable());"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JSeparator" name="sp_04">
+            <Component class="javax.swing.JSeparator" name="sp_zmb">
             </Component>
             <Component class="javax.swing.JRadioButton" name="rb_zoom_fast">
               <Properties>
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="bg_1"/>
+                  <ComponentRef name="bg_scale_type"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#x428;&#x432;&#x438;&#x434;&#x43a;&#x435; &#x43c;&#x430;&#x441;&#x448;&#x442;&#x430;&#x431;&#x443;&#x432;&#x430;&#x43d;&#x43d;&#x44f;"/>
                 <Property name="actionCommand" type="java.lang.String" value="rb_zoom_fast"/>
@@ -519,7 +508,7 @@
             <Component class="javax.swing.JRadioButton" name="rb_zoom_smooth">
               <Properties>
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="bg_1"/>
+                  <ComponentRef name="bg_scale_type"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#x417;&#x433;&#x43b;&#x430;&#x434;&#x436;&#x435;&#x43d;&#x435; &#x43c;&#x430;&#x441;&#x448;&#x442;&#x430;&#x431;&#x443;&#x432;&#x430;&#x43d;&#x43d;&#x44f;"/>
                 <Property name="actionCommand" type="java.lang.String" value="rb_zoom_smooth"/>
@@ -531,26 +520,56 @@
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="rb_zoom_smooth.setSelected(image_view.getImageScaleType() == SCALE_TYPE_SMOOTH);"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JSeparator" name="jSeparator3">
+            <Component class="javax.swing.JSeparator" name="sep_zoom_smooth">
             </Component>
-            <Component class="javax.swing.JRadioButton" name="jRadioButton1">
+            <Component class="javax.swing.JRadioButton" name="rb_open_original">
               <Properties>
-                <Property name="text" type="java.lang.String" value="jRadioButton1"/>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="bg_open_size"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x412;&#x456;&#x434;&#x43a;&#x440;&#x438;&#x432;&#x430;&#x442;&#x438; &#x437;&#x43e;&#x431;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x43d;&#x44f; &#x43e;&#x440;&#x438;&#x433;&#x456;&#x43d;&#x430;&#x43b;&#x44c;&#x43d;&#x43e;&#x433;&#x43e; &#x440;&#x43e;&#x437;&#x43c;&#x456;&#x440;&#x443;"/>
+                <Property name="actionCommand" type="java.lang.String" value="rb_open_original"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="rb_open_original.setSelected(image_view.getImageOpenSize() == OPEN_SIZE_ORIGINAL);"/>
+              </AuxValues>
             </Component>
-            <Component class="javax.swing.JRadioButton" name="jRadioButton2">
+            <Component class="javax.swing.JRadioButton" name="rb_open_internal_fit">
               <Properties>
-                <Property name="text" type="java.lang.String" value="jRadioButton2"/>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="bg_open_size"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x412;&#x456;&#x434;&#x43a;&#x440;&#x438;&#x432;&#x430;&#x442;&#x438; &#x437;&#x43e;&#x431;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x43d;&#x44f; &#x432;&#x43f;&#x438;&#x441;&#x430;&#x43d;&#x438;&#x43c;"/>
+                <Property name="actionCommand" type="java.lang.String" value="rb_open_internal_fit"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="rb_open_internal_fit.setSelected(image_view.getImageOpenSize() == OPEN_SIZE_INTERNAL_FIT);"/>
+              </AuxValues>
             </Component>
-            <Component class="javax.swing.JRadioButton" name="jRadioButton3">
+            <Component class="javax.swing.JRadioButton" name="rb_open_external_fit">
               <Properties>
-                <Property name="text" type="java.lang.String" value="jRadioButton3"/>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="bg_open_size"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x412;&#x456;&#x434;&#x43a;&#x440;&#x438;&#x432;&#x430;&#x442;&#x438; &#x437;&#x43e;&#x431;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x43d;&#x44f; &#x43e;&#x43f;&#x438;&#x441;&#x430;&#x43d;&#x438;&#x43c;"/>
+                <Property name="actionCommand" type="java.lang.String" value="rb_open_external_fit"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="rb_open_external_fit.setSelected(image_view.getImageOpenSize() == OPEN_SIZE_EXTERNAL_FIT);"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JPanel" name="pnl_07">
+        <Container class="javax.swing.JPanel" name="pnl_grid">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="&#x421;&#x456;&#x442;&#x43a;&#x430;">
@@ -566,10 +585,10 @@
                       <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="cb_grid" max="32767" attributes="0"/>
-                          <Component id="pnl_11" max="32767" attributes="0"/>
-                          <Component id="pnl_13" alignment="0" max="32767" attributes="0"/>
-                          <Component id="sp_05" alignment="0" max="32767" attributes="0"/>
-                          <Component id="pnl_12" alignment="0" max="32767" attributes="0"/>
+                          <Component id="pnl_grid_light" max="32767" attributes="0"/>
+                          <Component id="pnl_grid_size" alignment="0" max="32767" attributes="0"/>
+                          <Component id="sp_grid" alignment="0" max="32767" attributes="0"/>
+                          <Component id="pnl_grid_dark" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
                   </Group>
@@ -581,13 +600,13 @@
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                       <Component id="cb_grid" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="sp_05" min="-2" max="-2" attributes="0"/>
+                      <Component id="sp_grid" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="pnl_11" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnl_grid_light" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="pnl_12" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnl_grid_dark" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="pnl_13" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnl_grid_size" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -606,9 +625,9 @@
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_grid.setSelected(image_view.isGridVisible());"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JSeparator" name="sp_05">
+            <Component class="javax.swing.JSeparator" name="sp_grid">
             </Component>
-            <Container class="javax.swing.JPanel" name="pnl_11">
+            <Container class="javax.swing.JPanel" name="pnl_grid_light">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                 <Property name="columns" type="int" value="0"/>
@@ -639,7 +658,7 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Container class="javax.swing.JPanel" name="pnl_12">
+            <Container class="javax.swing.JPanel" name="pnl_grid_dark">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                 <Property name="columns" type="int" value="0"/>
@@ -670,7 +689,7 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Container class="javax.swing.JPanel" name="pnl_13">
+            <Container class="javax.swing.JPanel" name="pnl_grid_size">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                 <Property name="columns" type="int" value="0"/>
@@ -703,7 +722,7 @@
             </Container>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JPanel" name="pnl_08">
+        <Container class="javax.swing.JPanel" name="pnl_magnifier">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="&#x41b;&#x443;&#x43f;&#x430;">
@@ -720,15 +739,15 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="rb_magn_oval" max="32767" attributes="0"/>
                           <Component id="rb_magn_rect" max="32767" attributes="0"/>
-                          <Component id="sp_06" alignment="0" max="32767" attributes="0"/>
-                          <Component id="pnl_14" alignment="0" max="32767" attributes="0"/>
-                          <Component id="pnl_15" alignment="0" max="32767" attributes="0"/>
-                          <Component id="sp_07" alignment="0" max="32767" attributes="0"/>
+                          <Component id="sp_magn_rect" alignment="0" max="32767" attributes="0"/>
+                          <Component id="pnl_magn_w" alignment="0" max="32767" attributes="0"/>
+                          <Component id="pnl_magn_h" alignment="0" max="32767" attributes="0"/>
+                          <Component id="sp_magn_h" alignment="0" max="32767" attributes="0"/>
                           <Component id="cb_magn_scale" alignment="0" max="32767" attributes="0"/>
-                          <Component id="sp_08" alignment="0" max="32767" attributes="0"/>
+                          <Component id="sp_magn_scale" alignment="0" max="32767" attributes="0"/>
                           <Component id="cb_hide_cursor" alignment="0" max="32767" attributes="0"/>
-                          <Component id="sp_09" max="32767" attributes="0"/>
-                          <Component id="tab_pnl_02" alignment="0" max="32767" attributes="0"/>
+                          <Component id="sp_hide_cursor" max="32767" attributes="0"/>
+                          <Component id="tab_pnl_zoom_borders" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                   </Group>
@@ -742,23 +761,23 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="rb_magn_rect" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="sp_06" min="-2" max="-2" attributes="0"/>
+                      <Component id="sp_magn_rect" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="pnl_14" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnl_magn_w" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="pnl_15" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnl_magn_h" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="sp_07" min="-2" max="-2" attributes="0"/>
+                      <Component id="sp_magn_h" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="cb_magn_scale" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="sp_08" min="-2" max="-2" attributes="0"/>
+                      <Component id="sp_magn_scale" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="cb_hide_cursor" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="sp_09" min="-2" max="-2" attributes="0"/>
+                      <Component id="sp_hide_cursor" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="tab_pnl_02" max="32767" attributes="0"/>
+                      <Component id="tab_pnl_zoom_borders" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -768,7 +787,7 @@
             <Component class="javax.swing.JRadioButton" name="rb_magn_oval">
               <Properties>
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="bg_2"/>
+                  <ComponentRef name="bg_magnifier_shape"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#x41e;&#x432;&#x430;&#x43b;&#x44c;&#x43d;&#x430; &#x43b;&#x443;&#x43f;&#x430;"/>
                 <Property name="actionCommand" type="java.lang.String" value="rb_magn_oval"/>
@@ -783,7 +802,7 @@
             <Component class="javax.swing.JRadioButton" name="rb_magn_rect">
               <Properties>
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="bg_2"/>
+                  <ComponentRef name="bg_magnifier_shape"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#x41f;&#x440;&#x44f;&#x43c;&#x43e;&#x43a;&#x443;&#x442;&#x43d;&#x430; &#x43b;&#x443;&#x43f;&#x430;"/>
                 <Property name="actionCommand" type="java.lang.String" value="rb_magn_rect"/>
@@ -795,9 +814,9 @@
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="rb_magn_rect.setSelected(image_view.getZoomShapeType() == ZOOM_SHAPE_RECTANGLE);"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JSeparator" name="sp_06">
+            <Component class="javax.swing.JSeparator" name="sp_magn_rect">
             </Component>
-            <Container class="javax.swing.JPanel" name="pnl_14">
+            <Container class="javax.swing.JPanel" name="pnl_magn_w">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                 <Property name="columns" type="int" value="0"/>
@@ -828,7 +847,7 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Container class="javax.swing.JPanel" name="pnl_15">
+            <Container class="javax.swing.JPanel" name="pnl_magn_h">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                 <Property name="columns" type="int" value="0"/>
@@ -859,7 +878,7 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JSeparator" name="sp_07">
+            <Component class="javax.swing.JSeparator" name="sp_magn_h">
             </Component>
             <Component class="javax.swing.JComboBox" name="cb_magn_scale">
               <Properties>
@@ -887,7 +906,7 @@
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JSeparator" name="sp_08">
+            <Component class="javax.swing.JSeparator" name="sp_magn_scale">
             </Component>
             <Component class="javax.swing.JCheckBox" name="cb_hide_cursor">
               <Properties>
@@ -901,13 +920,13 @@
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_hide_cursor.setSelected(!image_view.isZoomShowCursor());"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JSeparator" name="sp_09">
+            <Component class="javax.swing.JSeparator" name="sp_hide_cursor">
             </Component>
-            <Container class="javax.swing.JTabbedPane" name="tab_pnl_02">
+            <Container class="javax.swing.JTabbedPane" name="tab_pnl_zoom_borders">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
               <SubComponents>
-                <Container class="javax.swing.JPanel" name="pnl_16">
+                <Container class="javax.swing.JPanel" name="pnl_f_zoom_border">
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                       <JTabbedPaneConstraints tabName="I &#x440;&#x430;&#x43c;&#x43a;&#x430; &#x43b;&#x443;&#x43f;&#x438;">
@@ -922,10 +941,10 @@
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="pnl_21" max="32767" attributes="0"/>
+                                  <Component id="pnl_f_zoom_border_color" max="32767" attributes="0"/>
                                   <Component id="cb_f_zoom_border" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="pnl_19" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="pnl_20" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="pnl_f_zoom_border_w" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="pnl_f_zoom_border_h" alignment="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                           </Group>
@@ -937,11 +956,11 @@
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                               <Component id="cb_f_zoom_border" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="pnl_19" min="-2" max="-2" attributes="0"/>
+                              <Component id="pnl_f_zoom_border_w" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="pnl_20" min="-2" max="-2" attributes="0"/>
+                              <Component id="pnl_f_zoom_border_h" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="pnl_21" min="-2" max="-2" attributes="0"/>
+                              <Component id="pnl_f_zoom_border_color" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -960,7 +979,7 @@
                         <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_f_zoom_border.setSelected(image_view.isZoomFirstBorderVisible());"/>
                       </AuxValues>
                     </Component>
-                    <Container class="javax.swing.JPanel" name="pnl_19">
+                    <Container class="javax.swing.JPanel" name="pnl_f_zoom_border_w">
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                         <Property name="columns" type="int" value="0"/>
@@ -991,7 +1010,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Container class="javax.swing.JPanel" name="pnl_20">
+                    <Container class="javax.swing.JPanel" name="pnl_f_zoom_border_h">
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                         <Property name="columns" type="int" value="0"/>
@@ -1022,7 +1041,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Container class="javax.swing.JPanel" name="pnl_21">
+                    <Container class="javax.swing.JPanel" name="pnl_f_zoom_border_color">
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                         <Property name="columns" type="int" value="0"/>
@@ -1055,7 +1074,7 @@
                     </Container>
                   </SubComponents>
                 </Container>
-                <Container class="javax.swing.JPanel" name="pnl_17">
+                <Container class="javax.swing.JPanel" name="pnl_s_zoom_border">
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                       <JTabbedPaneConstraints tabName="II &#x440;&#x430;&#x43c;&#x43a;&#x430; &#x43b;&#x443;&#x43f;&#x438;">
@@ -1071,9 +1090,9 @@
                               <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="cb_s_zoom_border" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="pnl_22" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="pnl_23" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="pnl_24" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="pnl_s_zoom_border_w" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="pnl_s_zoom_border_h" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="pnl_s_zoom_border_color" alignment="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
                           </Group>
@@ -1085,11 +1104,11 @@
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                               <Component id="cb_s_zoom_border" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="pnl_22" min="-2" max="-2" attributes="0"/>
+                              <Component id="pnl_s_zoom_border_w" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="pnl_23" min="-2" max="-2" attributes="0"/>
+                              <Component id="pnl_s_zoom_border_h" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="pnl_24" min="-2" max="-2" attributes="0"/>
+                              <Component id="pnl_s_zoom_border_color" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -1108,7 +1127,7 @@
                         <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_s_zoom_border.setSelected(image_view.isZoomSecondBorderVisible());"/>
                       </AuxValues>
                     </Component>
-                    <Container class="javax.swing.JPanel" name="pnl_22">
+                    <Container class="javax.swing.JPanel" name="pnl_s_zoom_border_w">
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                         <Property name="columns" type="int" value="0"/>
@@ -1139,7 +1158,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Container class="javax.swing.JPanel" name="pnl_23">
+                    <Container class="javax.swing.JPanel" name="pnl_s_zoom_border_h">
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                         <Property name="columns" type="int" value="0"/>
@@ -1170,7 +1189,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Container class="javax.swing.JPanel" name="pnl_24">
+                    <Container class="javax.swing.JPanel" name="pnl_s_zoom_border_color">
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                         <Property name="columns" type="int" value="0"/>
@@ -1203,7 +1222,7 @@
                     </Container>
                   </SubComponents>
                 </Container>
-                <Container class="javax.swing.JPanel" name="pnl_18">
+                <Container class="javax.swing.JPanel" name="pnl_zoom_gap">
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                       <JTabbedPaneConstraints tabName="&#x417;&#x43c;&#x456;&#x449;&#x435;&#x43d;&#x43d;&#x44f; &#x43b;&#x443;&#x43f;&#x438;">
@@ -1219,8 +1238,8 @@
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="cb_flip_zoom" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="pnl_25" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="pnl_26" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="pnl_zoom_gap_w" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="pnl_zoom_gap_h" alignment="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                           </Group>
@@ -1232,9 +1251,9 @@
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                               <Component id="cb_flip_zoom" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="pnl_25" min="-2" max="-2" attributes="0"/>
+                              <Component id="pnl_zoom_gap_w" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="pnl_26" min="-2" max="-2" attributes="0"/>
+                              <Component id="pnl_zoom_gap_h" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -1253,7 +1272,7 @@
                         <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_flip_zoom.setSelected(image_view.isInvertZoomOut());"/>
                       </AuxValues>
                     </Component>
-                    <Container class="javax.swing.JPanel" name="pnl_25">
+                    <Container class="javax.swing.JPanel" name="pnl_zoom_gap_w">
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                         <Property name="columns" type="int" value="0"/>
@@ -1284,7 +1303,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Container class="javax.swing.JPanel" name="pnl_26">
+                    <Container class="javax.swing.JPanel" name="pnl_zoom_gap_h">
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                         <Property name="columns" type="int" value="0"/>
@@ -1321,7 +1340,7 @@
             </Container>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JPanel" name="pnl_09">
+        <Container class="javax.swing.JPanel" name="pnl_region">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="&#x420;&#x435;&#x433;&#x456;&#x43e;&#x43d;">
@@ -1334,30 +1353,19 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
+                      <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="cb_additional_stroke" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="pnl_28" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="sp_10" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="pnl_27" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="sp_11" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="pnl_29" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="btn_random_stroke" alignment="0" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                              <Component id="jSeparator2" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="cb_additional_stroke" alignment="0" max="32767" attributes="0"/>
+                          <Component id="pnl_s_stroke_color" alignment="0" max="32767" attributes="0"/>
+                          <Component id="sp_additional_stroke" alignment="0" max="32767" attributes="0"/>
+                          <Component id="pnl_f_stroke_color" alignment="0" max="32767" attributes="0"/>
+                          <Component id="sp_s_stroke_color" alignment="0" max="32767" attributes="0"/>
+                          <Component id="pnl_stroke_w" alignment="0" max="32767" attributes="0"/>
+                          <Component id="btn_random_stroke" alignment="0" max="32767" attributes="0"/>
+                          <Component id="sep_random_stroke" alignment="0" max="32767" attributes="0"/>
+                          <Component id="pnl_region_min" alignment="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                      <Component id="pnl_30" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                      <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1367,21 +1375,21 @@
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                       <Component id="cb_additional_stroke" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="sp_10" min="-2" max="-2" attributes="0"/>
+                      <Component id="sp_additional_stroke" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="pnl_27" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnl_f_stroke_color" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="pnl_28" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnl_s_stroke_color" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="sp_11" min="-2" max="-2" attributes="0"/>
+                      <Component id="sp_s_stroke_color" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="pnl_29" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnl_stroke_w" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btn_random_stroke" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jSeparator2" min="-2" max="-2" attributes="0"/>
+                      <Component id="sep_random_stroke" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="pnl_30" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnl_region_min" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -1400,9 +1408,9 @@
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_additional_stroke.setSelected(image_view.isRegionAdditionalStroke());"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JSeparator" name="sp_10">
+            <Component class="javax.swing.JSeparator" name="sp_additional_stroke">
             </Component>
-            <Container class="javax.swing.JPanel" name="pnl_27">
+            <Container class="javax.swing.JPanel" name="pnl_f_stroke_color">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                 <Property name="columns" type="int" value="0"/>
@@ -1433,7 +1441,7 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Container class="javax.swing.JPanel" name="pnl_28">
+            <Container class="javax.swing.JPanel" name="pnl_s_stroke_color">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                 <Property name="columns" type="int" value="0"/>
@@ -1464,9 +1472,9 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JSeparator" name="sp_11">
+            <Component class="javax.swing.JSeparator" name="sp_s_stroke_color">
             </Component>
-            <Container class="javax.swing.JPanel" name="pnl_29">
+            <Container class="javax.swing.JPanel" name="pnl_stroke_w">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                 <Property name="columns" type="int" value="0"/>
@@ -1506,9 +1514,9 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JSeparator" name="jSeparator2">
+            <Component class="javax.swing.JSeparator" name="sep_random_stroke">
             </Component>
-            <Container class="javax.swing.JPanel" name="pnl_30">
+            <Container class="javax.swing.JPanel" name="pnl_region_min">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                 <Property name="columns" type="int" value="0"/>
@@ -1525,7 +1533,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
                   </Events>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_stroke_w.setText(String.format(&quot;%.0fpx&quot;, image_view.getRegionStroke().getLineWidth()));&#xa;"/>
+                    <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="fld_region_min.setText(image_view.getRegionMinimumSize() + &quot;px&quot;);&#xa;"/>
                   </AuxValues>
                 </Component>
                 <Component class="javax.swing.JButton" name="btn_region_min">
@@ -1541,7 +1549,7 @@
             </Container>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JPanel" name="pnl_10">
+        <Container class="javax.swing.JPanel" name="pnl_additionally">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
               <JTabbedPaneConstraints tabName="&#x414;&#x43e;&#x434;&#x430;&#x442;&#x43a;&#x43e;&#x432;&#x43e;">
@@ -1558,7 +1566,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="cb_move_out" max="32767" attributes="0"/>
                           <Component id="cb_invert" max="32767" attributes="0"/>
-                          <Component id="sp_12" alignment="0" max="32767" attributes="0"/>
+                          <Component id="sp_invert" alignment="0" max="32767" attributes="0"/>
                           <Component id="rb_sb_as_needed" max="32767" attributes="0"/>
                           <Component id="rb_sb_always" alignment="0" max="32767" attributes="0"/>
                           <Component id="rb_sb_never" alignment="0" max="32767" attributes="0"/>
@@ -1578,7 +1586,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="cb_invert" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="sp_12" min="-2" max="-2" attributes="0"/>
+                      <Component id="sp_invert" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="rb_sb_always" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -1627,12 +1635,12 @@
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_invert.setSelected(image_view.isWheelInvert());"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JSeparator" name="sp_12">
+            <Component class="javax.swing.JSeparator" name="sp_invert">
             </Component>
             <Component class="javax.swing.JRadioButton" name="rb_sb_always">
               <Properties>
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="bg_3"/>
+                  <ComponentRef name="bg_scrollbars_visibility"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#x41f;&#x43e;&#x441;&#x442;&#x456;&#x439;&#x43d;&#x43e; &#x432;&#x456;&#x434;&#x43e;&#x431;&#x440;&#x430;&#x436;&#x430;&#x442; &#x441;&#x43c;&#x443;&#x433;&#x438; &#x43f;&#x440;&#x43e;&#x43a;&#x440;&#x443;&#x442;&#x43a;&#x438;"/>
                 <Property name="actionCommand" type="java.lang.String" value="rb_sb_always"/>
@@ -1647,7 +1655,7 @@
             <Component class="javax.swing.JRadioButton" name="rb_sb_as_needed">
               <Properties>
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="bg_3"/>
+                  <ComponentRef name="bg_scrollbars_visibility"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#x412;&#x456;&#x434;&#x43e;&#x431;&#x440;&#x430;&#x436;&#x430;&#x442;&#x438; &#x441;&#x43c;&#x443;&#x433;&#x438; &#x43f;&#x440;&#x43e;&#x43a;&#x440;&#x443;&#x442;&#x43a;&#x438; &#x437;&#x430; &#x43f;&#x43e;&#x442;&#x440;&#x435;&#x431;&#x438;"/>
                 <Property name="actionCommand" type="java.lang.String" value="rb_sb_as_needed"/>
@@ -1662,7 +1670,7 @@
             <Component class="javax.swing.JRadioButton" name="rb_sb_never">
               <Properties>
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-                  <ComponentRef name="bg_3"/>
+                  <ComponentRef name="bg_scrollbars_visibility"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#x41d;&#x456;&#x43a;&#x43e;&#x43b;&#x438; &#x43d;&#x435; &#x432;&#x456;&#x434;&#x43e;&#x431;&#x440;&#x430;&#x436;&#x430;&#x442;&#x438; &#x441;&#x43c;&#x443;&#x433;&#x438; &#x43f;&#x440;&#x43e;&#x43a;&#x440;&#x443;&#x442;&#x43a;&#x438;"/>
                 <Property name="actionCommand" type="java.lang.String" value="rb_sb_never"/>
