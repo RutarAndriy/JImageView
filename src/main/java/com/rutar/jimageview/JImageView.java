@@ -83,7 +83,7 @@ private float imageScaleMin;                 // Максимальний мас�
 private float imageScaleInternalFit;     // Масштаб для внутрішнього заповнення
 private float imageScaleExternalFit;      // Масштаб для зовнішнього заповнення
 private int imageScaleType = SCALE_TYPE_FAST;              // Тип масштабування
-private int imageOpenSize = OPEN_SIZE_INTERNAL_FIT; // Розмір нового зображення
+private int imageOpenSize = OPEN_SIZE_ORIGINAL; // Розмір відкритого зображення
 private boolean lmbEnable    = true; // Переміщення зображення за допомогою ЛКМ
 private boolean cmbEnable    = true;          // Зміна вигляду за допопогою СКМ
 private boolean rmbEnable    = true;           // Масштабування за допоогою ПКМ
@@ -143,6 +143,7 @@ private boolean rmbPressed;                                    // ПКМ нат�
 private boolean zmbPressed;                              // ЛКМ і ПКМ натиснуті
 private boolean cursorOnImage;      // Знаходження курсора всередині компонента
 private boolean scrollBarVisible;        // Видимість скролбарів, хоча б одного
+private boolean initialState;             // Початкова ініціалізація компонента
 private Point pressOrigin;   // Точка, у якій відбулося натискання клавіші миші
 private JPanel panelRoot;                    // Панель для малювання зображення
 private JScrollBar hScrollBar, vScrollBar;           // Гор. та верт. скролбари
@@ -172,7 +173,7 @@ setRegionStroke(null);
 setErrorImage(null);
 setImage(null);
 
-zoomToOriginal();
+initialState = true;
 
 }
 
@@ -1975,6 +1976,13 @@ private final ChangeListener changeListener = new ChangeListener() {
         
         if (scrollBarVisible != isScrollBarVisible()) { updateCursor(); }
         
+        if (initialState) { 
+            switch (imageOpenSize) {
+                case OPEN_SIZE_ORIGINAL     -> zoomToOriginal();
+                case OPEN_SIZE_INTERNAL_FIT -> fitInternal();
+                case OPEN_SIZE_EXTERNAL_FIT -> fitExternal(); }
+            initialState = false;
+        }
     }
 };
 

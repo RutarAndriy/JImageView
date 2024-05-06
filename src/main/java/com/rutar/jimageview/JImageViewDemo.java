@@ -31,8 +31,7 @@ public JImageViewDemo() { initComponents();
 ///////////////////////////////////////////////////////////////////////////////
 
 @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents() {//GEN-BEGIN:initComponents
 
         bg_scale_type = new ButtonGroup();
         bg_magnifier_shape = new ButtonGroup();
@@ -931,7 +930,7 @@ public JImageViewDemo() { initComponents();
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addComponent(image_view, GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
+                .addComponent(image_view, GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE)
                 .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
                     .addComponent(sp_scale, GroupLayout.Alignment.LEADING)
@@ -993,7 +992,7 @@ public JImageViewDemo() { initComponents();
                 if (!minimumSizeSet) {
                     setMinimumSize(getSize());
                     minimumSizeSet = true; } } });
-    }// </editor-fold>//GEN-END:initComponents
+    }//GEN-END:initComponents
 
 ///////////////////////////////////////////////////////////////////////////////
 
