@@ -501,6 +501,13 @@ public void fitExternal() { calculateImageFitScale();
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/** Відновлення оригінального розміру відображуваного зображення */
+public void zoomToOriginal() { calculateImageFitScale();
+                               setImageScale(100);
+                               center(); }
+
+///////////////////////////////////////////////////////////////////////////////
+
 /** 
  * Переміщує зображення таким чином, щоб воно відображалося в центрі
  * компонента. Метод доцільно використовувати лише тоді, коли зображення
@@ -529,11 +536,6 @@ public void centerOnPoint (Point point) {
     panelRoot.scrollRectToVisible(viewRect);
 
 }
-
-///////////////////////////////////////////////////////////////////////////////
-
-/** Відновлення оригінального розміру відображуваного зображення */
-public void zoomToOriginal() { setImageScale(100); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1830,9 +1832,15 @@ public void mousePressed (MouseEvent me) {
             if (specifyRegion || lmbPressed || rmbPressed) { return; }
             cmbPressed = true;
             
-            if (imageScale == 100)                        { fitInternal();    }
-            else if (imageScale == imageScaleInternalFit) { fitExternal();    }
-            else                                          { zoomToOriginal(); }
+            double sX = Math.abs(imageScale - 100d);
+            double sY = Math.abs(imageScale - imageScaleInternalFit);
+            
+            // Якщо зображення оригінального розміру - вписуємо його
+            if      (sX < 0.001) { fitInternal();    }
+            // Якщо зображення вписане - описуємо його
+            else if (sY < 0.001) { fitExternal();    }
+            // В інших випадках - відновлюємо оригінальний розмір
+            else                 { zoomToOriginal(); }            
         }
         
         // Права клавіша миші
