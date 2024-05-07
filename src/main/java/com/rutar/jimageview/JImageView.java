@@ -1,7 +1,6 @@
 package com.rutar.jimageview;
 
 import java.io.*;
-import java.net.*;
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
@@ -24,24 +23,42 @@ import static com.rutar.jimageview.JImageViewUtils.*;
 
 public class JImageView extends JScrollPane {
 
+/** Швидке масштабування */
 public static final int SCALE_TYPE_FAST = 0;
+/** Згладжене масштабування */
 public static final int SCALE_TYPE_SMOOTH = 1;
 
+
+/** Відкривання зображення в оригінальному розмірі */
 public static final int OPEN_SIZE_ORIGINAL = 0;
+/** Відкривання зображення вписаним у компонент */
 public static final int OPEN_SIZE_INTERNAL_FIT = 1;
+/** Відкривання зображення описаним навколо компонента */
 public static final int OPEN_SIZE_EXTERNAL_FIT = 2;
 
+
+/** Масштабний коефіцієнт лупи - x1.25 */
 public static final float ZOOM_SCALE_X1_25 = 1.25f;
+/** Масштабний коефіцієнт лупи - x1.50 */
 public static final float ZOOM_SCALE_X1_50 = 1.50f;
+/** Масштабний коефіцієнт лупи - x1.75 */
 public static final float ZOOM_SCALE_X1_75 = 1.75f;
+/** Масштабний коефіцієнт лупи - x2.00 */
 public static final float ZOOM_SCALE_X2_00 = 2.00f;
+/** Масштабний коефіцієнт лупи - x2.25 */
 public static final float ZOOM_SCALE_X2_25 = 2.25f;
+/** Масштабний коефіцієнт лупи - x2.50 */
 public static final float ZOOM_SCALE_X2_50 = 2.50f;
+/** Масштабний коефіцієнт лупи - x3.00 */
 public static final float ZOOM_SCALE_X3_00 = 3.00f;
+/** Масштабний коефіцієнт лупи - x4.00 */
 public static final float ZOOM_SCALE_X4_00 = 4.00f;
+/** Масштабний коефіцієнт лупи - x5.00 */
 public static final float ZOOM_SCALE_X5_00 = 5.00f;
 
+/** Форма лупи - прямокутна */
 public static final int ZOOM_SHAPE_RECTANGLE = 0;
+/** Форма лупи - еліптична */
 public static final int ZOOM_SHAPE_ELLIPSE   = 1;
 
 // ............................................................................

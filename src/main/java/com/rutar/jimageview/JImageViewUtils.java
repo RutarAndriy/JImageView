@@ -19,11 +19,17 @@ import static java.awt.image.AffineTransformOp.*;
 
 public class JImageViewUtils {
 
+/** Горизонтальне відзеркалення */
 public static final int FLIP_HORIZONTAL = 0;
+/** Вертикальне відзеркалення */
 public static final int FLIP_VERTICAL   = 1;
 
+
+/** Обертання зображення на 90° за годинниковою стрілкою */
 public static final int ROTATE_90_DEG  = 90;
+/** Обертання зображення на 180° */
 public static final int ROTATE_180_DEG = 180;
+/** Обертання зображення на 90° проти годинникової стрілки */
 public static final int ROTATE_270_DEG = 270;
 
 ///////////////////////////////////////////////////////////////////////////////
