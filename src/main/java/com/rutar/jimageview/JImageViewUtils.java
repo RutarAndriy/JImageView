@@ -36,15 +36,33 @@ public static final int ROTATE_270_DEG = 270;
  */
 public static BufferedImage getImageQuickly (File file) {
 
-if (file == null) { return null; }
+    if (file == null) { return null; }
+    
+    try (FileInputStream fis = new FileInputStream(file)) {
+        return getImageQuickly(fis); }
+    catch (Exception e) { return null; }
+    
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Метод дозволяє швидко завантажити зображення, набагато швидше, ніж за
+ * допомогою стандартного ImageIO.read()
+ * @param is об'єкт типу InputStream
+ * @return об'єкт типу BufferedImage
+ */
+public static BufferedImage getImageQuickly (InputStream is) {
 
 try {
 
+    if (is.available() == 0) { return null; }
+    
     MediaTracker tracker = new MediaTracker(new JPanel());
     
     byte[] allBytes;
-    try (FileInputStream stream = new FileInputStream(file)) {
-        allBytes = stream.readAllBytes();
+    try (BufferedInputStream bis = new BufferedInputStream(is)) {
+        allBytes = bis.readAllBytes();
     }
     
     Image toolkitImage = Toolkit.getDefaultToolkit().createImage(allBytes);
@@ -78,9 +96,25 @@ catch (IOException | InterruptedException e) { return null; }
 public static BufferedImage getImageSlowly (File file) {
 
 if (file == null) { return null; }
-    
+
 try                   { return ImageIO.read(file); }
 catch (IOException e) { return null;               }
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Стандартний метод завантаження зображень, 
+ * може бути корисний, якщо метод getImageQuickly() не працює
+ * @param is об'єкт типу InputStream
+ * @return об'єкт типу BufferedImage
+ */
+public static BufferedImage getImageSlowly (InputStream is) {
+
+try { if (is.available() == 0) { return null; }
+      return ImageIO.read(is); }
+catch (IOException e) { return null; }
 
 }
 

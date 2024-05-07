@@ -1636,12 +1636,11 @@ private BufferedImage getRandomImage() {
     String[] names = { "tree", "fire", "wave" };
 
     int index = (int)(Math.random() * 3);
-
-    try { File file = new File(getClass().getResource
-                              (String.format(path, names[index])).toURI());
-          return JImageViewUtils.getImageQuickly(file); }
+    path = String.format(path, names[index]);
     
-    catch (URISyntaxException e) { return null; }
+    try (InputStream is = getClass().getResourceAsStream(path)) {
+        return JImageViewUtils.getImageQuickly(is); }
+    catch (Exception e) { return null; }
 
 }
 
