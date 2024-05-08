@@ -31,7 +31,8 @@ public JImageViewDemo() { initComponents();
 ///////////////////////////////////////////////////////////////////////////////
 
 @SuppressWarnings("unchecked")
-    private void initComponents() {//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
 
         bg_scale_type = new ButtonGroup();
         bg_magnifier_shape = new ButtonGroup();
@@ -992,7 +993,7 @@ public JImageViewDemo() { initComponents();
                 if (!minimumSizeSet) {
                     setMinimumSize(getSize());
                     minimumSizeSet = true; } } });
-    }//GEN-END:initComponents
+    }// </editor-fold>//GEN-END:initComponents
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1589,8 +1590,7 @@ private final Color bgError  = new Color(255, 200, 200);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-private class ImagePreviewComponent extends JComponent
-                                    implements PropertyChangeListener {
+private class ImagePreviewComponent extends JComponent {
 
 private BufferedImage image;
 private final int gridSize = 15;
@@ -1598,7 +1598,7 @@ private final int gridSize = 15;
 // ............................................................................
 
 public ImagePreviewComponent (JFileChooser chooser)
-    { chooser.addPropertyChangeListener(this);
+    { chooser.addPropertyChangeListener(propertyChangeListener);
       setPreferredSize(new Dimension(300, 300)); }
 
 // ............................................................................
@@ -1633,30 +1633,31 @@ protected void paintComponent (Graphics g) {
 
 // ............................................................................
 
-@Override
-public void propertyChange (PropertyChangeEvent e) {
-
-    switch (e.getPropertyName()) {
-        
-        case JFileChooser.DIRECTORY_CHANGED_PROPERTY -> { image = null;
-                                                          repaint(); }
-        
-        case JFileChooser.SELECTED_FILE_CHANGED_PROPERTY -> {
-                
-            File file = (File) e.getNewValue();
-            
-                image = JImageViewUtils.getImageQuickly(file);
-            if (image == null) {
-                image = JImageViewUtils.getImageSlowly(file); }
-            
-            repaint();
-        }
-    }
-}
+private void deletePreview() { image = null; }
 
 // ............................................................................
 
-private void deletePreview() { image = null; }
+private final PropertyChangeListener propertyChangeListener =
+             (PropertyChangeEvent evt) -> {
+    
+    switch (evt.getPropertyName()) {
+
+    case JFileChooser.DIRECTORY_CHANGED_PROPERTY -> { image = null;
+                                                      repaint(); }
+
+    case JFileChooser.SELECTED_FILE_CHANGED_PROPERTY -> {
+
+        File file = (File) evt.getNewValue();
+
+            image = JImageViewUtils.getImageQuickly(file);
+        if (image == null) {
+            image = JImageViewUtils.getImageSlowly(file); }
+
+        repaint();
+    }
+}};
+
+// Кінець класу ImagePreviewComponent /////////////////////////////////////////
 
 }
 
