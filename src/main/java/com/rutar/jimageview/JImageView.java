@@ -72,12 +72,12 @@ private static       Cursor CURSOR_DEFAULT = null;
 
 // Масив стандартних масштабів
 private final int[] scales =
-    { 10,  15,  20,  25,   30,   35,   40,   45,   50,
-                           60,   70,   80,   90,  100,
-          125, 150, 175,  200,  225,  250,  275,  300,
-                                350,  400,  450,  500,
-                                600,  700,  800,  900,
-                         1000, 1500, 2000, 2500, 3000 };
+    { 5, 8, 10,  15,  20,  25,   30,   35,   40,   45,   50,
+                                 60,   70,   80,   90,  100,
+                125, 150, 175,  200,  225,  250,  275,  300,
+                                      350,  400,  450,  500,
+                                      600,  700,  800,  900,
+                               1000, 1500, 2000, 2500, 3000 };
 
 // Масив стандартних масштабів вікна масштабування
 private final float[] zoomLevels =
@@ -1837,15 +1837,15 @@ public void mousePressed (MouseEvent me) {
             if (specifyRegion || lmbPressed || rmbPressed) { return; }
             cmbPressed = true;
             
-            double sX = Math.abs(imageScale - 100d);
-            double sY = Math.abs(imageScale - imageScaleInternalFit);
+            double sX = Math.abs(imageScale - imageScaleInternalFit);
+            double sY = Math.abs(imageScale - imageScaleExternalFit);
             
-            // Якщо зображення оригінального розміру - вписуємо його
-            if      (sX < 0.001) { fitInternal();    }
             // Якщо зображення вписане - описуємо його
-            else if (sY < 0.001) { fitExternal();    }
-            // В інших випадках - відновлюємо оригінальний розмір
-            else                 { zoomToOriginal(); }            
+            if      (sX < 0.001) { fitExternal();    }
+            // Якщо зображення описане - відновлюємо оригінальний розмір
+            else if (sY < 0.001) { zoomToOriginal(); }
+            // В інших випадках - вписуємо його
+            else                 { fitInternal();    }        
         }
         
         // Права клавіша миші
