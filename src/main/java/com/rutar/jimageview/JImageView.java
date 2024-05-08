@@ -693,10 +693,15 @@ public float getImageScale() { return imageScale; }
  */
 public void setImageScale (float imageScale)
     { calculateImageLimitScale();
+      // ......................................................................
+      // Ігнорування корекції значення для вписаного та описаного масштабів
+      if (Math.abs(imageScale - imageScaleInternalFit) > 0.001 &&
+          Math.abs(imageScale - imageScaleExternalFit) > 0.001) {
       if      (imageScale > globalScaleMax) { imageScale = globalScaleMax; }
       else if (imageScale < globalScaleMin) { imageScale = globalScaleMin; }
       if      (imageScale > imageScaleMax)  { imageScale = imageScaleMax;  }
-      else if (imageScale < imageScaleMin)  { imageScale = imageScaleMin;  }
+      else if (imageScale < imageScaleMin)  { imageScale = imageScaleMin;  } }
+      // ......................................................................
       float oldValue = this.imageScale;
       this.imageScale = imageScale;
       calculateScaledImageSize();
