@@ -31,8 +31,7 @@ public JImageViewDemo() { initComponents();
 ///////////////////////////////////////////////////////////////////////////////
 
 @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents() {//GEN-BEGIN:initComponents
 
         bg_scale_type = new ButtonGroup();
         bg_magnifier_shape = new ButtonGroup();
@@ -164,6 +163,7 @@ public JImageViewDemo() { initComponents();
         rb_sb_always = new JRadioButton();
         rb_sb_as_needed = new JRadioButton();
         rb_sb_never = new JRadioButton();
+        cb_restore = new JCheckBox();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("JImageView Demo");
@@ -890,19 +890,28 @@ public JImageViewDemo() { initComponents();
         rb_sb_never.setSelected(image_view.getVerticalScrollBarPolicy() == ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER && image_view.getHorizontalScrollBarPolicy() == ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         rb_sb_never.addActionListener(this::onAction);
 
+        cb_restore.setText("Відновлювати стан збраження при зміні розміру");
+        cb_restore.setActionCommand("cb_restore");
+        cb_restore.setSelected(image_view.isRestoreLastState());
+        cb_restore.addActionListener(this::onAction);
+
         GroupLayout pnl_additionallyLayout = new GroupLayout(pnl_additionally);
         pnl_additionally.setLayout(pnl_additionallyLayout);
         pnl_additionallyLayout.setHorizontalGroup(pnl_additionallyLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(pnl_additionallyLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
                 .addGroup(pnl_additionallyLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(cb_move_out, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cb_move_out, GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
                     .addComponent(cb_invert, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(sp_invert)
                     .addComponent(rb_sb_as_needed, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(rb_sb_always, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(rb_sb_never, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cb_zoom_out, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(3, 3, 3))
+            .addGroup(pnl_additionallyLayout.createSequentialGroup()
+                .addGap(3, 3, 3)
+                .addComponent(cb_restore, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(3, 3, 3))
         );
         pnl_additionallyLayout.setVerticalGroup(pnl_additionallyLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -914,6 +923,8 @@ public JImageViewDemo() { initComponents();
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cb_invert)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cb_restore)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(sp_invert, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rb_sb_always)
@@ -921,7 +932,7 @@ public JImageViewDemo() { initComponents();
                 .addComponent(rb_sb_as_needed)
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rb_sb_never)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 188, Short.MAX_VALUE))
         );
 
         tab_pnl_settings.addTab("Додатково", pnl_additionally);
@@ -993,7 +1004,7 @@ public JImageViewDemo() { initComponents();
                 if (!minimumSizeSet) {
                     setMinimumSize(getSize());
                     minimumSizeSet = true; } } });
-    }// </editor-fold>//GEN-END:initComponents
+    }//GEN-END:initComponents
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1259,6 +1270,8 @@ public JImageViewDemo() { initComponents();
             { image_view.setDrugZoomOut(cb_zoom_out.isSelected()); }
         case "cb_invert" ->
             { image_view.setWheelInvert(cb_invert.isSelected()); }
+        case "cb_restore" ->
+            { image_view.setRestoreLastState(cb_restore.isSelected()); }
 
         case "rb_sb_always" ->
             { image_view.setHorizontalScrollBarPolicy
@@ -1504,6 +1517,7 @@ private final Color bgError  = new Color(255, 200, 200);
     private JCheckBox cb_lmb;
     private JComboBox<String> cb_magn_scale;
     private JCheckBox cb_move_out;
+    private JCheckBox cb_restore;
     private JCheckBox cb_rmb;
     private JCheckBox cb_s_zoom_border;
     private JCheckBox cb_wheel;

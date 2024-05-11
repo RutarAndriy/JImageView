@@ -108,6 +108,7 @@ private boolean zmbEnable    = true;    // Вибір регіону за доп
 private boolean wheelEnable  = true;            // Масштабування колесиком миші
 private boolean wheelInvert  = false;             // Інвертування колесика миші
 private boolean drugImageOut = true;         // Переміщення за межею компонента
+private boolean restoreLastState = true; // Відновлення стану при зміні розміру
 
 ///////////////////////////////////////////////////////////////////////////////
 // Змінні, які мають відношення до фонової сітки //////////////////////////////
@@ -485,8 +486,7 @@ public void maximize() { setImageScale(imageScaleMax);
  * Задання розміру зображення таким чином, щоб його 
  * більша сторона максимально замістила доступний простір компонента
  */
-public void fitInternal() { calculateImageFitScale();
-                            setImageScale(imageScaleInternalFit);
+public void fitInternal() { setImageScale(imageScaleInternalFit);
                             center(); }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -495,15 +495,13 @@ public void fitInternal() { calculateImageFitScale();
  * Задання розміру зображення таким чином, щоб його 
  * менша сторона максимально замістила доступний простір компонента
  */
-public void fitExternal() { calculateImageFitScale();
-                            setImageScale(imageScaleExternalFit);
+public void fitExternal() { setImageScale(imageScaleExternalFit);
                             center(); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 /** Відновлення оригінального розміру відображуваного зображення */
-public void zoomToOriginal() { calculateImageFitScale();
-                               setImageScale(100);
+public void zoomToOriginal() { setImageScale(100);
                                center(); }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -648,17 +646,19 @@ public BufferedImage getImage() { return image; }
  * @param image нове основне зображення
  */
 public void setImage (BufferedImage image)
-    { if (image == null) { image = getErrorImage(); }       
+    { System.out.println("setImage >>> " + System.currentTimeMillis());
+      if (image == null) { image = getErrorImage(); }       
       Image oldValue = this.image;
       this.image = image;
       this.imageW = image.getWidth();
       this.imageH = image.getHeight();
       this.changeListener.stateChanged(null);
-      switch (imageOpenSize) {
-          case OPEN_SIZE_ORIGINAL     -> zoomToOriginal();
-          case OPEN_SIZE_INTERNAL_FIT -> fitInternal();
-          case OPEN_SIZE_EXTERNAL_FIT -> fitExternal();
-      }
+      if (!initialState) {
+          switch (imageOpenSize) {
+              case OPEN_SIZE_ORIGINAL     -> zoomToOriginal();
+              case OPEN_SIZE_INTERNAL_FIT -> fitInternal();
+              case OPEN_SIZE_EXTERNAL_FIT -> fitExternal();
+          }}
       fireAll("image", oldValue, image); }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -872,6 +872,25 @@ public void setDrugImageOut (boolean drugImageOut)
     { boolean oldValue = this.drugImageOut;
       this.drugImageOut = drugImageOut;
       fireAll("drugImageOut", oldValue, drugImageOut); }
+
+///////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Отримання можливості відновлення попереднього стану зображення 
+ * при зміні розміру компонента
+ * @return true, якщо доступно
+ */
+public boolean isRestoreLastState() { return restoreLastState; }
+
+/**
+ * Задання можливості відновлення попереднього стану зображення 
+ * при зміні розміру компонента
+ * @param restoreLastState true - доступно, false - недоступно
+ */
+public void setRestoreLastState (boolean restoreLastState)
+    { boolean oldValue = this.restoreLastState;
+      this.restoreLastState = restoreLastState;
+      fireAll("restoreLastState", oldValue, restoreLastState); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -1479,6 +1498,7 @@ private void calculateImageLimitScale() {
 
 private void calculateImageFitScale() {
     
+    System.out.println("calculateImageFitScale >>> " + System.currentTimeMillis());
     float[] fitScale = calculateFitScale(imageW, imageH);
     
     imageScaleInternalFit = fitScale[0];
@@ -2002,16 +2022,26 @@ private final ChangeListener changeListener = new ChangeListener() {
         // Якщо компонент не валідований, його необхідно обов'язково валідувати
         // Якщо цього не зробити, компонент повертатиме некоректні властивості
         if (!isValid()) { validate(); }
-        
+
         if (scrollBarVisible != isScrollBarVisible()) { updateCursor(); }
         
-        if (initialState) { 
+        int last_state = -1;
+        if      (Math.abs(getImageScale() - imageScaleInternalFit) < 0.001)
+            { last_state = 0; }
+        else if (Math.abs(getImageScale() - imageScaleExternalFit) < 0.001)
+            { last_state = 1; }
+        
+        calculateImageFitScale();
+        
+        if (initialState && isValid()) {
             switch (imageOpenSize) {
                 case OPEN_SIZE_ORIGINAL     -> zoomToOriginal();
                 case OPEN_SIZE_INTERNAL_FIT -> fitInternal();
                 case OPEN_SIZE_EXTERNAL_FIT -> fitExternal(); }
             initialState = false;
         }
+        else if (restoreLastState && last_state == 0) { fitInternal(); }
+        else if (restoreLastState && last_state == 1) { fitExternal(); }
     }
 };
 

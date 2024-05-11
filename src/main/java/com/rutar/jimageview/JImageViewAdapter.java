@@ -49,6 +49,9 @@ public void wheelInvertChange (JImageViewEvent evt) {}
 public void drugImageOutChange (JImageViewEvent evt) {}
 
 @Override
+public void restoreLastStateChange (JImageViewEvent evt) {}
+
+@Override
 public void gridVisibleChange (JImageViewEvent evt) {}
 
 @Override

@@ -1564,7 +1564,7 @@
                   <Group type="102" attributes="0">
                       <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="cb_move_out" max="32767" attributes="0"/>
+                          <Component id="cb_move_out" pref="335" max="32767" attributes="0"/>
                           <Component id="cb_invert" max="32767" attributes="0"/>
                           <Component id="sp_invert" alignment="0" max="32767" attributes="0"/>
                           <Component id="rb_sb_as_needed" max="32767" attributes="0"/>
@@ -1573,6 +1573,11 @@
                           <Component id="cb_zoom_out" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                      <Component id="cb_restore" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1586,6 +1591,8 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="cb_invert" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
+                      <Component id="cb_restore" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="sp_invert" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="rb_sb_always" min="-2" max="-2" attributes="0"/>
@@ -1593,7 +1600,7 @@
                       <Component id="rb_sb_as_needed" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="rb_sb_never" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="188" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1680,6 +1687,18 @@
               </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="rb_sb_never.setSelected(image_view.getVerticalScrollBarPolicy() == VERTICAL_SCROLLBAR_NEVER &amp;&amp; image_view.getHorizontalScrollBarPolicy() == HORIZONTAL_SCROLLBAR_NEVER);&#xa;"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JCheckBox" name="cb_restore">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="&#x412;&#x456;&#x434;&#x43d;&#x43e;&#x432;&#x43b;&#x44e;&#x432;&#x430;&#x442;&#x438; &#x441;&#x442;&#x430;&#x43d; &#x437;&#x431;&#x440;&#x430;&#x436;&#x435;&#x43d;&#x43d;&#x44f; &#x43f;&#x440;&#x438; &#x437;&#x43c;&#x456;&#x43d;&#x456; &#x440;&#x43e;&#x437;&#x43c;&#x456;&#x440;&#x443;"/>
+                <Property name="actionCommand" type="java.lang.String" value="cb_restore"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="cb_restore.setSelected(image_view.isRestoreLastState());"/>
               </AuxValues>
             </Component>
           </SubComponents>

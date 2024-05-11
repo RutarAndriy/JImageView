@@ -79,6 +79,13 @@ public void wheelEnableChange (JImageViewEvent evt);
 public void wheelInvertChange (JImageViewEvent evt);
 
 /**
+ * Зміна можливості відновлення попереднього стану зображення 
+ * при зміні розміру компонента
+ * @param evt Подія типу JImageViewEvent
+ */
+public void restoreLastStateChange (JImageViewEvent evt);
+
+/**
  * Зміна можливості переміщення зображення за межею компонента
  * @param evt Подія типу JImageViewEvent
  */

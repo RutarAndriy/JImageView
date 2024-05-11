@@ -143,6 +143,12 @@ property = new PropertyDescriptor("drugImageOut", JImageView.class,
 property.setPreferred(true);
 properties.add(property);
 
+// RestoreLastState
+property = new PropertyDescriptor("restoreLastState", JImageView.class,
+                                  "isRestoreLastState", "setRestoreLastState");
+property.setPreferred(true);
+properties.add(property);
+
 // GridVisible
 property = new PropertyDescriptor("gridVisible", JImageView.class,
                                   "isGridVisible", "setGridVisible");
