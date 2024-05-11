@@ -606,31 +606,36 @@ public void setRegion (Rectangle region) {
 
 /** Обертання зображення на 90° за годинниковою стрілкою */
 public void turnСlockwise()
-    { setRotatedImage(getRotatedImage(image, ROTATE_90_DEG)); }
+    { if (errorImageSet) { return; }
+      setRotatedImage(getRotatedImage(image, ROTATE_90_DEG)); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 /** Обертання зображення на 90° проти годинникової стрілки */
 public void turnСounterclockwise()
-    { setRotatedImage(getRotatedImage(image, ROTATE_270_DEG)); }
+    { if (errorImageSet) { return; }
+      setRotatedImage(getRotatedImage(image, ROTATE_270_DEG)); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 /** Обертання зображення на 180° */
 public void rollOver()
-    { setRotatedImage(getRotatedImage(image, ROTATE_180_DEG)); }
+    { if (errorImageSet) { return; }
+      setRotatedImage(getRotatedImage(image, ROTATE_180_DEG)); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 /** Відзеркалення зображення горизонтально */
 public void mirrorHorizontally()
-    { setRotatedImage(getFlippedImage(image, FLIP_HORIZONTAL)); }
+    { if (errorImageSet) { return; }
+      setRotatedImage(getFlippedImage(image, FLIP_HORIZONTAL)); }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 /** Відзеркалення зображення вертикально */
 public void mirrorVertically()
-    { setRotatedImage(getFlippedImage(image, FLIP_VERTICAL)); }
+    { if (errorImageSet) { return; }
+      setRotatedImage(getFlippedImage(image, FLIP_VERTICAL)); }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Getter'и та Setter'и - повертають та задають властивості компонента ////////
