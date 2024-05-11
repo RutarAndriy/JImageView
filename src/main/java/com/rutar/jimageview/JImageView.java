@@ -486,18 +486,24 @@ public void maximize() { setImageScale(imageScaleMax);
 /**
  * Задання розміру зображення таким чином, щоб його 
  * більша сторона максимально замістила доступний простір компонента
+ * @param center якщо true - вирівняти по центру
  */
-public void fitInternal() { setImageScale(imageScaleInternalFit);
-                            center(); }
+public void fitInternal (boolean center) {
+    setImageScale(imageScaleInternalFit);
+    if (center) { center(); }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
  * Задання розміру зображення таким чином, щоб його 
  * менша сторона максимально замістила доступний простір компонента
+ * @param center якщо true - вирівняти по центру
  */
-public void fitExternal() { setImageScale(imageScaleExternalFit);
-                            center(); }
+public void fitExternal (boolean center) {
+    setImageScale(imageScaleExternalFit);
+    if (center) { center(); }
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -663,8 +669,8 @@ public void setImage (BufferedImage image)
       if (!initialState) {
           switch (imageOpenSize) {
               case OPEN_SIZE_ORIGINAL     -> zoomToOriginal();
-              case OPEN_SIZE_INTERNAL_FIT -> fitInternal();
-              case OPEN_SIZE_EXTERNAL_FIT -> fitExternal();
+              case OPEN_SIZE_INTERNAL_FIT -> fitInternal(true);
+              case OPEN_SIZE_EXTERNAL_FIT -> fitExternal(true);
           }}
       fireAll("image", oldValue, image); }
 
@@ -1877,11 +1883,11 @@ public void mousePressed (MouseEvent me) {
             double sY = Math.abs(imageScale - imageScaleExternalFit);
             
             // Якщо зображення вписане - описуємо його
-            if      (sX < 0.001) { fitExternal();    }
+            if      (sX < 0.001) { fitExternal(true); }
             // Якщо зображення описане - відновлюємо оригінальний розмір
-            else if (sY < 0.001) { zoomToOriginal(); }
+            else if (sY < 0.001) { zoomToOriginal();  }
             // В інших випадках - вписуємо його
-            else                 { fitInternal();    }        
+            else                 { fitInternal(true); }        
         }
         
         // Права клавіша миші
@@ -2047,8 +2053,8 @@ private final ChangeListener changeListener = new ChangeListener() {
         if (initialState && isValid()) {
             switch (imageOpenSize) {
                 case OPEN_SIZE_ORIGINAL     -> zoomToOriginal();
-                case OPEN_SIZE_INTERNAL_FIT -> fitInternal();
-                case OPEN_SIZE_EXTERNAL_FIT -> fitExternal(); }
+                case OPEN_SIZE_INTERNAL_FIT -> fitInternal(true);
+                case OPEN_SIZE_EXTERNAL_FIT -> fitExternal(true); }
             initialState = false;
         }
     }
@@ -2070,8 +2076,8 @@ private final ComponentListener componentListener = new ComponentAdapter() {
         
         calculateImageFitScale();
         
-        if      (restoreLastState && last_state == 0) { fitInternal(); }
-        else if (restoreLastState && last_state == 1) { fitExternal(); }
+        if      (restoreLastState && last_state == 0) { fitInternal(false); }
+        else if (restoreLastState && last_state == 1) { fitExternal(false); }
         
     }
 };

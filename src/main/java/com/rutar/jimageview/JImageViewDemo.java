@@ -1031,15 +1031,15 @@ public JImageViewDemo() { initComponents();
         case "btn_flip_h"     -> { image_view.mirrorHorizontally();   }
         case "btn_flip_v"     -> { image_view.mirrorVertically();     }
         
-        case "btn_zoom_in"      -> { image_view.zoomIn(null);     }
-        case "btn_zoom_out"     -> { image_view.zoomOut(null);    }
-        case "btn_minimize"     -> { image_view.minimize();       }
-        case "btn_maximize"     -> { image_view.maximize();       }
-        case "btn_internal_fit" -> { image_view.fitInternal();    }
-        case "btn_external_fit" -> { image_view.fitExternal();    }
-        case "btn_original"     -> { image_view.zoomToOriginal(); }
-        case "btn_region_fit"   -> { image_view.setRegion();      }
-        case "btn_center"       -> { image_view.center();         }
+        case "btn_zoom_in"      -> { image_view.zoomIn(null);      }
+        case "btn_zoom_out"     -> { image_view.zoomOut(null);     }
+        case "btn_minimize"     -> { image_view.minimize();        }
+        case "btn_maximize"     -> { image_view.maximize();        }
+        case "btn_internal_fit" -> { image_view.fitInternal(true); }
+        case "btn_external_fit" -> { image_view.fitExternal(true); }
+        case "btn_original"     -> { image_view.zoomToOriginal();  }
+        case "btn_region_fit"   -> { image_view.setRegion();       }
+        case "btn_center"       -> { image_view.center();          }
 
         case "btn_set_scale", "fld_scale" ->
             { Float value = getNumericValue(fld_scale);
