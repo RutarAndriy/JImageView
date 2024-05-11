@@ -162,6 +162,7 @@ private boolean zmbPressed;                              // ЛКМ і ПКМ н�
 private boolean cursorOnImage;      // Знаходження курсора всередині компонента
 private boolean scrollBarVisible;        // Видимість скролбарів, хоча б одного
 private boolean initialState;             // Початкова ініціалізація компонента
+private boolean errorImageSet;                    // Показ зображення "помилки"
 private Point pressOrigin;   // Точка, у якій відбулося натискання клавіші миші
 private JPanel panelRoot;                    // Панель для малювання зображення
 private JScrollBar hScrollBar, vScrollBar;           // Гор. та верт. скролбари
@@ -646,8 +647,9 @@ public BufferedImage getImage() { return image; }
  * @param image нове основне зображення
  */
 public void setImage (BufferedImage image)
-    { System.out.println("setImage >>> " + System.currentTimeMillis());
-      if (image == null) { image = getErrorImage(); }       
+    { if (image == null) { image = getErrorImage();
+                           errorImageSet = true;  }
+      else               { errorImageSet = false; }
       Image oldValue = this.image;
       this.image = image;
       this.imageW = image.getWidth();
@@ -702,6 +704,7 @@ public void setImageScale (float imageScale)
       if      (imageScale > imageScaleMax)  { imageScale = imageScaleMax;  }
       else if (imageScale < imageScaleMin)  { imageScale = imageScaleMin;  } }
       // ......................................................................
+      if (errorImageSet) { imageScale = 100; }
       float oldValue = this.imageScale;
       this.imageScale = imageScale;
       calculateScaledImageSize();
@@ -1497,8 +1500,7 @@ private void calculateImageLimitScale() {
 ///////////////////////////////////////////////////////////////////////////////
 
 private void calculateImageFitScale() {
-    
-    System.out.println("calculateImageFitScale >>> " + System.currentTimeMillis());
+
     float[] fitScale = calculateFitScale(imageW, imageH);
     
     imageScaleInternalFit = fitScale[0];
@@ -1838,7 +1840,7 @@ public void mousePressed (MouseEvent me) {
         case MouseEvent.BUTTON1 -> {
             
             if (!lmbEnable) { return; }
-            if (cmbPressed || rmbPressed) { return; }
+            if (cmbPressed || rmbPressed || errorImageSet) { return; }
             lmbPressed = true;
             
             if (specifyRegion)
@@ -1854,7 +1856,8 @@ public void mousePressed (MouseEvent me) {
         case MouseEvent.BUTTON2 -> {
         
             if (!cmbEnable) { return; }
-            if (specifyRegion || lmbPressed || rmbPressed) { return; }
+            if (specifyRegion || lmbPressed ||
+                rmbPressed || errorImageSet) { return; }
             cmbPressed = true;
             
             double sX = Math.abs(imageScale - imageScaleInternalFit);
@@ -1872,7 +1875,7 @@ public void mousePressed (MouseEvent me) {
         case MouseEvent.BUTTON3 -> {
             
             if (!rmbEnable) { return; }
-            if (specifyRegion || cmbPressed) { return; }
+            if (specifyRegion || cmbPressed || errorImageSet) { return; }
 
             if (lmbPressed) { 
                 if (!zmbEnable) { return; }
@@ -1901,7 +1904,8 @@ public void mouseReleased (MouseEvent me) {
         case MouseEvent.BUTTON1 -> {
 
             lmbPressed = false;
-            if (zmbPressed || cmbPressed || rmbPressed) { return; }
+            if (zmbPressed || cmbPressed ||
+                rmbPressed || errorImageSet) { return; }
             
             if (specifyRegion)
                 { if (regionNorm.width  <= regionMinimumSize ||
@@ -1920,7 +1924,8 @@ public void mouseReleased (MouseEvent me) {
         case MouseEvent.BUTTON3 -> {
             
             rmbPressed = false;
-            if (specifyRegion || lmbPressed || cmbPressed) { return; }
+            if (specifyRegion || lmbPressed ||
+                cmbPressed || errorImageSet) { return; }
 
             zoomOrigin = null;
             updateCursor();
@@ -1934,7 +1939,8 @@ public void mouseReleased (MouseEvent me) {
 @Override
 public void mouseWheelMoved (MouseWheelEvent mwe) {
     
-    if (!wheelEnable || specifyRegion || lmbPressed || cmbPressed) { return; }
+    if (!wheelEnable || specifyRegion ||
+        lmbPressed || cmbPressed || errorImageSet) { return; }
     
     // Масштабування лупи
     if (rmbPressed)
