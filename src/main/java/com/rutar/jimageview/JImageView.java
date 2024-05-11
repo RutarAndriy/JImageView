@@ -1477,6 +1477,14 @@ for (JImageViewListener listener : getListeners()) {
 // Допоміжні методи ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Перевірка показу зображення "помилки"
+ * @return true, якщо відображається
+ */
+public boolean isErrorImageSet() { return errorImageSet; }
+
+///////////////////////////////////////////////////////////////////////////////
+
 private void setRotatedImage (BufferedImage image)
     { this.image = image;
       this.imageW = image.getWidth();
