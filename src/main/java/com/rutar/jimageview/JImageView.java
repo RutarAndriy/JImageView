@@ -183,9 +183,9 @@ setWheelScrollingEnabled(false);
 
 getViewport().addMouseListener(mouseListener);
 getViewport().addChangeListener(changeListener);
+getViewport().addComponentListener(componentListener);
 getViewport().addMouseMotionListener(mouseMotionListener);
 getViewport().addMouseWheelListener((MouseWheelListener) mouseListener);
-
 setViewportView(panelRoot);
 
 setRegionStroke(null);
@@ -2044,14 +2044,6 @@ private final ChangeListener changeListener = new ChangeListener() {
 
         if (scrollBarVisible != isScrollBarVisible()) { updateCursor(); }
         
-        int last_state = -1;
-        if      (Math.abs(getImageScale() - imageScaleInternalFit) < 0.001)
-            { last_state = 0; }
-        else if (Math.abs(getImageScale() - imageScaleExternalFit) < 0.001)
-            { last_state = 1; }
-        
-        calculateImageFitScale();
-        
         if (initialState && isValid()) {
             switch (imageOpenSize) {
                 case OPEN_SIZE_ORIGINAL     -> zoomToOriginal();
@@ -2059,8 +2051,28 @@ private final ChangeListener changeListener = new ChangeListener() {
                 case OPEN_SIZE_EXTERNAL_FIT -> fitExternal(); }
             initialState = false;
         }
-        else if (restoreLastState && last_state == 0) { fitInternal(); }
+    }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+private final ComponentListener componentListener = new ComponentAdapter() {
+    
+    @Override
+    public void componentResized (ComponentEvent e) {
+
+        int last_state = -1;
+        
+        if      (Math.abs(getImageScale() - imageScaleInternalFit) < 0.001)
+            { last_state = 0; }
+        else if (Math.abs(getImageScale() - imageScaleExternalFit) < 0.001)
+            { last_state = 1; }
+        
+        calculateImageFitScale();
+        
+        if      (restoreLastState && last_state == 0) { fitInternal(); }
         else if (restoreLastState && last_state == 1) { fitExternal(); }
+        
     }
 };
 
