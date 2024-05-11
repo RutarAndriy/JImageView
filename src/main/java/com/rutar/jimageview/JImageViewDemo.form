@@ -274,7 +274,7 @@
     </Component>
     <Container class="javax.swing.JPanel" name="pnl_rotate_mirror">
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="increaseTextSize(6, btn_rotate_90, btn_rotate_270, btn_rotate_180, btn_flip_h, btn_flip_v);&#xa;"/>
+        <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="increaseTextSize(6, btn_rotate_270, btn_rotate_90, btn_rotate_180, btn_flip_h, btn_flip_v);&#xa;"/>
       </AuxValues>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
@@ -283,10 +283,10 @@
         <Property name="rows" type="int" value="1"/>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="btn_rotate_90">
+        <Component class="javax.swing.JButton" name="btn_rotate_270">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x21b6;"/>
-            <Property name="actionCommand" type="java.lang.String" value="btn_rotate_90"/>
+            <Property name="actionCommand" type="java.lang.String" value="btn_rotate_270"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
@@ -296,10 +296,10 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="onAction"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btn_rotate_270">
+        <Component class="javax.swing.JButton" name="btn_rotate_90">
           <Properties>
             <Property name="text" type="java.lang.String" value="&#x21b7;"/>
-            <Property name="actionCommand" type="java.lang.String" value="btn_rotate_270"/>
+            <Property name="actionCommand" type="java.lang.String" value="btn_rotate_90"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[0, 0, 0, 0]"/>
             </Property>
@@ -1571,13 +1571,9 @@
                           <Component id="rb_sb_always" alignment="0" max="32767" attributes="0"/>
                           <Component id="rb_sb_never" alignment="0" max="32767" attributes="0"/>
                           <Component id="cb_zoom_out" alignment="0" max="32767" attributes="0"/>
+                          <Component id="cb_restore" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                      <Component id="cb_restore" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

@@ -59,8 +59,8 @@ public JImageViewDemo() { initComponents();
         btn_set_scale = new JButton();
         sp_scale = new JSeparator();
         pnl_rotate_mirror = new JPanel();
-        btn_rotate_90 = new JButton();
         btn_rotate_270 = new JButton();
+        btn_rotate_90 = new JButton();
         btn_rotate_180 = new JButton();
         btn_flip_h = new JButton();
         btn_flip_v = new JButton();
@@ -241,19 +241,19 @@ public JImageViewDemo() { initComponents();
 
         pnl_rotate_mirror.setLayout(new GridLayout(1, 0, 5, 0));
 
-        btn_rotate_90.setText("↶");
-        btn_rotate_90.setActionCommand("btn_rotate_90");
-        btn_rotate_90.setMargin(new Insets(0, 0, 0, 0));
-        btn_rotate_90.setToolTipText("Повернути на 90° проти годинникової стрілки");
-        btn_rotate_90.addActionListener(this::onAction);
-        pnl_rotate_mirror.add(btn_rotate_90);
-
-        btn_rotate_270.setText("↷");
+        btn_rotate_270.setText("↶");
         btn_rotate_270.setActionCommand("btn_rotate_270");
         btn_rotate_270.setMargin(new Insets(0, 0, 0, 0));
-        btn_rotate_270.setToolTipText("Повернути на 90° за годинниковою стрілкою");
+        btn_rotate_270.setToolTipText("Повернути на 90° проти годинникової стрілки");
         btn_rotate_270.addActionListener(this::onAction);
         pnl_rotate_mirror.add(btn_rotate_270);
+
+        btn_rotate_90.setText("↷");
+        btn_rotate_90.setActionCommand("btn_rotate_90");
+        btn_rotate_90.setMargin(new Insets(0, 0, 0, 0));
+        btn_rotate_90.setToolTipText("Повернути на 90° за годинниковою стрілкою");
+        btn_rotate_90.addActionListener(this::onAction);
+        pnl_rotate_mirror.add(btn_rotate_90);
 
         btn_rotate_180.setText("↺");
         btn_rotate_180.setActionCommand("btn_rotate_180");
@@ -276,7 +276,7 @@ public JImageViewDemo() { initComponents();
         btn_flip_v.addActionListener(this::onAction);
         pnl_rotate_mirror.add(btn_flip_v);
 
-        increaseTextSize(6, btn_rotate_90, btn_rotate_270, btn_rotate_180, btn_flip_h, btn_flip_v);
+        increaseTextSize(6, btn_rotate_270, btn_rotate_90, btn_rotate_180, btn_flip_h, btn_flip_v);
 
         tab_pnl_settings.setBorder(BorderFactory.createEmptyBorder(0, 0, 1, 0));
 
@@ -907,11 +907,8 @@ public JImageViewDemo() { initComponents();
                     .addComponent(rb_sb_as_needed, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(rb_sb_always, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(rb_sb_never, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cb_zoom_out, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(3, 3, 3))
-            .addGroup(pnl_additionallyLayout.createSequentialGroup()
-                .addGap(3, 3, 3)
-                .addComponent(cb_restore, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cb_zoom_out, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cb_restore, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(3, 3, 3))
         );
         pnl_additionallyLayout.setVerticalGroup(pnl_additionallyLayout.createParallelGroup(GroupLayout.Alignment.LEADING)

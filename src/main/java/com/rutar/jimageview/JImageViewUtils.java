@@ -141,9 +141,9 @@ public static BufferedImage getRotatedImage (BufferedImage src, int angle) {
     
     switch (angle) {
         
-        case ROTATE_90_DEG  -> { a = -Math.PI/2; p = h;   q = h-w; }
+        case ROTATE_90_DEG  -> { a =  Math.PI/2; p = w-h; q = w;   }
         case ROTATE_180_DEG -> { a =  Math.PI;   p = w;   q = h;   }
-        case ROTATE_270_DEG -> { a =  Math.PI/2; p = w-h; q = w;   }
+        case ROTATE_270_DEG -> { a = -Math.PI/2; p = h;   q = h-w; }
 
         default -> { return src; } }
     
