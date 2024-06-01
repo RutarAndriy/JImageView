@@ -428,7 +428,7 @@ methods = new String[] { "imageChange",
 
 eventSet = new EventSetDescriptor(JImageView.class,
                                   "JImageViewListener",
-                                  JImageViewAdapter.class, methods,
+                                  JImageViewListener.class, methods,
                                   "addJImageViewListener",
                                   "removeJImageViewListener");
 
